@@ -1,0 +1,22 @@
+{
+  "properties": {
+    "Name": { "title": [{ "text": { "content": "7. Detección de Patrones y Notificación de Confirmación" } }] },
+    "Status": { "select": { "name": "To Do" } },
+    "Priority": { "select": { "name": "Baja" } },
+    "Role": { "multi_select": [{ "name": "Backend" }, { "name": "AI Engineer" }] },
+    "Estimate": { "rich_text": [{ "text": { "content": "10-14 horas" } }] },
+    "User Story": { "rich_text": [{ "text": { "content": "Como usuario recurrente, quiero que la app detecte patrones en mis gastos (pagos mensuales, suscripciones) y me notifique proactivamente para confirmar o ajustar." } }] },
+    "Acceptance Criteria": { "rich_text": [{ "text": { "content": "• Algoritmo que analice últimos 3 meses de transacciones\n• Detección de gastos recurrentes (mismo monto ±10%, misma categoría, periodicidad)\n• Notificación push o in-app sugiriendo confirmación\n• Dashboard de patrones con opción de crear gasto automático" } }] },
+    "Technical Details": { "rich_text": [{ "text": { "content": "Backend: PatternDetectionService.php, PatternNotificationService.php\nFrontend: PatternDashboard.vue\nAPI: GET /api/v1/patterns, POST /api/v1/patterns/{id}/confirm\nDB: detected_patterns table\n\nJobs: ProcessAutomaticExpenses.php (ShouldQueue)" } }] }
+  },
+  "children": [
+    { "object": "block", "type": "heading_2", "heading_2": { "rich_text": [{ "text": { "content": "Algoritmo de Detección" } }] } },
+    { "object": "block", "type": "paragraph", "paragraph": { "rich_text": [{ "text": { "content": "• Agrupar por descripción, categoría, cuenta" } }] } },
+    { "object": "block", "type": "paragraph", "paragraph": { "rich_text": [{ "text": { "content": "• Buscar repeticiones con tolerancia de ±10% en monto" } }] } },
+    { "object": "block", "type": "paragraph", "paragraph": { "rich_text": [{ "text": { "content": "• Detectar periodicidad: semanal, quincenal, mensual" } }] } },
+    { "object": "block", "type": "heading_2", "heading_2": { "rich_text": [{ "text": { "content": "Tipos de Patrón" } }] } },
+    { "object": "block", "type": "paragraph", "paragraph": { "rich_text": [{ "text": { "content": "• recurring: Gastos que se repiten" } }] } },
+    { "object": "block", "type": "paragraph", "paragraph": { "rich_text": [{ "text": { "content": "• trend: Tendencias de gasto" } }] } },
+    { "object": "block", "type": "paragraph", "paragraph": { "rich_text": [{ "text": { "content": "• anomaly: Anomalías detectadas" } }] } }
+  ]
+}

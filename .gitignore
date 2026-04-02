@@ -1,0 +1,39 @@
+# PIDs de procesos
+.backend.pid
+.frontend.pid
+
+# Logs
+logs/
+*.log
+
+# Variables de entorno
+.env
+.env.local
+.env.*.local
+
+# Archivos temporales
+*.tmp
+*.temp
+.DS_Store
+
+# Archivos de build
+dist/
+build/
+
+# Backups de base de datos (sensible)
+backups/*.sql
+backups/*.sql.gz
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Dependencias externas
+vendor/
+
+# Gemini / otros agentes locales
+.gemini/
+
+# Archivos de sesión MCP
+.vscode/mcp.json

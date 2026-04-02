@@ -1,0 +1,19 @@
+{
+  "properties": {
+    "Name": { "title": [{ "text": { "content": "6. Implementación Front-end Adaptativa (Lite vs Pro)" } }] },
+    "Status": { "select": { "name": "To Do" } },
+    "Priority": { "select": { "name": "Alta" } },
+    "Role": { "multi_select": [{ "name": "Frontend" }, { "name": "UX" }] },
+    "Estimate": { "rich_text": [{ "text": { "content": "40-50 horas" } }] },
+    "User Story": { "rich_text": [{ "text": { "content": "Quiero alternar mi app entre un modo simple 'Lite' para ver resúmenes en la calle, y un modo 'Pro' con alta densidad de datos si me siento a conciliar cuentas." } }] },
+    "Acceptance Criteria": { "rich_text": [{ "text": { "content": "• Refactorizar layouts base en Quasar usando <component :is='activeLayout'>\n• Versión Pro: Super-Grid tipo hoja de cálculo con selección masiva\n• Versión Lite: Tarjetas Hero Balance gigantescas" } }] },
+    "Technical Details": { "rich_text": [{ "text": { "content": "Store: src/stores/plan.ts (nuevo)\nComponentes: LiteUserLayout.vue, ProUserLayout.vue\nRutas: Dynamic component based on user.plan\n\nFeature Matrix:\n- Lite: 1 cuenta, 5 categorías, sin bulk import, sin AI\n- Pro: ilimitado, bulk import, AI Coach, reportes avanzados" } }] }
+  },
+  "children": [
+    { "object": "block", "type": "heading_2", "heading_2": { "rich_text": [{ "text": { "content": "Arquitectura" } }] } },
+    { "object": "block", "type": "paragraph", "paragraph": { "rich_text": [{ "text": { "content": "usePlanStore con getters: features, canAccess()" } }] } },
+    { "object": "block", "type": "paragraph", "paragraph": { "rich_text": [{ "text": { "content": "Componentes versionados: JarListLite.vue, JarListPro.vue" } }] } },
+    { "object": "block", "type": "heading_2", "heading_2": { "rich_text": [{ "text": { "content": "Ejemplo de Componente Versionado" } }] } },
+    { "object": "block", "type": "code", "code": { "language": "vue", "rich_text": [{ "text": { "content": "<template>\n  <component :is=\"currentJarListComponent\" />\n</template>\n\n<script setup>\nconst currentJarListComponent = computed(() => {\n  return authStore.user?.plan === 'pro' ? JarListPro : JarListLite;\n});\n</script>" } }] } }
+  ]
+}

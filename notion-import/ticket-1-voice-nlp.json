@@ -1,0 +1,164 @@
+{
+  "properties": {
+    "Name": {
+      "title": [
+        {
+          "text": {
+            "content": "1. Sistema de Registro por Voz (NLP Core)"
+          }
+        }
+      ]
+    },
+    "Status": {
+      "select": {
+        "name": "To Do"
+      }
+    },
+    "Priority": {
+      "select": {
+        "name": "Alta"
+      }
+    },
+    "Role": {
+      "multi_select": [
+        {
+          "name": "UX"
+        },
+        {
+          "name": "Fullstack"
+        }
+      ]
+    },
+    "Estimate": {
+      "rich_text": [
+        {
+          "text": {
+            "content": "16-24 horas"
+          }
+        }
+      ]
+    },
+    "User Story": {
+      "rich_text": [
+        {
+          "text": {
+            "content": "Yo como usuario con prisa, quiero dictar un gasto mediante un comando de voz desde el FAB Principal para que se registre automáticamente."
+          }
+        }
+      ]
+    },
+    "Acceptance Criteria": {
+      "rich_text": [
+        {
+          "text": {
+            "content": "• Integración de Web Speech API o motor similar en Flutter/Capacitor\n• Endpoint en Laravel que envíe el prompt a un LLM para extraer: Monto, Categoría y Moneda\n• Confirmación visual Toast con arquitectura Glassmorphism"
+          }
+        }
+      ]
+    },
+    "Technical Details": {
+      "rich_text": [
+        {
+          "text": {
+            "content": "Frontend: Web Speech API, VoiceInputDialog.vue\nBackend: VoiceController.php, VoiceParseService.php, VoiceParseService.php\nDB: voice_commands table\nAPI: POST /api/v1/voice/parse\n\nTech Stack:\n- Frontend: TypeScript interfaces, Capacitor\n- Backend: Laravel, OpenAI/Claude/Gemini\n- Mobile: @capacitor/camera"
+          }
+        }
+      ]
+    },
+    "Dependencies": {
+      "rich_text": [
+        {
+          "text": {
+            "content": "Dependencias a instalar:\nBackend: openai-php/laravel\nFrontend: @capacitor/camera, @capacitor/filesystem"
+          }
+        }
+      ]
+    }
+  },
+  "children": [
+    {
+      "object": "block",
+      "type": "heading_2",
+      "heading_2": {
+        "rich_text": [{ "text": { "content": "Especificación Técnica" } }]
+      }
+    },
+    {
+      "object": "block",
+      "type": "paragraph",
+      "paragraph": {
+        "rich_text": [
+          { "text": { "content": "Ubicación Frontend: OWFinanceFrontend2025/src/components/VoiceInputDialog.vue (nuevo)" } }
+        ]
+      }
+    },
+    {
+      "object": "block",
+      "type": "paragraph",
+      "paragraph": {
+        "rich_text": [
+          { "text": { "content": "Ubicación Backend: OWFINANCEBackend2025/app/Http/Controllers/Api/VoiceController.php" } }
+        ]
+      }
+    },
+    {
+      "object": "block",
+      "type": "paragraph",
+      "paragraph": {
+        "rich_text": [
+          { "text": { "content": "Servicios: VoiceParseService.php, LLMService.php" } }
+        ]
+      }
+    },
+    {
+      "object": "block",
+      "type": "heading_2",
+      "heading_2": {
+        "rich_text": [{ "text": { "content": "Casos de Prueba" } }]
+      }
+    },
+    {
+      "object": "block",
+      "type": "paragraph",
+      "paragraph": {
+        "rich_text": [
+          { "text": { "content": "• Input: 'Pagué 25 dólares en café' → Output: {amount: 25, currency: 'USD', category: 'Café'}" } }
+        ]
+      }
+    },
+    {
+      "object": "block",
+      "type": "paragraph",
+      "paragraph": {
+        "rich_text": [
+          { "text": { "content": "• Input: 'Gasté 50 euros en supermercado' → Output: {amount: 50, currency: 'EUR', category: 'Supermercado'}" } }
+        ]
+      }
+    },
+    {
+      "object": "block",
+      "type": "heading_2",
+      "heading_2": {
+        "rich_text": [{ "text": { "content": "Riesgos y Mitigaciones" } }]
+      }
+    },
+    {
+      "object": "block",
+      "type": "paragraph",
+      "paragraph": {
+        "rich_text": [
+          { "text": { "content": "• Reconocimiento offline: Cache de categorías, fallback a parsing regex" } }
+        ]
+      }
+    },
+    {
+      "object": "block",
+      "type": "paragraph",
+      "paragraph": {
+        "rich_text": [
+          { "text": { "content": "• LLM no responde: Timeout 10s, fallback a regex básico" } }
+        ]
+      }
+    }
+  ]
+}

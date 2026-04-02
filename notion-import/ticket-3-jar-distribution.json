@@ -1,0 +1,18 @@
+{
+  "properties": {
+    "Name": { "title": [{ "text": { "content": "3. Automatización de Reparto en Cántaros (Ingresos)" } }] },
+    "Status": { "select": { "name": "To Do" } },
+    "Priority": { "select": { "name": "Alta" } },
+    "Role": { "multi_select": [{ "name": "Fullstack" }, { "name": "Infra" }] },
+    "Estimate": { "rich_text": [{ "text": { "content": "12-16 horas" } }] },
+    "User Story": { "rich_text": [{ "text": { "content": "Como ahorrador disciplinado, quiero que al registrar mi nómina, la app divida inteligentemente el dinero entre mis cántaros basándose en mis porcentajes configurados (<=100%)." } }] },
+    "Acceptance Criteria": { "rich_text": [{ "text": { "content": "• Función de backend que detecte transacciones tipo 'Ingreso Fijo'\n• Disparador de simulador de reparto en Frontend\n• UI interactiva Drag & Drop para ajustar excedentes" } }] },
+    "Technical Details": { "rich_text": [{ "text": { "content": "Backend: IncomeDetectionService.php, JarDistributionService.php\nFrontend: JarDistributionSimulator.vue\nAPI: POST /api/v1/jars/distribution/suggest, POST /api/v1/jars/distribution/apply\nDB: income_patterns table" } }] }
+  },
+  "children": [
+    { "object": "block", "type": "heading_2", "heading_2": { "rich_text": [{ "text": { "content": "Invariantes (NO ROMPER)" } }] } },
+    { "object": "block", "type": "paragraph", "paragraph": { "rich_text": [{ "text": { "content": "• Suma de porcentajes activos <= 100%" } }] } },
+    { "object": "block", "type": "paragraph", "paragraph": { "rich_text": [{ "text": { "content": "• Categoría pertenece a máximo un jar por usuario" } }] } },
+    { "object": "block", "type": "paragraph", "paragraph": { "rich_text": [{ "text": { "content": "• Operaciones scoped al usuario autenticado" } }] } }
+  ]
+}

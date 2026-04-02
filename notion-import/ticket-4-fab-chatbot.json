@@ -1,0 +1,23 @@
+{
+  "properties": {
+    "Name": { "title": [{ "text": { "content": "4. UI de Gasto Rápido y Chatbot (Componentes Flotantes)" } }] },
+    "Status": { "select": { "name": "To Do" } },
+    "Priority": { "select": { "name": "Media" } },
+    "Role": { "multi_select": [{ "name": "UX" }, { "name": "Frontend" }] },
+    "Estimate": { "rich_text": [{ "text": { "content": "10-14 horas" } }] },
+    "User Story": { "rich_text": [{ "text": { "content": "Quiero tener acceso inmediato a inserción de datos (FAB) y al asesor (Chatbot) desde cualquier rincón de la app sin importar si estoy en Lite o Pro." } }] },
+    "Acceptance Criteria": { "rich_text": [{ "text": { "content": "• FAB gigante en esquina inferior derecha (Pro) o centro (Lite)\n• Radial Menu con opciones: Add Gasto, Ingreso, Voz\n• Botón AI Coach con chat conversacional Glassmorphism (Blur 16px)" } }] },
+    "Technical Details": { "rich_text": [{ "text": { "content": "Frontend: QuickActionFab.vue, AIChatCoachDialog.vue\nBackend: chatbot.php, FinancialChatbotService.php\nAPI: POST /api/v1/chatbot/message\nDB: chatbot_conversations table" } }] }
+  },
+  "children": [
+    { "object": "block", "type": "heading_2", "heading_2": { "rich_text": [{ "text": { "content": "Componentes" } }] } },
+    { "object": "block", "type": "paragraph", "paragraph": { "rich_text": [{ "text": { "content": "• QuickActionFab.vue - FAB principal con Radial Menu" } }] } },
+    { "object": "block", "type": "paragraph", "paragraph": { "rich_text": [{ "text": { "content": "• AIChatCoachDialog.vue - Chat con Glassmorphism" } }] } },
+    { "object": "block", "type": "heading_2", "heading_2": { "rich_text": [{ "text": { "content": "Acciones del FAB" } }] } },
+    { "object": "block", "type": "paragraph", "paragraph": { "rich_text": [{ "text": { "content": "• expense: Agregar gasto" } }] } },
+    { "object": "block", "type": "paragraph", "paragraph": { "rich_text": [{ "text": { "content": "• income: Agregar ingreso" } }] } },
+    { "object": "block", "type": "paragraph", "paragraph": { "rich_text": [{ "text": { "content": "• transfer: Transferencia" } }] } },
+    { "object": "block", "type": "paragraph", "paragraph": { "rich_text": [{ "text": { "content": "• voice: Registro por voz (Tarea #1)" } }] } },
+    { "object": "block", "type": "paragraph", "paragraph": { "rich_text": [{ "text": { "content": "• scan: Escanear recibo (Tarea #2)" } }] } }
+  ]
+}

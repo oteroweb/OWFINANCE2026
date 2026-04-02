@@ -1,0 +1,47 @@
+Primero esto es un sistema como coach o asesor financero la idea es poder registrar y al registrar tu perfil financiero primeramente esto tenlo en cuenta en la configuracion
+dependiend de mi perfil van los c antaros y las categorias
+
+
+estos elementos van en todas las vistas como layout
+
+tenemos la pagina de inicio al ser multimonedas tenemos una barra con las monedas habilitadas (al darle click podemos editar la tasa en cuestion)
+tenemos un menu de opciones para navegar entre las distintas Pantallas
+tenemos una barra con los cantaros y los disponibles que tenemos en cada cantaro
+tenemos un barra de movimientos historicos donde tenemos los intervalos desde todo, anual, semestral, trismestral, quincenal, semanal, diario y personalizado, del cual tenemos unas flechas que nos permiten navegadr por ejemplo de mes a mes si tenemos seleccionado el mensual
+boton en lugar estraategico con el cual tendremos opciones (anadir gasto,deuda nueva(explicado luego), anadir ingreso, transferencia, nota de voz, tomar foto factura, texto plano para agregar transaccion, y otras opciones que se consideren pertinente)
+boton en algun lado para hcer preguntas chatear, pedir estatus, de mis finanzas es como un chat inteligente con preguntas frecuentas o incluso por poder anadir transcciones simplemente escribiendo.
+
+
+
+Vista home
+
+    * aqui vamos a poner el total sin discriminar, pero vamos a tener por defecto ***** ocultado nuestros totales a fin de no mostrar 
+    *total discriminado con las cuentas que tenemos la opcion habilitda de tenerla registrada en nuesrtro balance
+    boton de navegador de gasto (VER EVAUADOR DE GASTO Y DEFINIR UTILIDAD) (ESTO PUEDE LEIMINARSE O MEJORARSE)
+    *GRAFICA DE CANTAROS DISTRIBUCION
+    *widget asignado gastado
+    *wigdet resumen del mes 
+    *wigder dinero ocioso o sin uso 
+
+
+Vista Trnascciones
+    barra lateral con las cuentas las cuales permiten  (aprox 20%)
+        ver las cuentas seprados por carpetas que teine e ltotal por carpepta
+            cada cuenta puede ajustarse el saldo reclcular saldo y seleccionar multiple
+
+    barra central (aprox 30)
+        pool de etiquetas con categorias las cuales podemos ver todas las categorias mas resaltantes y poder ver los totales de gastos de esas categorias tambien poder sleeccionarlas 
+        filtros relevantes y opciones del s cuentas
+        barra de saldo total
+        boton de nueva transaccion
+        widget de colunas visibles
+        talba con las trnascciones que tiene balance actual blaance inicial como primer y ultima fila
+        filas de transacciones con las descripciones categorias y demas opciones de una trnasccion esta permite editar y seleccionar mulltiples para ediciones masivas o eliminacion si se requere
+        widget finales numeros totales de trnascciones, total de ingresos total de gsastos balance total impuestos y comisiones pagads
+
+vista de cantaros
+    fila con totales
+        ingreso esperado 
+
+        
+

@@ -1,0 +1,39 @@
+{
+  "properties": {
+    "Name": {
+      "title": [{ "text": { "content": "2. Visor e Ingesta de Recibos (OCR)" } }]
+    },
+    "Status": {
+      "select": { "name": "To Do" }
+    },
+    "Priority": {
+      "select": { "name": "Alta" }
+    },
+    "Role": {
+      "multi_select": [
+        { "name": "UX" },
+        { "name": "Fullstack" }
+      ]
+    },
+    "Estimate": {
+      "rich_text": [{ "text": { "content": "20-30 horas" } }]
+    },
+    "User Story": {
+      "rich_text": [{ "text": { "content": "Yo como comprador, quiero tomar una foto a mi ticket físico o factura para que la IA extraiga el total, impuestos y lo guarde en mi cuenta asociada." } }]
+    },
+    "Acceptance Criteria": {
+      "rich_text": [{ "text": { "content": "• Acceso nativo a cámara vía Capacitor y carga de UI modal\n• Procesamiento OCR en backend (Google Vision o AWS Textract)\n• Precarga de formulario 'Añadir Transacción' con los datos extraídos" } }]
+    },
+    "Technical Details": {
+      "rich_text": [{ "text": { "content": "Frontend: ReceiptCaptureDialog.vue, Capacitor Camera Plugin\nBackend: OcrController.php, ReceiptParserService.php\nDB: receipt_scans table\nAPI: POST /api/v1/ocr/scan\n\nTech: Google Cloud Vision / AWS Textract / Tesseract.js" } }]
+    }
+  },
+  "children": [
+    { "object": "block", "type": "heading_2", "heading_2": { "rich_text": [{ "text": { "content": "Especificación Técnica" } }] } },
+    { "object": "block", "type": "paragraph", "paragraph": { "rich_text": [{ "text": { "content": "Ubicación: OWFinanceFrontend2025/src/components/ReceiptCaptureDialog.vue" } }] } },
+    { "object": "block", "type": "paragraph", "paragraph": { "rich_text": [{ "text": { "content": "Backend: app/Http/Controllers/Api/OcrController.php, ReceiptParserService.php" } }] } },
+    { "object": "block", "type": "paragraph", "paragraph": { "rich_text": [{ "text": { "content": "Permisos: NSCameraUsageDescription, NSPhotoLibraryUsageDescription" } }] } },
+    { "object": "block", "type": "heading_2", "heading_2": { "rich_text": [{ "text": { "content": "Proveedores OCR" } }] } },
+    { "object": "block", "type": "paragraph", "paragraph": { "rich_text": [{ "text": { "content": "1. Google Cloud Vision API (recomendado)\n2. AWS Textract\n3. Azure Computer Vision\n4. Tesseract.js (offline)" } }] } }
+  ]
+}

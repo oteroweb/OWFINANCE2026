@@ -1,0 +1,20 @@
+{
+  "properties": {
+    "Name": { "title": [{ "text": { "content": "5. Perfil Contextual para Coach Financiero (IA)" } }] },
+    "Status": { "select": { "name": "To Do" } },
+    "Priority": { "select": { "name": "Urgente" } },
+    "Role": { "multi_select": [{ "name": "AI Engineer" }, { "name": "Backend" }] },
+    "Estimate": { "rich_text": [{ "text": { "content": "14-18 horas" } }] },
+    "User Story": { "rich_text": [{ "text": { "content": "Quiero enseñarle a la IA quién soy (mi tipo de trabajo, familia, deudas críticas y aversión al riesgo) para que las sugerencias sean hiper-personalizadas." } }] },
+    "Acceptance Criteria": { "rich_text": [{ "text": { "content": "• Campo financial_profile_context tipo TEXT en tabla users\n• Vista Settings -> Perfil Financiero IA con textarea Glassmorphism\n• Chatbot DEBE inyectar este texto como System Prompt" } }] },
+    "Technical Details": { "rich_text": [{ "text": { "content": "Backend: UserFinancialProfileService.php, modify users table\nFrontend: FinancialProfilePage.vue\nRuta: /user/settings/financial-profile\n\nCampos BD:\n- financial_profile_context (TEXT)\n- risk_tolerance (enum: conservative/moderate/aggressive)\n- employment_type (string)\n- family_size (int)\n- monthly_debt_commitment (decimal)" } }] }
+  },
+  "children": [
+    { "object": "block", "type": "heading_2", "heading_2": { "rich_text": [{ "text": { "content": "Integración con Chatbot" } }] } },
+    { "object": "block", "type": "paragraph", "paragraph": { "rich_text": [{ "text": { "content": "FinancialChatbotService DEBE llamar a UserFinancialProfileService::generateContextForLLM() antes de enviar al LLM" } }] } },
+    { "object": "block", "type": "heading_2", "heading_2": { "rich_text": [{ "text": { "content": "Casos de Uso" } }] } },
+    { "object": "block", "type": "paragraph", "paragraph": { "rich_text": [{ "text": { "content": "• Freelancer → 'Dado que tus ingresos son variables, te sugiero...'" } }] } },
+    { "object": "block", "type": "paragraph", "paragraph": { "rich_text": [{ "text": { "content": "• Familia 4 miembros → 'Para una familia de 4, el 50/30/20 sugiere...'" } }] } },
+    { "object": "block", "type": "paragraph", "paragraph": { "rich_text": [{ "text": { "content": "• Deudas altas → 'Con $X en deudas, prioriza...'" } }] } }
+  ]
+}
