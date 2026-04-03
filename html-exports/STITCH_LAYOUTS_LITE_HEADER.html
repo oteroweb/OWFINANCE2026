@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OWFinance Lite - Header Layout</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: #f5f5f5;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-left {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .header-title {
+            font-size: 12px;
+            font-weight: 500;
+            opacity: 0.9;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .balance-display {
+            display: flex;
+            align-items: baseline;
+            gap: 6px;
+        }
+
+        .balance-amount {
+            font-size: 24px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        .balance-currency {
+            font-size: 14px;
+            font-weight: 600;
+            opacity: 0.95;
+        }
+
+        .header-right {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .currency-selector {
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 6px 10px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            min-width: 60px;
+            text-align: center;
+        }
+
+        .currency-selector:hover {
+            background: rgba(255, 255, 255, 0.3);
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+
+        .avatar-menu {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-weight: 700;
+            transition: all 0.2s ease;
+            font-size: 18px;
+        }
+
+        .avatar-menu:hover {
+            background: rgba(255, 255, 255, 0.3);
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+
+        .balance-toggle {
+            background: rgba(255, 255, 255, 0.15);
+            border: none;
+            color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+            font-size: 16px;
+        }
+
+        .balance-toggle:hover {
+            background: rgba(255, 255, 255, 0.25);
+        }
+
+        .demo-section {
+            padding: 20px;
+            background: white;
+            margin: 20px;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .demo-section h2 {
+            margin-bottom: 10px;
+            color: #333;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .code-block {
+            background: #f0f0f0;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-family: 'Courier New', monospace;
+            overflow-x: auto;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-left">
+            <div class="header-title">Total Balance</div>
+            <div class="balance-display">
+                <span class="balance-amount">$12,450.50</span>
+                <span class="balance-currency">USD</span>
+            </div>
+        </div>
+        <div class="header-right">
+            <button class="balance-toggle" title="Toggle balance visibility">👁️</button>
+            <select class="currency-selector">
+                <option>USD</option>
+                <option>EUR</option>
+                <option>GBP</option>
+                <option>MXN</option>
+            </select>
+            <div class="avatar-menu" title="User menu">JO</div>
+        </div>
+    </div>
+
+    <div class="demo-section">
+        <h2>Header Component Details</h2>
+        <p><strong>Component Name:</strong> LiteHeader / DashboardHeader</p>
+        <p><strong>Location:</strong> src/components/LiteHeader.vue</p>
+        <p><strong>Purpose:</strong> Top navigation bar for Lite version with balance display, currency selector, and user menu</p>
+
+        <h3 style="margin-top: 15px; color: #666; font-size: 12px;">Props</h3>
+        <div class="code-block">
+balanceAmount: Number (required)
+currencyCode: String (default: 'USD')
+isBalanceHidden: Boolean (default: false)
+userName: String
+userInitials: String
+currencyOptions: Array
+        </div>
+
+        <h3 style="margin-top: 15px; color: #666; font-size: 12px;">Events</h3>
+        <div class="code-block">
+@toggle-balance: Emit when eye icon clicked
+@currency-changed: Emit when currency selector changes
+@avatar-click: Emit when avatar is clicked
+        </div>
+
+        <h3 style="margin-top: 15px; color: #666; font-size: 12px;">Responsive Breakpoints</h3>
+        <div class="code-block">
+Mobile (< 640px): Single row, stacked right section
+Tablet (640px - 1024px): Single row, optimized spacing
+Desktop (> 1024px): Single row, full layout
+        </div>
+    </div>
+</body>
+</html>
