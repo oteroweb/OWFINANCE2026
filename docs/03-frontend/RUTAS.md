@@ -19,6 +19,22 @@
 
 ---
 
+## Arquitectura de layouts del área de usuario
+
+El área `/user` usa un único punto de entrada: **`DynamicRoleLayout.vue`**. Este componente selecciona el layout visual en tiempo de ejecución basándose en `auth.settings.layout_mode`:
+
+| `layout_mode` | Layout cargado | Estado |
+|---------------|----------------|--------|
+| `lite` | `LiteMobileLayout.vue` | ✅ Activo — diseño mobile-first Liquid Glass |
+| `pro` | `ProLayout.vue` | 🔧 En desarrollo |
+| `legacy` | `LegacyLayout.vue` | ✅ Fallback por defecto si `layout_mode` no está definido |
+
+> El valor de `layout_mode` viene de `auth.settings` (endpoint `/user/settings`). Si no existe, cae en `legacy`.
+
+> **Nota sobre admin:** El rol `admin` existe y tiene sus propias rutas bajo `/admin` con `AdminLayout.vue`, pero **no es prioritario en esta etapa** del producto.
+
+---
+
 ## Tabla de rutas — Web (prefijo `/app/`)
 
 ### Rutas públicas
@@ -43,7 +59,7 @@
 | `/user/expense-analysis` | `http://localhost:9000/app/user/expense-analysis` | `.../app/user/expense-analysis` | `.../app/user/expense-analysis` | Análisis de gastos |
 | `/user/config` | `http://localhost:9000/app/user/config` | `.../app/user/config` | `.../app/user/config` | Configuración / perfil del usuario |
 
-### Rutas de administrador (`role: admin`)
+### Rutas de administrador (`role: admin`) — _No prioritario actualmente_
 
 | Ruta Vue Router | URL Local | URL Dev remoto | URL Producción | Descripción |
 |-----------------|-----------|----------------|----------------|-------------|
@@ -81,6 +97,23 @@ En modo Capacitor (`quasar dev -m capacitor` o build móvil), el router usa **ha
 | `/user/home` | `file:///android_asset/www/index.html#/user/home` |
 | `/user/transactions` | `file:///android_asset/www/index.html#/user/transactions` |
 | (resto de rutas) | `...#/{ruta}` |
+
+---
+
+## Flujo de selección de layout (área usuario)
+
+```
+Usuario autenticado entra a /user/*
+          │
+          ▼
+  DynamicRoleLayout.vue
+          │
+          ├─ layout_mode === 'lite'    → LiteMobileLayout.vue  (Liquid Glass, mobile-first)
+          ├─ layout_mode === 'pro'     → ProLayout.vue
+          └─ default / no definido    → LegacyLayout.vue
+```
+
+`layout_mode` se configura en `/user/config` y se persiste en backend vía `/user/settings`.
 
 ---
 
@@ -136,3 +169,7 @@ Archivo: `OWFinanceFrontend2025/src/router/index.ts`
 | `OWFinanceFrontend2025/src/router/index.ts` | Creación del router + guard `beforeEach` |
 | `OWFinanceFrontend2025/quasar.config.ts` | `vueRouterBase`, `vueRouterMode`, `publicPath` por modo |
 | `OWFinanceFrontend2025/src/pages/LoginPage.vue` | Lógica `navigateByRole()` post-login |
+| `OWFinanceFrontend2025/src/layouts/DynamicRoleLayout.vue` | Selector dinámico de layout por `layout_mode` |
+| `OWFinanceFrontend2025/src/layouts/LiteMobileLayout.vue` | Layout Lite — Liquid Glass, mobile-first |
+| `OWFinanceFrontend2025/src/layouts/ProLayout.vue` | Layout Pro (en desarrollo) |
+| `OWFinanceFrontend2025/src/layouts/LegacyLayout.vue` | Layout Legacy — fallback por defecto |
