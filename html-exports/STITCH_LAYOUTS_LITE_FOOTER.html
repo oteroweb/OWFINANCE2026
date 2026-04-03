@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OWFinance Lite - Bottom Navigation Layout</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: #f5f5f5;
+        }
+
+        .mobile-frame {
+            width: 375px;
+            height: 812px;
+            background: white;
+            margin: 20px auto;
+            border-radius: 40px;
+            border: 12px solid #000;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .notch {
+            height: 28px;
+            background: #000;
+            border-radius: 0 0 20px 20px;
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 150px;
+            z-index: 10;
+        }
+
+        .mobile-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding-top: 28px;
+            background: white;
+        }
+
+        .content-area {
+            flex: 1;
+            padding: 16px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #999;
+        }
+
+        .bottom-nav {
+            background: white;
+            border-top: 1px solid #e5e5e5;
+            display: flex;
+            justify-content: space-around;
+            align-items: flex-end;
+            padding: 0;
+            height: 76px;
+            padding-bottom: env(safe-area-inset-bottom);
+            position: relative;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            padding: 8px 0;
+            flex: 1;
+            color: #999;
+            text-decoration: none;
+            font-size: 12px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .nav-item.active {
+            color: #667eea;
+        }
+
+        .nav-item.active::before {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            height: 3px;
+            background: #667eea;
+            width: 24px;
+            border-radius: 1.5px;
+        }
+
+        .nav-icon {
+            font-size: 24px;
+            line-height: 1;
+        }
+
+        .nav-label {
+            font-size: 11px;
+            white-space: nowrap;
+        }
+
+        .fab {
+            position: absolute;
+            bottom: 24px;
+            right: 16px;
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            font-size: 28px;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            z-index: 50;
+        }
+
+        .fab:active {
+            transform: scale(0.95);
+            box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+        }
+
+        .demo-section {
+            padding: 20px;
+            background: white;
+            margin: 20px;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .demo-section h2 {
+            margin-bottom: 10px;
+            color: #333;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .code-block {
+            background: #f0f0f0;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 11px;
+            font-family: 'Courier New', monospace;
+            overflow-x: auto;
+            margin-top: 10px;
+            line-height: 1.5;
+        }
+
+        .nav-items-list {
+            margin-top: 10px;
+            font-size: 12px;
+        }
+
+        .nav-items-list li {
+            margin-left: 20px;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="mobile-frame">
+        <div class="notch"></div>
+        <div class="mobile-content">
+            <div class="content-area">
+                <div style="text-align: center;">
+                    <div style="font-size: 18px; font-weight: 600; color: #333; margin-bottom: 8px;">Dashboard</div>
+                    <div style="font-size: 14px; color: #999;">Main content goes here</div>
+                </div>
+            </div>
+            <div class="bottom-nav">
+                <div class="nav-item active">
+                    <div class="nav-icon">🏠</div>
+                    <div class="nav-label">Home</div>
+                </div>
+                <div class="nav-item">
+                    <div class="nav-icon">💰</div>
+                    <div class="nav-label">Transactions</div>
+                </div>
+                <div class="nav-item">
+                    <div class="nav-icon">🏦</div>
+                    <div class="nav-label">Jars</div>
+                </div>
+                <div class="nav-item">
+                    <div class="nav-icon">⚙️</div>
+                    <div class="nav-label">Settings</div>
+                </div>
+                <button class="fab" title="Add transaction">+</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="demo-section">
+        <h2>Bottom Navigation Component Details</h2>
+        <p><strong>Component Name:</strong> LiteBottomNav / MobileBottomNav</p>
+        <p><strong>Location:</strong> src/components/LiteBottomNav.vue</p>
+        <p><strong>Purpose:</strong> Primary navigation for Lite version with 4 main tabs and floating action button</p>
+
+        <h3 style="margin-top: 15px; color: #666; font-size: 12px;">Features</h3>
+        <ul class="nav-items-list">
+            <li>4 main navigation tabs (Home, Transactions, Jars, Settings)</li>
+            <li>Active tab indicator (underline)</li>
+            <li>Floating Action Button (FAB) for quick add transaction</li>
+            <li>Safe area padding for notch/home indicator</li>
+            <li>Icon + label per tab</li>
+        </ul>
+
+        <h3 style="margin-top: 15px; color: #666; font-size: 12px;">Props</h3>
+        <div class="code-block">
+activeTab: String (required, one of: 'home', 'transactions', 'jars', 'settings')
+tabs: Array (Array of tab objects with id, icon, label)
+fabIcon: String (default: '+')
+showFab: Boolean (default: true)
+        </div>
+
+        <h3 style="margin-top: 15px; color: #666; font-size: 12px;">Events</h3>
+        <div class="code-block">
+@tab-changed: { tabId: String } Emit when tab is clicked
+@fab-clicked: Emit when FAB is clicked
+        </div>
+
+        <h3 style="margin-top: 15px; color: #666; font-size: 12px;">Safe Area Compliance</h3>
+        <div class="code-block">
+padding-bottom: env(safe-area-inset-bottom)
+Handles iPhone notch and home indicator
+Works on all mobile devices
+        </div>
+    </div>
+</body>
+</html>
