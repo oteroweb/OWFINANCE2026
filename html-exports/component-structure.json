@@ -1,0 +1,602 @@
+{
+  "project": "OWFinance Frontend 2025",
+  "stack": "Vue 3 + Quasar Framework + TypeScript + Vite",
+  "generated": "2026-04-02",
+  "version": "1.0",
+  "components": [
+    {
+      "name": "JarCard",
+      "path": "src/components/JarCard.vue",
+      "category": "Jars",
+      "description": "Displays a single jar card with balance, budget info, and quick stats. Supports accumulative/reset modes with live preview of percentage changes.",
+      "props": [
+        {
+          "name": "jar",
+          "type": "Record<string, any>",
+          "required": true,
+          "description": "Jar object with name, type, percent, fixedAmount, refresh_mode, active properties"
+        },
+        {
+          "name": "balance",
+          "type": "object | null",
+          "required": false,
+          "description": "Balance object with asignado, gastado, ajuste, retiros, transfers_in/out, leverage_in/out, saldo_anterior"
+        },
+        {
+          "name": "loading",
+          "type": "boolean",
+          "required": false,
+          "default": "false",
+          "description": "Loading state overlay"
+        },
+        {
+          "name": "error",
+          "type": "string",
+          "required": false,
+          "description": "Error message to display"
+        },
+        {
+          "name": "statusBalance",
+          "type": "'low' | 'medium' | 'high' | 'full'",
+          "required": false,
+          "default": "'low'",
+          "description": "Visual status indicator"
+        },
+        {
+          "name": "showLeverage",
+          "type": "boolean",
+          "required": false,
+          "default": "false",
+          "description": "Whether to show leverage button"
+        },
+        {
+          "name": "useRealIncome",
+          "type": "boolean",
+          "required": false,
+          "default": "false",
+          "description": "Use real income (true) or expected income (false)"
+        },
+        {
+          "name": "expectedIncome",
+          "type": "number",
+          "required": false,
+          "default": "0",
+          "description": "User-configured expected income"
+        },
+        {
+          "name": "calculatedIncome",
+          "type": "number",
+          "required": false,
+          "default": "0",
+          "description": "Calculated/real income from transactions"
+        }
+      ],
+      "events": [
+        {
+          "name": "adjust",
+          "payload": "void",
+          "description": "User clicked adjust button"
+        },
+        {
+          "name": "reset",
+          "payload": "void",
+          "description": "User clicked reset adjustment"
+        },
+        {
+          "name": "refresh",
+          "payload": "void",
+          "description": "User requested refresh"
+        },
+        {
+          "name": "withdraw",
+          "payload": "void",
+          "description": "User clicked register usage"
+        },
+        {
+          "name": "leverage",
+          "payload": "void",
+          "description": "User clicked leverage button"
+        }
+      ],
+      "slots": [],
+      "relatedViews": ["Dashboard", "JarsView"],
+      "keyFeatures": [
+        "Real-time balance display with progress bar",
+        "Expandable detailed breakdown",
+        "Multi-state indicators (accumulative/reset, positive/negative)",
+        "Income preview when percentages change",
+        "Carry-over amount tracking for accumulative jars",
+        "Quick action buttons (Adjust, Withdraw, Leverage)"
+      ]
+    },
+    {
+      "name": "JarsBalanceBar",
+      "path": "src/components/JarsBalanceBar.vue",
+      "category": "Jars",
+      "description": "Horizontal scrollable bar showing quick summary of all jar balances for the current period. Color-coded by status (ok, warning, negative).",
+      "props": [],
+      "events": [],
+      "slots": [],
+      "relatedViews": ["Dashboard"],
+      "internals": {
+        "api": "GET /jars/all-balances?year=Y&month=M",
+        "stores": ["useAuthStore", "usePeriodStore"]
+      },
+      "keyFeatures": [
+        "Auto-loads on mount and when period changes",
+        "Horizontal scrolling for many jars",
+        "Status chips: ok (green), warning (orange), negative (red)",
+        "Manual refresh button",
+        "Responsive to mobile"
+      ]
+    },
+    {
+      "name": "ExpenseDistributionChart",
+      "path": "src/components/ExpenseDistributionChart.vue",
+      "category": "Charts",
+      "description": "Displays two ECharts visualizations: pie chart showing budget distribution by jar, and bar chart comparing assigned vs spent vs balance.",
+      "props": [
+        {
+          "name": "rows",
+          "type": "JarChartRow[]",
+          "required": true,
+          "description": "Array of jar data with id, name, color, assignedExpected, spent, balance"
+        },
+        {
+          "name": "currencyCode",
+          "type": "string",
+          "required": true,
+          "description": "Currency code for formatting (e.g., 'USD')"
+        },
+        {
+          "name": "hideValues",
+          "type": "boolean",
+          "required": false,
+          "description": "When true, shows '••••••' instead of amounts"
+        }
+      ],
+      "events": [],
+      "slots": [],
+      "relatedViews": ["Dashboard", "AnalyticsView"],
+      "keyFeatures": [
+        "Dual-chart layout (pie + bar)",
+        "Interactive tooltips with amounts",
+        "Responsive grid",
+        "Currency formatting with Intl API",
+        "Value obfuscation option",
+        "ECharts with Canvas renderer"
+      ]
+    },
+    {
+      "name": "TransactionForm",
+      "path": "src/components/TransactionForm.vue",
+      "category": "Forms",
+      "description": "Form component for creating/editing transactions. Handles name, amount, datetime, account selection, and optional file upload.",
+      "props": [
+        {
+          "name": "form",
+          "type": "Partial<TransactionForm>",
+          "required": true,
+          "description": "Form data object"
+        },
+        {
+          "name": "editMode",
+          "type": "boolean",
+          "required": false,
+          "description": "Whether editing existing transaction"
+        }
+      ],
+      "events": [
+        {
+          "name": "save",
+          "payload": "TransactionForm",
+          "description": "Form submitted with data"
+        },
+        {
+          "name": "cancel",
+          "payload": "void",
+          "description": "User clicked cancel"
+        }
+      ],
+      "slots": [],
+      "relatedViews": ["TransactionsView"],
+      "keyFeatures": [
+        "Reactive form with v-model binding",
+        "Date/time picker support",
+        "Dynamic button label (Crear/Guardar cambios)",
+        "Basic validation (name + amount required)"
+      ]
+    },
+    {
+      "name": "TransactionCreateDialog",
+      "path": "src/components/TransactionCreateDialog.vue",
+      "category": "Dialogs",
+      "description": "Dialog wrapper for creating new transactions. Likely wraps TransactionForm in a Q-Dialog.",
+      "props": [],
+      "events": [],
+      "slots": [],
+      "relatedViews": ["TransactionsView"],
+      "keyFeatures": [
+        "Modal dialog pattern",
+        "Clean separation of form from modal"
+      ]
+    },
+    {
+      "name": "AccountsTree",
+      "path": "src/components/AccountsTree.vue",
+      "category": "Trees",
+      "description": "Hierarchical tree component for managing accounts and folders. Supports drag & drop, inline actions, and multi-folder nesting.",
+      "props": [],
+      "events": [
+        {
+          "name": "create-account",
+          "payload": "void"
+        },
+        {
+          "name": "toggle-global-balance",
+          "payload": "{ id: number, newValue: boolean }"
+        },
+        {
+          "name": "edit-account",
+          "payload": "Account"
+        },
+        {
+          "name": "delete-account",
+          "payload": "Account"
+        }
+      ],
+      "slots": [],
+      "relatedViews": ["SettingsView", "AccountsManagement"],
+      "keyFeatures": [
+        "Drag & drop reordering into folders",
+        "Folder creation and deletion",
+        "Account balance display per node",
+        "Folder total balance rollup",
+        "Global balance toggle per account",
+        "Inline edit/delete buttons on hover",
+        "Special UNASSIGNED_ID folder handling"
+      ]
+    },
+    {
+      "name": "CategoriesTree",
+      "path": "src/components/CategoriesTree.vue",
+      "category": "Trees",
+      "description": "Hierarchical tree for managing transaction categories. Supports filtering, drag & drop, and multi-column layout for large lists.",
+      "props": [
+        {
+          "name": "isReadonly",
+          "type": "boolean",
+          "required": false,
+          "description": "Disable editing when true"
+        },
+        {
+          "name": "columnsCount",
+          "type": "number",
+          "required": false,
+          "description": "Number of columns for multi-column layout"
+        }
+      ],
+      "events": [
+        {
+          "name": "create-category",
+          "payload": "void"
+        },
+        {
+          "name": "create-folder",
+          "payload": "void"
+        },
+        {
+          "name": "delete-category",
+          "payload": "Category"
+        }
+      ],
+      "slots": [],
+      "relatedViews": ["SettingsView", "CategoriesManagement"],
+      "keyFeatures": [
+        "Advanced filtering by name and type",
+        "Toggle to show/hide folders/categories",
+        "Drag & drop to root and between folders",
+        "Multi-column responsive grid",
+        "Active filter chips display",
+        "Read-only mode support"
+      ]
+    },
+    {
+      "name": "CrudPage",
+      "path": "src/components/CrudPage.vue",
+      "category": "Pages",
+      "description": "Generic CRUD page wrapper with data table, filters, search, export, and create/edit/delete dialogs.",
+      "props": [
+        {
+          "name": "dictionary",
+          "type": "object",
+          "required": true,
+          "description": "Configuration object with title, buttonNewLabel, finderLabel, forms_filter, columns"
+        }
+      ],
+      "events": [],
+      "slots": [],
+      "relatedViews": ["All CRUD-based views"],
+      "keyFeatures": [
+        "Dynamic column definitions",
+        "Server-side pagination",
+        "Global search + dynamic filters",
+        "CSV export",
+        "Inline edit/delete buttons",
+        "Many-to-many relationship rendering",
+        "Dialog for create/edit operations"
+      ]
+    },
+    {
+      "name": "PeriodFilterBar",
+      "path": "src/components/PeriodFilterBar.vue",
+      "category": "Filters",
+      "description": "Period selector bar with tabs (Day, Week, Month, Year, All, Custom) and navigation arrows. Responsive: tabs on desktop, dropdown on mobile.",
+      "props": [],
+      "events": [],
+      "slots": [],
+      "relatedViews": ["Dashboard", "TransactionsView", "Analytics"],
+      "internals": {
+        "stores": ["usePeriodStore"],
+        "composables": ["useQuasar"]
+      },
+      "keyFeatures": [
+        "Multiple period type tabs",
+        "Custom date range picker dialog",
+        "Previous/next navigation",
+        "Mobile-responsive dropdown select",
+        "Keyboard escape support",
+        "Period label localization"
+      ]
+    },
+    {
+      "name": "MonthlyIncomePanel",
+      "path": "src/components/MonthlyIncomePanel.vue",
+      "category": "Panels",
+      "description": "Card component showing expected vs real income, total assigned, and fulfillment percentage. Inline editing of expected income.",
+      "props": [],
+      "events": [],
+      "slots": [],
+      "relatedViews": ["Dashboard"],
+      "internals": {
+        "stores": ["useAuthStore"],
+        "api": "Likely PATCH for saving expected income"
+      },
+      "keyFeatures": [
+        "Dual income view (Expected vs Real)",
+        "Inline edit mode for expected income",
+        "Real-time calculation of difference and fulfillment %",
+        "Total assigned breakdown",
+        "Visual indicators (trending up/down)",
+        "Currency formatting with symbol"
+      ]
+    },
+    {
+      "name": "BigJarSidebar",
+      "path": "src/components/BigJarSidebar.vue",
+      "category": "Jars",
+      "description": "Visual jar representation showing stacked segments proportional to each jar's percentage allocation. Used in sidebar or detail views.",
+      "props": [],
+      "events": [],
+      "slots": [],
+      "relatedViews": ["Dashboard", "JarsView"],
+      "internals": {
+        "stores": ["useJarsStore"]
+      },
+      "keyFeatures": [
+        "Stacked segment visualization",
+        "Auto-calculated heights based on percentages",
+        "Deterministic color generation from jar name",
+        "Legend display with percentages/fixed amounts",
+        "Handles mixed percent + fixed jar types",
+        "Responsive to jar list changes"
+      ]
+    },
+    {
+      "name": "AccountDialog",
+      "path": "src/components/AccountDialog.vue",
+      "category": "Dialogs",
+      "description": "Dialog for creating/editing account details. Wraps account form."
+    },
+    {
+      "name": "CategoryDialog",
+      "path": "src/components/CategoryDialog.vue",
+      "category": "Dialogs",
+      "description": "Dialog for creating/editing category details. Wraps category form."
+    },
+    {
+      "name": "TransactionEditDialog",
+      "path": "src/components/TransactionEditDialog.vue",
+      "category": "Dialogs",
+      "description": "Dialog for editing existing transactions. Similar to TransactionCreateDialog but for edit mode."
+    },
+    {
+      "name": "TransactionBulkImportDialog",
+      "path": "src/components/TransactionBulkImportDialog.vue",
+      "category": "Dialogs",
+      "description": "Dialog for bulk importing transactions from file or CSV."
+    },
+    {
+      "name": "VersionBadge",
+      "path": "src/components/VersionBadge.vue",
+      "category": "UI",
+      "description": "Small badge component showing app version (Lite/Pro)."
+    },
+    {
+      "name": "AdjustmentModal",
+      "path": "src/components/AdjustmentModal.vue",
+      "category": "Dialogs",
+      "description": "Modal for adjusting jar balance (manual adjustments)."
+    },
+    {
+      "name": "AccountViewerDialog",
+      "path": "src/components/AccountViewerDialog.vue",
+      "category": "Dialogs",
+      "description": "Read-only dialog for viewing account details and transaction history."
+    },
+    {
+      "name": "AccountsSidebarWidget",
+      "path": "src/components/AccountsSidebarWidget.vue",
+      "category": "Sidebars",
+      "description": "Compact account summary widget for sidebars. Likely shows quick account balances."
+    },
+    {
+      "name": "OnboardingModal",
+      "path": "src/components/OnboardingModal.vue",
+      "category": "Dialogs",
+      "description": "First-run onboarding flow for new users."
+    },
+    {
+      "name": "TransactionFormDialog",
+      "path": "src/components/TransactionFormDialog.vue",
+      "category": "Dialogs",
+      "description": "Wrapper combining TransactionForm in a dialog."
+    },
+    {
+      "name": "EssentialLink",
+      "path": "src/components/EssentialLink.vue",
+      "category": "UI",
+      "description": "Navigation link component, likely used in drawers/navigation."
+    },
+    {
+      "name": "ExampleComponent",
+      "path": "src/components/ExampleComponent.vue",
+      "category": "Examples",
+      "description": "Placeholder/example component from Quasar template."
+    }
+  ],
+  "uiComponents": [
+    {
+      "name": "glass-fluid-card",
+      "path": "src/components/ui/glass-fluid-card.vue",
+      "category": "UI",
+      "description": "Glassmorphism card with fluid design."
+    },
+    {
+      "name": "simple-css-chart",
+      "path": "src/components/ui/simple-css-chart.vue",
+      "category": "UI",
+      "description": "CSS-only chart (no ECharts) for lightweight displays."
+    },
+    {
+      "name": "glass-fab",
+      "path": "src/components/ui/glass-fab.vue",
+      "category": "UI",
+      "description": "Floating action button with glassmorphism design."
+    },
+    {
+      "name": "spring-button",
+      "path": "src/components/ui/spring-button.vue",
+      "category": "UI",
+      "description": "Button with spring animation effects."
+    },
+    {
+      "name": "swipeable-bottom-sheet",
+      "path": "src/components/ui/swipeable-bottom-sheet.vue",
+      "category": "UI",
+      "description": "Mobile-friendly bottom sheet with swipe gestures."
+    }
+  ],
+  "liquidComponents": [
+    {
+      "name": "LiquidFAB",
+      "path": "src/components/liquid/LiquidFAB.vue",
+      "category": "Liquid Design",
+      "description": "Floating action button in Liquid design system."
+    },
+    {
+      "name": "LiquidBalanceCard",
+      "path": "src/components/liquid/LiquidBalanceCard.vue",
+      "category": "Liquid Design",
+      "description": "Balance card in Liquid design system."
+    },
+    {
+      "name": "LiquidTransactionItem",
+      "path": "src/components/liquid/LiquidTransactionItem.vue",
+      "category": "Liquid Design",
+      "description": "Transaction list item in Liquid design."
+    },
+    {
+      "name": "LiquidJarCard",
+      "path": "src/components/liquid/LiquidJarCard.vue",
+      "category": "Liquid Design",
+      "description": "Jar card variant for Lite version."
+    },
+    {
+      "name": "LiquidCategoryChip",
+      "path": "src/components/liquid/LiquidCategoryChip.vue",
+      "category": "Liquid Design",
+      "description": "Category chip in Liquid design."
+    },
+    {
+      "name": "LiquidBottomNav",
+      "path": "src/components/liquid/LiquidBottomNav.vue",
+      "category": "Liquid Design",
+      "description": "Bottom navigation in Liquid design (legacy)."
+    },
+    {
+      "name": "LiquidBottomNavNew",
+      "path": "src/components/liquid/LiquidBottomNavNew.vue",
+      "category": "Liquid Design",
+      "description": "Updated bottom navigation for Liquid design."
+    },
+    {
+      "name": "LiquidHeader",
+      "path": "src/components/liquid/LiquidHeader.vue",
+      "category": "Liquid Design",
+      "description": "Header component for Liquid design."
+    },
+    {
+      "name": "QuickActionSheet",
+      "path": "src/components/liquid/QuickActionSheet.vue",
+      "category": "Liquid Design",
+      "description": "Quick action menu sheet for Lite version."
+    },
+    {
+      "name": "LiteHomeView",
+      "path": "src/components/views/LiteHomeView.vue",
+      "category": "Liquid Design",
+      "description": "Main home view for Lite version using Liquid design."
+    }
+  ],
+  "otherComponents": [
+    {
+      "name": "TransactionPalette",
+      "path": "src/components/transactions/TransactionPalette.vue",
+      "category": "Transactions",
+      "description": "Component for displaying transaction category palette or quick selection."
+    }
+  ],
+  "summary": {
+    "totalComponents": 42,
+    "byCategory": {
+      "Jars": 3,
+      "Charts": 1,
+      "Forms": 1,
+      "Dialogs": 8,
+      "Trees": 2,
+      "Pages": 1,
+      "Filters": 1,
+      "Panels": 1,
+      "Sidebars": 1,
+      "UI": 5,
+      "Liquid Design": 10,
+      "Transactions": 1,
+      "Examples": 1,
+      "Other": 5
+    },
+    "keyArchitecturalPatterns": [
+      "Component composition with Quasar",
+      "TypeScript prop/event typing",
+      "Pinia store integration (auth, period, jars)",
+      "Dialog-wrapper pattern for modals",
+      "Drag & drop support (AccountsTree, CategoriesTree)",
+      "Responsive design with Quasar breakpoints",
+      "ECharts integration for visualizations",
+      "Glassmorphism UI design system",
+      "Liquid design variant for Lite version",
+      "Currency formatting with Intl API",
+      "Multi-language support structure"
+    ]
+  }
+}
