@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>OW Finance - Gestión de Cántaros</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&amp;family=Inter:wght@300;400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "on-secondary-fixed": "#002113",
+                        "on-surface-variant": "#bec8d2",
+                        "surface-dim": "#0b1326",
+                        "background": "#0b1326",
+                        "surface-container-high": "#222a3d",
+                        "surface-bright": "#31394d",
+                        "error": "#ffb4ab",
+                        "tertiary-container": "#c59300",
+                        "on-primary-fixed-variant": "#004c6e",
+                        "surface-container-low": "#131b2e",
+                        "on-primary-fixed": "#001e2f",
+                        "inverse-primary": "#006591",
+                        "primary": "#89ceff",
+                        "on-secondary-container": "#00311f",
+                        "surface-variant": "#2d3449",
+                        "surface-container-highest": "#2d3449",
+                        "on-tertiary-container": "#433000",
+                        "secondary": "#4edea3",
+                        "on-background": "#dae2fd",
+                        "on-tertiary-fixed": "#261a00",
+                        "tertiary-fixed-dim": "#f9bd22",
+                        "secondary-fixed-dim": "#4edea3",
+                        "on-secondary": "#003824",
+                        "on-error": "#690005",
+                        "error-container": "#93000a",
+                        "on-tertiary-fixed-variant": "#5c4300",
+                        "surface-container": "#171f33",
+                        "outline": "#88929b",
+                        "tertiary": "#f9bd22",
+                        "on-surface": "#dae2fd",
+                        "primary-container": "#0ea5e9",
+                        "on-secondary-fixed-variant": "#005236",
+                        "secondary-container": "#00a572",
+                        "on-primary": "#00344d",
+                        "surface-container-lowest": "#060e20",
+                        "on-primary-container": "#003751",
+                        "on-tertiary": "#402d00",
+                        "surface-tint": "#89ceff",
+                        "secondary-fixed": "#6ffbbe",
+                        "surface": "#0b1326",
+                        "inverse-surface": "#dae2fd",
+                        "inverse-on-surface": "#283044",
+                        "primary-fixed-dim": "#89ceff",
+                        "tertiary-fixed": "#ffdf9f",
+                        "primary-fixed": "#c9e6ff",
+                        "on-error-container": "#ffdad6",
+                        "outline-variant": "#3e4850"
+                    },
+                    fontFamily: {
+                        "headline": ["Manrope"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    },
+                    borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body { font-family: 'Inter', sans-serif; background-color: #0b1326; color: #dae2fd; }
+        .font-headline { font-family: 'Manrope', sans-serif; }
+        .glass-panel { background: rgba(45, 52, 73, 0.6); backdrop-filter: blur(16px); }
+        .tonal-transition { background: linear-gradient(180deg, #131b2e 0%, #0b1326 100%); }
+    </style>
+</head>
+<body class="antialiased overflow-x-hidden">
+<!-- SIDEBAR (Fixed Left) -->
+<aside class="fixed left-0 top-0 h-full flex flex-col w-64 border-r border-white/10 bg-slate-900/60 backdrop-blur-xl shadow-[0_0_40px_rgba(0,30,47,0.08)] z-50">
+<div class="p-8">
+<h1 class="text-2xl font-bold text-sky-400 tracking-tighter font-headline">Liquid Editorial</h1>
+<p class="text-[10px] uppercase tracking-wider text-slate-400 mt-1 font-label">The Ethereal Vault</p>
+</div>
+<nav class="flex-1 px-4 space-y-2">
+<!-- Dashboard -->
+<a class="flex items-center px-4 py-3 text-slate-400 hover:text-sky-200 transition-colors hover:bg-white/10 hover:backdrop-blur-lg rounded-lg group" href="#">
+<span class="material-symbols-outlined mr-3 transition-transform group-hover:scale-110">dashboard</span>
+<span class="font-medium">Dashboard</span>
+</a>
+<!-- Cántaros (Active) -->
+<a class="flex items-center px-4 py-3 text-sky-400 font-bold bg-white/5 border-r-4 border-sky-500 transition-all duration-300 ease-in-out" href="#">
+<span class="material-symbols-outlined mr-3" data-weight="fill" style="font-variation-settings: 'FILL' 1;">database</span>
+<span class="font-medium">Cántaros</span>
+</a>
+<!-- Transferencias -->
+<a class="flex items-center px-4 py-3 text-slate-400 hover:text-sky-200 transition-colors hover:bg-white/10 hover:backdrop-blur-lg rounded-lg group" href="#">
+<span class="material-symbols-outlined mr-3 transition-transform group-hover:scale-110">swap_horiz</span>
+<span class="font-medium">Transferencias</span>
+</a>
+<!-- Inversiones -->
+<a class="flex items-center px-4 py-3 text-slate-400 hover:text-sky-200 transition-colors hover:bg-white/10 hover:backdrop-blur-lg rounded-lg group" href="#">
+<span class="material-symbols-outlined mr-3 transition-transform group-hover:scale-110">trending_up</span>
+<span class="font-medium">Inversiones</span>
+</a>
+<!-- Ajustes -->
+<a class="flex items-center px-4 py-3 text-slate-400 hover:text-sky-200 transition-colors hover:bg-white/10 hover:backdrop-blur-lg rounded-lg group" href="#">
+<span class="material-symbols-outlined mr-3 transition-transform group-hover:scale-110">settings</span>
+<span class="font-medium">Ajustes</span>
+</a>
+</nav>
+<div class="p-6 mt-auto">
+<div class="flex items-center gap-3 p-3 bg-white/5 rounded-2xl">
+<img alt="Usuario Premium" class="w-10 h-10 rounded-full border border-sky-500/30 object-cover" data-alt="Close-up portrait of a professional male in a suit with subtle cool studio lighting and a clean background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC0LhfKco0PiG9zcosGTiTs_KIhIj-4EFJZyLNeFaRuapIqRw0Bjo1SppiNUg73EtYa6fg9qxct2PzVVf5Dq3KsbOp0pOa_TOrHrdyiFt0fJJgwkNbDP3gr95yyzxKCt6UXMd6hnJ_CZoT_ZRd4OxszaHOPkTGYNbXjDeHGajz3sxBdaG5q4CuhvNEdz96tSqTcVNqwq4nwzvzt5tGAfNPHGxns5_U7d4ReYnzSomIzvlh_XlTyRIKEaxkrHy3SG2A9mIxuvU3H4G0"/>
+<div class="overflow-hidden">
+<p class="text-sm font-bold truncate">Usuario Premium</p>
+<p class="text-[10px] text-slate-500">ADMIN Ethereal</p>
+</div>
+</div>
+</div>
+</aside>
+<!-- TOP NAVBAR -->
+<header class="fixed top-0 right-0 h-20 flex justify-between items-center pl-72 pr-8 bg-[#0b1326]/80 backdrop-blur-md z-40 w-full">
+<div>
+<h2 class="text-xl font-bold font-headline text-sky-400">Gestión de Cántaros</h2>
+<p class="text-xs text-slate-400">Liquid Editorial Finance Shell</p>
+</div>
+<div class="flex items-center gap-6">
+<div class="relative flex items-center bg-surface-container-low px-4 py-2 rounded-full border border-white/5 group focus-within:border-sky-500/50 transition-all">
+<span class="material-symbols-outlined text-slate-500 text-sm mr-2">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-sm text-on-surface placeholder-slate-500 w-64" placeholder="Buscar transacción..." type="text"/>
+</div>
+<div class="flex items-center gap-4">
+<button class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-white/5 text-slate-400 hover:text-sky-400 transition-all">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-white/5 text-slate-400 hover:text-sky-400 transition-all">
+<span class="material-symbols-outlined">help_outline</span>
+</button>
+</div>
+</div>
+</header>
+<!-- MAIN CONTENT -->
+<main class="pt-28 pl-72 pr-8 pb-12 min-h-screen">
+<!-- HERO KPI SECTION -->
+<section class="grid grid-cols-4 gap-6 mb-12">
+<!-- KPI 1 -->
+<div class="bg-surface-container p-6 rounded-xl shadow-[0_0_40px_rgba(0,30,47,0.08)] relative overflow-hidden group">
+<div class="absolute -right-4 -top-4 w-24 h-24 bg-sky-500/10 rounded-full blur-2xl group-hover:bg-sky-500/20 transition-all"></div>
+<p class="text-xs font-label uppercase tracking-widest text-slate-400 mb-2">Ingreso Esperado</p>
+<p class="text-3xl font-headline font-extrabold text-on-surface">$3,200</p>
+<div class="mt-4 flex items-center text-xs text-secondary font-medium">
+<span class="material-symbols-outlined text-sm mr-1">trending_up</span>
+                    +12.5% vs mes anterior
+                </div>
+</div>
+<!-- KPI 2 -->
+<div class="bg-surface-container p-6 rounded-xl shadow-[0_0_40px_rgba(0,30,47,0.08)] relative overflow-hidden group">
+<p class="text-xs font-label uppercase tracking-widest text-slate-400 mb-2">Total Asignado</p>
+<div class="flex items-baseline gap-2">
+<p class="text-3xl font-headline font-extrabold text-on-surface">$2,944</p>
+<span class="text-sm font-bold text-sky-400">(92%)</span>
+</div>
+<div class="w-full bg-surface-container-low h-1.5 rounded-full mt-4 overflow-hidden">
+<div class="bg-sky-400 h-full rounded-full" style="width: 92%"></div>
+</div>
+</div>
+<!-- KPI 3 -->
+<div class="bg-surface-container p-6 rounded-xl shadow-[0_0_40px_rgba(0,30,47,0.08)] relative overflow-hidden group">
+<p class="text-xs font-label uppercase tracking-widest text-slate-400 mb-2">Total Gastado</p>
+<p class="text-3xl font-headline font-extrabold text-on-surface">$1,126</p>
+<div class="mt-4 flex items-center text-xs text-slate-500 font-medium">
+<span class="material-symbols-outlined text-sm mr-1">history</span>
+                    Último gasto: hace 2 horas
+                </div>
+</div>
+<!-- KPI 4 (Warning Accent) -->
+<div class="bg-surface-container p-6 rounded-xl shadow-[0_0_40px_rgba(0,30,47,0.08)] relative border border-tertiary/20 group">
+<div class="absolute -right-4 -top-4 w-24 h-24 bg-tertiary/10 rounded-full blur-2xl"></div>
+<p class="text-xs font-label uppercase tracking-widest text-tertiary mb-2">Dinero Ocioso</p>
+<p class="text-3xl font-headline font-extrabold text-tertiary">$256</p>
+<button class="mt-4 w-full py-2 bg-tertiary/10 hover:bg-tertiary/20 text-tertiary text-[10px] font-bold uppercase tracking-widest rounded-lg transition-colors">
+                    Reasignar Ahora
+                </button>
+</div>
+</section>
+<div class="flex flex-col xl:flex-row gap-8">
+<!-- LEFT: JARS DATA TABLE (65%) -->
+<div class="xl:w-[65%] space-y-6">
+<div class="bg-surface-container-low rounded-xl overflow-hidden shadow-2xl">
+<div class="p-6 border-b border-white/5 flex justify-between items-center">
+<h3 class="font-headline font-bold text-lg">Distribución de Cántaros</h3>
+<div class="flex gap-2">
+<button class="p-2 hover:bg-white/5 rounded-lg text-slate-400"><span class="material-symbols-outlined text-sm">filter_list</span></button>
+<button class="p-2 hover:bg-white/5 rounded-lg text-slate-400"><span class="material-symbols-outlined text-sm">more_vert</span></button>
+</div>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="text-[10px] font-label uppercase tracking-widest text-slate-500 border-b border-white/5">
+<th class="px-4 py-4 font-normal"></th>
+<th class="px-2 py-4 font-normal">Nombre</th>
+<th class="px-4 py-4 font-normal text-right">% Asig</th>
+<th class="px-4 py-4 font-normal text-right">Presupuesto</th>
+<th class="px-4 py-4 font-normal text-right">Arrastre</th>
+<th class="px-4 py-4 font-normal text-right">Disponible</th>
+<th class="px-4 py-4 font-normal text-center">Tendencia</th>
+<th class="px-4 py-4 font-normal"></th>
+</tr>
+</thead>
+<tbody class="text-sm font-body">
+<!-- Row 1 -->
+<tr class="bg-[#1A1A2E] hover:bg-white/5 transition-colors group">
+<td class="px-4 py-4 text-slate-600 cursor-grab"><span class="material-symbols-outlined text-lg">drag_indicator</span></td>
+<td class="px-2 py-4">
+<div class="flex items-center gap-3">
+<span class="w-3 h-3 rounded-full bg-sky-400 ring-4 ring-sky-400/10"></span>
+<span class="font-bold text-on-surface">Necesidades</span>
+</div>
+</td>
+<td class="px-4 py-4 text-right font-medium">55%</td>
+<td class="px-4 py-4 text-right font-mono text-xs">$1,760.00</td>
+<td class="px-4 py-4 text-right font-mono text-xs text-slate-500">+$12.00</td>
+<td class="px-4 py-4 text-right font-bold text-secondary">+$420.00</td>
+<td class="px-4 py-4 text-center">
+<span class="material-symbols-outlined text-secondary text-sm">trending_up</span>
+</td>
+<td class="px-4 py-4 text-right">
+<button class="opacity-0 group-hover:opacity-100 p-1 hover:text-sky-400 transition-all"><span class="material-symbols-outlined text-lg">edit</span></button>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="bg-[#222A3D] hover:bg-white/5 transition-colors group">
+<td class="px-4 py-4 text-slate-600 cursor-grab"><span class="material-symbols-outlined text-lg">drag_indicator</span></td>
+<td class="px-2 py-4">
+<div class="flex items-center gap-3">
+<span class="w-3 h-3 rounded-full bg-secondary ring-4 ring-secondary/10"></span>
+<span class="font-bold text-on-surface">Ahorro</span>
+</div>
+</td>
+<td class="px-4 py-4 text-right font-medium">20%</td>
+<td class="px-4 py-4 text-right font-mono text-xs">$640.00</td>
+<td class="px-4 py-4 text-right font-mono text-xs text-slate-500">$0.00</td>
+<td class="px-4 py-4 text-right font-bold text-secondary">+$640.00</td>
+<td class="px-4 py-4 text-center">
+<span class="material-symbols-outlined text-slate-500 text-sm">horizontal_rule</span>
+</td>
+<td class="px-4 py-4 text-right">
+<button class="opacity-0 group-hover:opacity-100 p-1 hover:text-sky-400 transition-all"><span class="material-symbols-outlined text-lg">edit</span></button>
+</td>
+</tr>
+<!-- Row 3 -->
+<tr class="bg-[#1A1A2E] hover:bg-white/5 transition-colors group">
+<td class="px-4 py-4 text-slate-600 cursor-grab"><span class="material-symbols-outlined text-lg">drag_indicator</span></td>
+<td class="px-2 py-4">
+<div class="flex items-center gap-3">
+<span class="w-3 h-3 rounded-full bg-tertiary ring-4 ring-tertiary/10"></span>
+<span class="font-bold text-on-surface">Diversión</span>
+</div>
+</td>
+<td class="px-4 py-4 text-right font-medium">15%</td>
+<td class="px-4 py-4 text-right font-mono text-xs">$480.00</td>
+<td class="px-4 py-4 text-right font-mono text-xs text-error">-$25.00</td>
+<td class="px-4 py-4 text-right font-bold text-secondary">+$85.00</td>
+<td class="px-4 py-4 text-center">
+<span class="material-symbols-outlined text-error text-sm">trending_down</span>
+</td>
+<td class="px-4 py-4 text-right">
+<button class="opacity-0 group-hover:opacity-100 p-1 hover:text-sky-400 transition-all"><span class="material-symbols-outlined text-lg">edit</span></button>
+</td>
+</tr>
+<!-- Row 4 -->
+<tr class="bg-[#222A3D] hover:bg-white/5 transition-colors group">
+<td class="px-4 py-4 text-slate-600 cursor-grab"><span class="material-symbols-outlined text-lg">drag_indicator</span></td>
+<td class="px-2 py-4">
+<div class="flex items-center gap-3">
+<span class="w-3 h-3 rounded-full bg-primary-container ring-4 ring-primary-container/10"></span>
+<span class="font-bold text-on-surface">Inversión</span>
+</div>
+</td>
+<td class="px-4 py-4 text-right font-medium">10%</td>
+<td class="px-4 py-4 text-right font-mono text-xs">$320.00</td>
+<td class="px-4 py-4 text-right font-mono text-xs text-slate-500">$0.00</td>
+<td class="px-4 py-4 text-right font-bold text-secondary">+$320.00</td>
+<td class="px-4 py-4 text-center">
+<span class="material-symbols-outlined text-secondary text-sm">trending_up</span>
+</td>
+<td class="px-4 py-4 text-right">
+<button class="opacity-0 group-hover:opacity-100 p-1 hover:text-sky-400 transition-all"><span class="material-symbols-outlined text-lg">edit</span></button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<!-- RIGHT: ANALYTICS & REGLAS (35%) -->
+<div class="xl:w-[35%] space-y-6">
+<!-- Donut Chart Card -->
+<div class="bg-surface-container p-8 rounded-xl shadow-2xl relative overflow-hidden">
+<h3 class="font-headline font-bold text-lg mb-8">Asset Allocation</h3>
+<div class="flex justify-center items-center relative py-4">
+<!-- Simulated Donut Chart with SVG -->
+<svg class="w-48 h-48 transform -rotate-90">
+<circle class="text-white/5" cx="96" cy="96" fill="transparent" r="80" stroke="currentColor" stroke-width="12"></circle>
+<circle class="text-sky-400" cx="96" cy="96" fill="transparent" r="80" stroke="currentColor" stroke-dasharray="502" stroke-dashoffset="226" stroke-width="12"></circle>
+<circle class="text-secondary" cx="96" cy="96" fill="transparent" r="80" stroke="currentColor" stroke-dasharray="502" stroke-dashoffset="401" stroke-width="12"></circle>
+</svg>
+<div class="absolute inset-0 flex flex-col items-center justify-center">
+<span class="text-3xl font-headline font-extrabold">$2.9k</span>
+<span class="text-[10px] font-label text-slate-500 uppercase">Total</span>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-4 mt-8">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-sky-400"></span>
+<span class="text-xs font-medium text-slate-300">Necesidades</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-secondary"></span>
+<span class="text-xs font-medium text-slate-300">Ahorro</span>
+</div>
+</div>
+</div>
+<!-- Reglas de Arrastre Panel -->
+<div class="bg-[#1A1A2E] p-6 rounded-xl border border-white/5">
+<div class="flex items-center gap-2 mb-6">
+<span class="material-symbols-outlined text-sky-400">auto_awesome</span>
+<h3 class="font-headline font-bold">Reglas de Arrastre</h3>
+</div>
+<div class="space-y-4">
+<div class="flex items-center justify-between p-3 bg-white/5 rounded-xl">
+<div>
+<p class="text-xs font-bold">Superávit carry-over</p>
+<p class="text-[10px] text-slate-500">Pasar sobrante al siguiente mes</p>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-11 h-6 bg-slate-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-sky-500"></div>
+</label>
+</div>
+<div class="flex items-center justify-between p-3 bg-white/5 rounded-xl">
+<div>
+<p class="text-xs font-bold">Déficit autofund</p>
+<p class="text-[10px] text-slate-500">Cubrir saldos negativos auto.</p>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input class="sr-only peer" type="checkbox"/>
+<div class="w-11 h-6 bg-slate-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-sky-500"></div>
+</label>
+</div>
+</div>
+<div class="mt-8 pt-6 border-t border-white/5">
+<button class="w-full py-4 border border-error/50 text-error hover:bg-error/10 text-xs font-bold uppercase tracking-widest rounded-xl transition-all flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-sm">warning</span>
+                            Ejecutar Cierre de Mes
+                        </button>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- FLOATING ACTIONS -->
+<div class="fixed bottom-8 right-8 flex flex-col items-center gap-4 z-50">
+<!-- AI Brain Icon Floating (Small Pill) -->
+<button class="bg-surface-variant p-3 rounded-full shadow-2xl hover:scale-110 transition-transform group border border-white/10">
+<span class="material-symbols-outlined text-sky-400 group-hover:text-sky-300">psychology</span>
+</button>
+<!-- MAIN FAB -->
+<button class="w-16 h-16 rounded-full bg-gradient-to-br from-primary to-primary-container shadow-[0_0_30px_rgba(14,165,233,0.4)] flex items-center justify-center text-on-primary hover:scale-105 active:scale-95 transition-all">
+<span class="material-symbols-outlined text-3xl" data-weight="fill" style="font-variation-settings: 'FILL' 1;">add</span>
+</button>
+</div>
+</body></html>

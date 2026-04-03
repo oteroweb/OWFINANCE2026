@@ -15,7 +15,7 @@ Este workspace contiene dos repositorios Git separados:
 
 Directorio raiz de coordinacion (scripts y docs compartidos):
 - `README.md`
-- `dev-start.sh`, `dev-stop.sh`, `switch-env.sh`, `deploy-mobile.sh`, `status.sh`
+- `dev-start.sh`, `dev-stop.sh`, `switch-env.sh`, `deploy-mobile.sh`, `status.sh`, `telegram-notify.sh`, `telegram-heartbeat.sh`, `ops-status.sh`
 
 ## Mapa rapido del sistema
 - Backend:
@@ -72,6 +72,13 @@ Directorio raiz de coordinacion (scripts y docs compartidos):
   - `./dev-stop.sh`
 - Estado general:
   - `./status.sh`
+- Estado operativo extendido:
+  - `./ops-status.sh dev`
+  - `./ops-status.sh stage`
+- Avisos por Telegram:
+  - `./telegram-notify.sh test --title OWFINANCE`
+  - `./telegram-step.sh --title Worker "Task step happened"`
+  - `./telegram-heartbeat.sh --title Worker --interval 300 "Task still running"` solo si hace falta un heartbeat real
 - Mobile Android dev:
   - `./dev-mobile.sh`
 - Deploy mobile:
@@ -151,8 +158,49 @@ Antes de modificar deployment, auth, rutas o jars:
 - validar contrato API;
 - dejar pasos de rollback claros.
 
+## Tooling de agentes instalado en este workspace
+
+### Agent Teams Lite
+- El workspace conserva `CLAUDE.md` como referencia de integración ATL, pero el entorno activo del usuario prioriza OpenCode, Antigravity/Gemini y VS Code.
+- Skills SDD disponibles en `.claude/skills/`:
+  - `sdd-init`, `sdd-explore`, `sdd-propose`, `sdd-spec`, `sdd-design`, `sdd-tasks`, `sdd-apply`, `sdd-verify`, `sdd-archive`, `skill-registry`.
+- Convenciones compartidas en `.claude/skills/_shared/`.
+- Registro local de skills en `.atl/skill-registry.md`.
+
+### Engram
+- Se asume como binario global instalado en la máquina.
+- Configuración MCP de workspace en `.vscode/mcp.json`.
+- Configuración global activa también en OpenCode (`~/.config/opencode/opencode.json`) y Gemini/Antigravity (`~/.gemini/settings.json`).
+- Preferencia de persistencia para flujos SDD: `engram` cuando esté disponible.
+
+### Roles operativos OWFINANCE
+- Skills de rol del workspace en `.agents/skills/owf-role-*/`.
+- Skill operativo de Telegram/Ops en `.agents/skills/telegram-ops-notifier/`.
+- Skill de bridge/contexto Telegram en `.agents/skills/telegram-context-bridge/`.
+- El bridge Telegram mantiene exactamente `/status`, `/status dev`, `/status stage`, `/status prod`, `/help`, `/last` y `/context`; los mensajes libres se responden como chat paralelo OWFINANCE con Gemini CLI local si esta disponible o con fallback deterministico de transcript/snapshot/docs.
+- Skill documental del workspace en `.agents/skills/documentator/`.
+- Copia para discoverability de OpenCode en `~/.config/opencode/skills/owf-role-*/`.
+- Copia OpenCode del skill operativo en `~/.config/opencode/skills/telegram-ops-notifier/`.
+- Copia OpenCode del skill de bridge en `~/.config/opencode/skills/telegram-context-bridge/`.
+- Copia OpenCode del skill documental en `~/.config/opencode/skills/documentator/`.
+- Slash commands sugeridos en `~/.config/opencode/commands/role-*.md`.
+- Slash command sugerido para Telegram/Ops en `~/.config/opencode/commands/telegram-ops.md`.
+- Slash command sugerido para documentación en `~/.config/opencode/commands/documentator.md`.
+- Documento de referencia: `docs/01-configuracion/SAAS_ROLE_SYSTEM.md`.
+- La carpeta Drive `OWFINANCE` (`https://drive.google.com/drive/folders/1tjxzCrWceyWPXydOL374FytD0ExM_Jkh`) es el hub documental canonico y la fuente de verdad para estrategia, roles, planning y contexto compartido; bajar al repo solo resumenes cortos cuando hagan falta para agentes o ejecucion local.
+- Cada rol OWF debe mantener docs, playbooks y decision logs canonicos en su carpeta primaria dentro de esa carpeta Drive `OWFINANCE`; usar `documentator` para discovery, estructura o sync corto al repo.
+- Roles/skills instalados: `owf-role-ceo-strategy`, `owf-role-product-owner`, `owf-role-product-operations`, `owf-role-scrum-master-planning`, `owf-role-sales-commercial`, `owf-role-ui-ux-design-steward`, `owf-role-finance-unit-economics`, `owf-role-marketing-growth`, `owf-role-customer-success`, `owf-role-risk-compliance`, `owf-role-data-insights`, `owf-role-engineering-architecture`, `owf-role-qa-release-quality`, `owf-role-devops-platform-sre`, `documentator`, `telegram-ops-notifier`, y `telegram-context-bridge`.
+- Si un rol necesita actualizar backlog, sprint, tareas o colas operativas en Notion, debe cargar primero `notion-mcp-integration`, intentar MCP primero y usar fallback HTTP API solo cuando MCP falle por auth/conectividad y exista `NOTION_API_TOKEN` valido. Para propuestas markdown del workspace, usar `notion-import/create_tickets_from_proposal.py`.
+
+### Gentleman Guardian Angel (GGA)
+- Configuración por repositorio:
+  - `OWFINANCEBackend2025/.gga`
+  - `OWFinanceFrontend2025/.gga`
+- Ambas configuraciones usan este `AGENTS.md` como `RULES_FILE` compartido.
+- Para activar hooks: ejecutar `gga install` dentro de cada repo Git.
+
 **Regla de UI/UX (Frontend):**
-Si la tarea toca el Frontend, DEBES leer la documentación y las directrices en `docs/ui-ux/` (particularmente `02-current-ui-inventory-and-architecture.md` y `03-unified-design-rules.md`) para asegurar consistencia visual, un enfoque "mobile-first" y respetar las definiciones "Lite" vs "Pro". Apóyate en el skill `ui-ux-pro-max` si requieres generar o estructurar componentes.
+Si la tarea toca el Frontend, DEBES leer la documentación y las directrices en `docs/ui-ux/` (particularmente `02-current-ui-inventory-and-architecture.md`, `03-unified-design-rules.md` y **`MASTER_UI_SOURCES.md`**) para asegurar consistencia visual con las fuentes de Stitch, un enfoque "mobile-first" y respetar las definiciones "Lite" vs "Pro". Apóyate en el skill `ui-ux-pro-max` si requieres generar o estructurar componentes.
 
 ## Referencias
 - Arquitectura general: `docs/ARQUITECTURA_PROYECTO.md`

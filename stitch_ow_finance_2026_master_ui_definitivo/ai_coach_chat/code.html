@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>OW Finance - AI Coach</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "on-primary-fixed-variant": "#004c6e",
+              "on-tertiary-container": "#433000",
+              "inverse-surface": "#dae2fd",
+              "tertiary-fixed-dim": "#f9bd22",
+              "primary": "#89ceff",
+              "on-background": "#dae2fd",
+              "surface-dim": "#0b1326",
+              "on-tertiary-fixed": "#261a00",
+              "tertiary-container": "#c59300",
+              "surface-container-lowest": "#060e20",
+              "surface-container-high": "#222a3d",
+              "secondary-fixed-dim": "#4edea3",
+              "secondary": "#4edea3",
+              "surface-bright": "#31394d",
+              "surface-tint": "#89ceff",
+              "secondary-fixed": "#6ffbbe",
+              "error-container": "#93000a",
+              "tertiary": "#f9bd22",
+              "on-secondary": "#003824",
+              "on-error": "#690005",
+              "surface-container-low": "#131b2e",
+              "on-tertiary": "#402d00",
+              "surface-container-highest": "#2d3449",
+              "surface-variant": "#2d3449",
+              "on-primary-container": "#003751",
+              "primary-fixed-dim": "#89ceff",
+              "on-primary-fixed": "#001e2f",
+              "outline": "#88929b",
+              "on-secondary-fixed-variant": "#005236",
+              "on-secondary-container": "#00311f",
+              "primary-fixed": "#c9e6ff",
+              "tertiary-fixed": "#ffdf9f",
+              "on-error-container": "#ffdad6",
+              "background": "#0b1326",
+              "on-surface-variant": "#bec8d2",
+              "on-surface": "#dae2fd",
+              "on-primary": "#00344d",
+              "outline-variant": "#3e4850",
+              "error": "#ffb4ab",
+              "on-secondary-fixed": "#002113",
+              "secondary-container": "#00a572",
+              "inverse-primary": "#006591",
+              "on-tertiary-fixed-variant": "#5c4300",
+              "primary-container": "#0ea5e9",
+              "inverse-on-surface": "#283044",
+              "surface-container": "#171f33",
+              "surface": "#0b1326"
+            },
+            fontFamily: {
+              "headline": ["Manrope"],
+              "body": ["Inter"],
+              "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        .glass-bg {
+            background: rgba(11, 19, 38, 0.7);
+            backdrop-filter: blur(32px);
+            -webkit-backdrop-filter: blur(32px);
+        }
+        .ai-avatar-gradient {
+            background: linear-gradient(135deg, #8B5CF6 0%, #0EA5E9 100%);
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .custom-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface font-body text-on-surface antialiased selection:bg-primary/30 overflow-hidden h-screen w-full flex flex-col">
+<!-- Header: Glass Top Bar -->
+<header class="fixed top-0 w-full z-50 glass-bg flex justify-between items-center px-6 h-20 shadow-[0_4px_30px_rgba(0,0,0,0.1)]">
+<div class="flex items-center gap-4">
+<button class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-white/10 active:scale-95 transition-all">
+<span class="material-symbols-outlined text-on-surface" data-icon="expand_more">expand_more</span>
+</button>
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 ai-avatar-gradient rounded-full flex items-center justify-center shadow-lg shadow-primary/20">
+<span class="material-symbols-outlined text-white text-sm" data-icon="auto_awesome" data-weight="fill" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+</div>
+<div>
+<h1 class="font-headline font-bold text-base tracking-tight text-white leading-tight">Asesor Financiero IA</h1>
+<span class="text-[10px] uppercase tracking-[0.1em] font-bold text-primary flex items-center gap-1.5">
+<span class="w-1.5 h-1.5 bg-secondary rounded-full animate-pulse"></span>
+                        En línea
+                    </span>
+</div>
+</div>
+</div>
+<button class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-white/10 active:scale-95 transition-all">
+<span class="material-symbols-outlined text-on-surface" data-icon="more_vert">more_vert</span>
+</button>
+</header>
+<!-- Main Chat Feed Container -->
+<main class="flex-1 overflow-y-auto pt-24 pb-44 px-6 space-y-8 custom-scrollbar relative">
+<!-- AI Initial Context Message -->
+<div class="flex flex-col gap-2 max-w-[85%]">
+<div class="flex items-end gap-3">
+<div class="w-8 h-8 ai-avatar-gradient rounded-full flex-shrink-0 flex items-center justify-center mb-1">
+<span class="material-symbols-outlined text-white text-[14px]" data-icon="auto_awesome" data-weight="fill" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+</div>
+<div class="bg-surface-container-high text-on-surface p-4 rounded-2xl rounded-bl-none shadow-sm">
+<p class="text-[15px] leading-relaxed">¡Hola! He revisado tus finanzas. Tasa de ahorro: <span class="text-secondary font-semibold">42%</span>. Sugiero redirigir <span class="text-primary font-semibold">$50</span> a emergencia.</p>
+</div>
+</div>
+<div class="ml-11 flex flex-wrap gap-2 mt-1">
+<button class="px-5 py-2.5 bg-primary-container text-white text-sm font-semibold rounded-full shadow-lg shadow-primary/20 active:scale-95 transition-transform">
+                    Asignar $50
+                </button>
+<button class="px-5 py-2.5 bg-surface-container-highest text-on-surface text-sm font-medium rounded-full active:scale-95 transition-transform">
+                    Detalles
+                </button>
+</div>
+<span class="ml-11 text-[11px] text-outline font-medium">14:22</span>
+</div>
+<!-- User Message -->
+<div class="flex flex-col items-end gap-2">
+<div class="bg-primary/15 text-primary-fixed border border-primary/20 p-4 rounded-2xl rounded-br-none max-w-[80%] shadow-sm">
+<p class="text-[15px] leading-relaxed">¿Cómo pago mi tarjeta más rápido?</p>
+</div>
+<span class="mr-2 text-[11px] text-outline font-medium">14:25</span>
+</div>
+<!-- AI Response -->
+<div class="flex flex-col gap-2 max-w-[85%]">
+<div class="flex items-end gap-3">
+<div class="w-8 h-8 ai-avatar-gradient rounded-full flex-shrink-0 flex items-center justify-center mb-1">
+<span class="material-symbols-outlined text-white text-[14px]" data-icon="auto_awesome" data-weight="fill" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+</div>
+<div class="bg-surface-container-high text-on-surface p-4 rounded-2xl rounded-bl-none shadow-sm">
+<p class="text-[15px] leading-relaxed">Según tu perfil freelancer: Usa <span class="text-tertiary font-semibold underline decoration-tertiary/30 underline-offset-4">método Avalancha</span>. Esto minimizará los intereses acumulados rápidamente.</p>
+</div>
+</div>
+<div class="ml-11 flex flex-wrap gap-2 mt-1">
+<button class="px-5 py-2.5 bg-primary-container text-white text-sm font-semibold rounded-full shadow-lg shadow-primary/20 active:scale-95 transition-transform flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]" data-icon="add_task">add_task</span>
+                    Crear plan de pago
+                </button>
+</div>
+<span class="ml-11 text-[11px] text-outline font-medium">14:26</span>
+</div>
+</main>
+<!-- Bottom Input Area -->
+<footer class="fixed bottom-0 w-full glass-bg pt-4 pb-8 px-6 space-y-4">
+<!-- Suggestion Chips -->
+<div class="flex gap-2 overflow-x-auto custom-scrollbar -mx-2 px-2">
+<button class="flex-none px-4 py-2 bg-surface-container-high border border-outline-variant/30 text-on-surface-variant text-sm font-medium rounded-full hover:bg-surface-bright transition-colors">
+                Analiza gastos
+            </button>
+<button class="flex-none px-4 py-2 bg-surface-container-high border border-outline-variant/30 text-on-surface-variant text-sm font-medium rounded-full hover:bg-surface-bright transition-colors">
+                Consejos
+            </button>
+<button class="flex-none px-4 py-2 bg-surface-container-high border border-outline-variant/30 text-on-surface-variant text-sm font-medium rounded-full hover:bg-surface-bright transition-colors">
+                Próximos pagos
+            </button>
+<button class="flex-none px-4 py-2 bg-surface-container-high border border-outline-variant/30 text-on-surface-variant text-sm font-medium rounded-full hover:bg-surface-bright transition-colors">
+                Inversiones
+            </button>
+</div>
+<!-- Main Input Bar -->
+<div class="flex items-center gap-3">
+<div class="flex-1 bg-surface-container-lowest border border-outline-variant/20 rounded-full h-14 px-5 flex items-center gap-3 shadow-inner focus-within:border-primary/50 focus-within:ring-4 focus-within:ring-primary/5 transition-all">
+<span class="material-symbols-outlined text-outline" data-icon="mic">mic</span>
+<input class="bg-transparent border-none flex-1 focus:ring-0 text-on-surface placeholder:text-outline text-[15px]" placeholder="Escribe un mensaje..." type="text"/>
+</div>
+<button class="w-14 h-14 bg-gradient-to-br from-primary to-primary-container rounded-full flex items-center justify-center text-white shadow-lg shadow-primary/30 active:scale-90 transition-transform duration-300">
+<span class="material-symbols-outlined" data-icon="send" data-weight="fill" style="font-variation-settings: 'FILL' 1;">send</span>
+</button>
+</div>
+</footer>
+<!-- Background Decoration -->
+<div class="fixed inset-0 pointer-events-none z-[-1] overflow-hidden">
+<div class="absolute -top-1/4 -right-1/4 w-[80vw] h-[80vw] bg-primary/5 blur-[120px] rounded-full"></div>
+<div class="absolute -bottom-1/4 -left-1/4 w-[80vw] h-[80vw] bg-tertiary/5 blur-[120px] rounded-full"></div>
+</div>
+</body></html>

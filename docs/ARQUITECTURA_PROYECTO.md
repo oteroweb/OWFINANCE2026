@@ -60,6 +60,12 @@ Directorios clave:
 - Frontend envia bearer token.
 - Varios endpoints usan `auth:sanctum`; otros aun expuestos solo con middleware `api`.
 
+### 3.5 Preferencias de Usuario y Onboarding (NUEVO)
+- Se utiliza la tabla `user_settings` para persistir configuración de la UI por usuario:
+  - `layout_mode` (enum: 'lite', 'pro'): Define de forma estricta qué árbol de componentes carga en frontend.
+  - `has_seen_onboarding` (boolean): Controla la aparición del splash/modal de bienvenida para explicar las versiones.
+- Las preferencias se exponen via GET `/api/v1/user/settings` y se actualizan con PUT.
+
 ## 4. Frontend (OWFinanceFrontend2025)
 
 ### 4.1 Stack y estructura
@@ -82,11 +88,14 @@ Directorios clave:
 - Interceptor response normaliza errores usando envelope backend.
 - `src/stores/auth.ts` persiste sesion en localStorage.
 
-### 4.3 Ruteo UI
-- Layouts separados por rol:
-  - `/admin/*`
-  - `/user/*`
-- Guard de router valida autenticacion y rol.
+### 4.3 Ruteo UI (Aislamiento Arquitectónico)
+- La aplicación implementa aislamiento total entre experiencias:
+  - `/lite/*` → `LiteMobileLayout` (Mobile-first, bottom nav, FAB)
+  - `/pro/*` → `ProLayout` (Sidebar, desktop-first, interfaces densas)
+  - `/admin/*` → `AdminLayout`
+  - `/user/*` → `LegacyLayout` (Transicional)
+- Router guard: Valida autenticación y redirige al login. Al entrar, detecta `user_settings.layout_mode` y redirige a la variante activa.
+- **Onboarding Guard:** Si `has_seen_onboarding` es falso, asume `/lite/home` pero dispara modal de selección.
 
 ## 5. Mobile (Capacitor)
 

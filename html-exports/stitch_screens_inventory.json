@@ -1,0 +1,490 @@
+{
+  "project_id": "5968657237763273187",
+  "export_date": "2026-04-03T00:57:41.543760",
+  "total_screens": 17,
+  "screens": [
+    {
+      "id": "ai_coach_chat",
+      "name": "Ai Coach Chat",
+      "path": "/Users/joseluisoterolopez/Desktop/dev/OWFINANCE2026/stitch_ow_finance_2026_master_ui_definitivo/ai_coach_chat",
+      "files": [
+        "screen.png",
+        "code.html"
+      ],
+      "variants": [],
+      "type": "unknown",
+      "description": "",
+      "category": "AI Coach"
+    },
+    {
+      "id": "c_ntaros_mobile_lite",
+      "name": "C Ntaros Mobile Lite",
+      "path": "/Users/joseluisoterolopez/Desktop/dev/OWFINANCE2026/stitch_ow_finance_2026_master_ui_definitivo/c_ntaros_mobile_lite",
+      "files": [
+        "screen.png",
+        "code.html"
+      ],
+      "variants": [
+        "lite"
+      ],
+      "type": "mobile",
+      "description": "",
+      "category": "Other"
+    },
+    {
+      "id": "desktop_pro_dashboard_home_1",
+      "name": "Desktop Pro Dashboard Home 1",
+      "path": "/Users/joseluisoterolopez/Desktop/dev/OWFINANCE2026/stitch_ow_finance_2026_master_ui_definitivo/desktop_pro_dashboard_home_1",
+      "files": [
+        "screen.png",
+        "code.html"
+      ],
+      "variants": [
+        "pro"
+      ],
+      "type": "desktop",
+      "description": "",
+      "category": "Dashboard"
+    },
+    {
+      "id": "desktop_pro_dashboard_home_2",
+      "name": "Desktop Pro Dashboard Home 2",
+      "path": "/Users/joseluisoterolopez/Desktop/dev/OWFINANCE2026/stitch_ow_finance_2026_master_ui_definitivo/desktop_pro_dashboard_home_2",
+      "files": [
+        "screen.png",
+        "code.html"
+      ],
+      "variants": [
+        "pro"
+      ],
+      "type": "desktop",
+      "description": "",
+      "category": "Dashboard"
+    },
+    {
+      "id": "desktop_pro_dashboard_light_mode",
+      "name": "Desktop Pro Dashboard Light Mode",
+      "path": "/Users/joseluisoterolopez/Desktop/dev/OWFINANCE2026/stitch_ow_finance_2026_master_ui_definitivo/desktop_pro_dashboard_light_mode",
+      "files": [
+        "screen.png",
+        "code.html"
+      ],
+      "variants": [
+        "pro"
+      ],
+      "type": "desktop",
+      "description": "",
+      "category": "Dashboard"
+    },
+    {
+      "id": "desktop_pro_jars_management",
+      "name": "Desktop Pro Jars Management",
+      "path": "/Users/joseluisoterolopez/Desktop/dev/OWFINANCE2026/stitch_ow_finance_2026_master_ui_definitivo/desktop_pro_jars_management",
+      "files": [
+        "screen.png",
+        "code.html"
+      ],
+      "variants": [
+        "pro"
+      ],
+      "type": "desktop",
+      "description": "",
+      "category": "Jars Management"
+    },
+    {
+      "id": "desktop_pro_settings",
+      "name": "Desktop Pro Settings",
+      "path": "/Users/joseluisoterolopez/Desktop/dev/OWFINANCE2026/stitch_ow_finance_2026_master_ui_definitivo/desktop_pro_settings",
+      "files": [
+        "screen.png",
+        "code.html"
+      ],
+      "variants": [
+        "pro"
+      ],
+      "type": "desktop",
+      "description": "",
+      "category": "Settings"
+    },
+    {
+      "id": "expanded_navigation_menu",
+      "name": "Expanded Navigation Menu",
+      "path": "/Users/joseluisoterolopez/Desktop/dev/OWFINANCE2026/stitch_ow_finance_2026_master_ui_definitivo/expanded_navigation_menu",
+      "files": [
+        "screen.png",
+        "code.html"
+      ],
+      "variants": [],
+      "type": "overlay",
+      "description": "",
+      "category": "Navigation"
+    },
+    {
+      "id": "liquid_glass_unified_1",
+      "name": "Liquid Glass Unified 1",
+      "path": "/Users/joseluisoterolopez/Desktop/dev/OWFINANCE2026/stitch_ow_finance_2026_master_ui_definitivo/liquid_glass_unified_1",
+      "files": [
+        "DESIGN.md"
+      ],
+      "variants": [],
+      "type": "unknown",
+      "description": "",
+      "category": "Other"
+    },
+    {
+      "id": "liquid_glass_unified_2",
+      "name": "Liquid Glass Unified 2",
+      "path": "/Users/joseluisoterolopez/Desktop/dev/OWFINANCE2026/stitch_ow_finance_2026_master_ui_definitivo/liquid_glass_unified_2",
+      "files": [
+        "DESIGN.md"
+      ],
+      "variants": [],
+      "type": "unknown",
+      "description": "",
+      "category": "Other"
+    },
+    {
+      "id": "ow_finance_dashboard_lite_1",
+      "name": "Ow Finance Dashboard Lite 1",
+      "path": "/Users/joseluisoterolopez/Desktop/dev/OWFINANCE2026/stitch_ow_finance_2026_master_ui_definitivo/ow_finance_dashboard_lite_1",
+      "files": [
+        "screen.png",
+        "code.html"
+      ],
+      "variants": [
+        "lite"
+      ],
+      "type": "mobile",
+      "description": "",
+      "category": "Dashboard"
+    },
+    {
+      "id": "ow_finance_dashboard_lite_2",
+      "name": "Ow Finance Dashboard Lite 2",
+      "path": "/Users/joseluisoterolopez/Desktop/dev/OWFINANCE2026/stitch_ow_finance_2026_master_ui_definitivo/ow_finance_dashboard_lite_2",
+      "files": [
+        "screen.png",
+        "code.html"
+      ],
+      "variants": [
+        "lite"
+      ],
+      "type": "mobile",
+      "description": "",
+      "category": "Dashboard"
+    },
+    {
+      "id": "ow_finance_dashboard_lite_home",
+      "name": "Ow Finance Dashboard Lite Home",
+      "path": "/Users/joseluisoterolopez/Desktop/dev/OWFINANCE2026/stitch_ow_finance_2026_master_ui_definitivo/ow_finance_dashboard_lite_home",
+      "files": [
+        "screen.png",
+        "code.html"
+      ],
+      "variants": [
+        "lite"
+      ],
+      "type": "mobile",
+      "description": "",
+      "category": "Dashboard"
+    },
+    {
+      "id": "precision_vault",
+      "name": "Precision Vault",
+      "path": "/Users/joseluisoterolopez/Desktop/dev/OWFINANCE2026/stitch_ow_finance_2026_master_ui_definitivo/precision_vault",
+      "files": [
+        "DESIGN.md"
+      ],
+      "variants": [],
+      "type": "unknown",
+      "description": "",
+      "category": "Other"
+    },
+    {
+      "id": "quick_add_modal_light_mode",
+      "name": "Quick Add Modal Light Mode",
+      "path": "/Users/joseluisoterolopez/Desktop/dev/OWFINANCE2026/stitch_ow_finance_2026_master_ui_definitivo/quick_add_modal_light_mode",
+      "files": [
+        "screen.png",
+        "code.html"
+      ],
+      "variants": [],
+      "type": "overlay",
+      "description": "",
+      "category": "Modal"
+    },
+    {
+      "id": "transactions_mobile_lite",
+      "name": "Transactions Mobile Lite",
+      "path": "/Users/joseluisoterolopez/Desktop/dev/OWFINANCE2026/stitch_ow_finance_2026_master_ui_definitivo/transactions_mobile_lite",
+      "files": [
+        "screen.png",
+        "code.html"
+      ],
+      "variants": [
+        "lite"
+      ],
+      "type": "mobile",
+      "description": "",
+      "category": "Transactions"
+    },
+    {
+      "id": "transactions_pro_super_grid",
+      "name": "Transactions Pro Super Grid",
+      "path": "/Users/joseluisoterolopez/Desktop/dev/OWFINANCE2026/stitch_ow_finance_2026_master_ui_definitivo/transactions_pro_super_grid",
+      "files": [
+        "screen.png",
+        "code.html"
+      ],
+      "variants": [
+        "pro"
+      ],
+      "type": "desktop",
+      "description": "",
+      "category": "Transactions"
+    }
+  ],
+  "categories": {
+    "Dashboard": [
+      {
+        "id": "desktop_pro_dashboard_home_1",
+        "name": "Desktop Pro Dashboard Home 1",
+        "path": "/Users/joseluisoterolopez/Desktop/dev/OWFINANCE2026/stitch_ow_finance_2026_master_ui_definitivo/desktop_pro_dashboard_home_1",
+        "files": [
+          "screen.png",
+          "code.html"
+        ],
+        "variants": [
+          "pro"
+        ],
+        "type": "desktop",
+        "description": "",
+        "category": "Dashboard"
+      },
+      {
+        "id": "desktop_pro_dashboard_home_2",
+        "name": "Desktop Pro Dashboard Home 2",
+        "path": "/Users/joseluisoterolopez/Desktop/dev/OWFINANCE2026/stitch_ow_finance_2026_master_ui_definitivo/desktop_pro_dashboard_home_2",
+        "files": [
+          "screen.png",
+          "code.html"
+        ],
+        "variants": [
+          "pro"
+        ],
+        "type": "desktop",
+        "description": "",
+        "category": "Dashboard"
+      },
+      {
+        "id": "desktop_pro_dashboard_light_mode",
+        "name": "Desktop Pro Dashboard Light Mode",
+        "path": "/Users/joseluisoterolopez/Desktop/dev/OWFINANCE2026/stitch_ow_finance_2026_master_ui_definitivo/desktop_pro_dashboard_light_mode",
+        "files": [
+          "screen.png",
+          "code.html"
+        ],
+        "variants": [
+          "pro"
+        ],
+        "type": "desktop",
+        "description": "",
+        "category": "Dashboard"
+      },
+      {
+        "id": "ow_finance_dashboard_lite_1",
+        "name": "Ow Finance Dashboard Lite 1",
+        "path": "/Users/joseluisoterolopez/Desktop/dev/OWFINANCE2026/stitch_ow_finance_2026_master_ui_definitivo/ow_finance_dashboard_lite_1",
+        "files": [
+          "screen.png",
+          "code.html"
+        ],
+        "variants": [
+          "lite"
+        ],
+        "type": "mobile",
+        "description": "",
+        "category": "Dashboard"
+      },
+      {
+        "id": "ow_finance_dashboard_lite_2",
+        "name": "Ow Finance Dashboard Lite 2",
+        "path": "/Users/joseluisoterolopez/Desktop/dev/OWFINANCE2026/stitch_ow_finance_2026_master_ui_definitivo/ow_finance_dashboard_lite_2",
+        "files": [
+          "screen.png",
+          "code.html"
+        ],
+        "variants": [
+          "lite"
+        ],
+        "type": "mobile",
+        "description": "",
+        "category": "Dashboard"
+      },
+      {
+        "id": "ow_finance_dashboard_lite_home",
+        "name": "Ow Finance Dashboard Lite Home",
+        "path": "/Users/joseluisoterolopez/Desktop/dev/OWFINANCE2026/stitch_ow_finance_2026_master_ui_definitivo/ow_finance_dashboard_lite_home",
+        "files": [
+          "screen.png",
+          "code.html"
+        ],
+        "variants": [
+          "lite"
+        ],
+        "type": "mobile",
+        "description": "",
+        "category": "Dashboard"
+      }
+    ],
+    "Transactions": [
+      {
+        "id": "transactions_mobile_lite",
+        "name": "Transactions Mobile Lite",
+        "path": "/Users/joseluisoterolopez/Desktop/dev/OWFINANCE2026/stitch_ow_finance_2026_master_ui_definitivo/transactions_mobile_lite",
+        "files": [
+          "screen.png",
+          "code.html"
+        ],
+        "variants": [
+          "lite"
+        ],
+        "type": "mobile",
+        "description": "",
+        "category": "Transactions"
+      },
+      {
+        "id": "transactions_pro_super_grid",
+        "name": "Transactions Pro Super Grid",
+        "path": "/Users/joseluisoterolopez/Desktop/dev/OWFINANCE2026/stitch_ow_finance_2026_master_ui_definitivo/transactions_pro_super_grid",
+        "files": [
+          "screen.png",
+          "code.html"
+        ],
+        "variants": [
+          "pro"
+        ],
+        "type": "desktop",
+        "description": "",
+        "category": "Transactions"
+      }
+    ],
+    "Jars Management": [
+      {
+        "id": "desktop_pro_jars_management",
+        "name": "Desktop Pro Jars Management",
+        "path": "/Users/joseluisoterolopez/Desktop/dev/OWFINANCE2026/stitch_ow_finance_2026_master_ui_definitivo/desktop_pro_jars_management",
+        "files": [
+          "screen.png",
+          "code.html"
+        ],
+        "variants": [
+          "pro"
+        ],
+        "type": "desktop",
+        "description": "",
+        "category": "Jars Management"
+      }
+    ],
+    "Settings": [
+      {
+        "id": "desktop_pro_settings",
+        "name": "Desktop Pro Settings",
+        "path": "/Users/joseluisoterolopez/Desktop/dev/OWFINANCE2026/stitch_ow_finance_2026_master_ui_definitivo/desktop_pro_settings",
+        "files": [
+          "screen.png",
+          "code.html"
+        ],
+        "variants": [
+          "pro"
+        ],
+        "type": "desktop",
+        "description": "",
+        "category": "Settings"
+      }
+    ],
+    "Modals": [
+      {
+        "id": "quick_add_modal_light_mode",
+        "name": "Quick Add Modal Light Mode",
+        "path": "/Users/joseluisoterolopez/Desktop/dev/OWFINANCE2026/stitch_ow_finance_2026_master_ui_definitivo/quick_add_modal_light_mode",
+        "files": [
+          "screen.png",
+          "code.html"
+        ],
+        "variants": [],
+        "type": "overlay",
+        "description": "",
+        "category": "Modal"
+      }
+    ],
+    "Navigation": [
+      {
+        "id": "expanded_navigation_menu",
+        "name": "Expanded Navigation Menu",
+        "path": "/Users/joseluisoterolopez/Desktop/dev/OWFINANCE2026/stitch_ow_finance_2026_master_ui_definitivo/expanded_navigation_menu",
+        "files": [
+          "screen.png",
+          "code.html"
+        ],
+        "variants": [],
+        "type": "overlay",
+        "description": "",
+        "category": "Navigation"
+      }
+    ],
+    "Other": [
+      {
+        "id": "c_ntaros_mobile_lite",
+        "name": "C Ntaros Mobile Lite",
+        "path": "/Users/joseluisoterolopez/Desktop/dev/OWFINANCE2026/stitch_ow_finance_2026_master_ui_definitivo/c_ntaros_mobile_lite",
+        "files": [
+          "screen.png",
+          "code.html"
+        ],
+        "variants": [
+          "lite"
+        ],
+        "type": "mobile",
+        "description": "",
+        "category": "Other"
+      },
+      {
+        "id": "liquid_glass_unified_1",
+        "name": "Liquid Glass Unified 1",
+        "path": "/Users/joseluisoterolopez/Desktop/dev/OWFINANCE2026/stitch_ow_finance_2026_master_ui_definitivo/liquid_glass_unified_1",
+        "files": [
+          "DESIGN.md"
+        ],
+        "variants": [],
+        "type": "unknown",
+        "description": "",
+        "category": "Other"
+      },
+      {
+        "id": "liquid_glass_unified_2",
+        "name": "Liquid Glass Unified 2",
+        "path": "/Users/joseluisoterolopez/Desktop/dev/OWFINANCE2026/stitch_ow_finance_2026_master_ui_definitivo/liquid_glass_unified_2",
+        "files": [
+          "DESIGN.md"
+        ],
+        "variants": [],
+        "type": "unknown",
+        "description": "",
+        "category": "Other"
+      },
+      {
+        "id": "precision_vault",
+        "name": "Precision Vault",
+        "path": "/Users/joseluisoterolopez/Desktop/dev/OWFINANCE2026/stitch_ow_finance_2026_master_ui_definitivo/precision_vault",
+        "files": [
+          "DESIGN.md"
+        ],
+        "variants": [],
+        "type": "unknown",
+        "description": "",
+        "category": "Other"
+      }
+    ]
+  }
+}

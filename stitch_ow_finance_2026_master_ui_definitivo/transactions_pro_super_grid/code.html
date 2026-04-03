@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>OW Finance | Desktop Pro Transactions</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "surface": "#f7f9fb",
+                        "tertiary": "#8a5100",
+                        "surface-container-highest": "#e0e3e5",
+                        "secondary-fixed-dim": "#a5cbe9",
+                        "on-primary": "#ffffff",
+                        "surface-variant": "#e0e3e5",
+                        "inverse-surface": "#2d3133",
+                        "inverse-on-surface": "#eff1f3",
+                        "on-secondary-fixed": "#001e2f",
+                        "on-secondary-fixed-variant": "#234b64",
+                        "secondary-fixed": "#c9e6ff",
+                        "secondary": "#3c627d",
+                        "tertiary-container": "#de8712",
+                        "primary-fixed": "#c9e6ff",
+                        "on-background": "#191c1e",
+                        "on-tertiary-fixed": "#2c1600",
+                        "on-secondary": "#ffffff",
+                        "error-container": "#ffdad6",
+                        "on-surface-variant": "#3e4850",
+                        "secondary-container": "#b8dffe",
+                        "on-tertiary-fixed-variant": "#693c00",
+                        "surface-container-high": "#e6e8ea",
+                        "primary-fixed-dim": "#89ceff",
+                        "error": "#ba1a1a",
+                        "on-error-container": "#93000a",
+                        "tertiary-fixed": "#ffdcbd",
+                        "tertiary-fixed-dim": "#ffb86e",
+                        "on-tertiary": "#ffffff",
+                        "inverse-primary": "#89ceff",
+                        "surface-container-low": "#f2f4f6",
+                        "on-secondary-container": "#3d637d",
+                        "outline": "#6e7881",
+                        "surface-dim": "#d8dadc",
+                        "background": "#f7f9fb",
+                        "surface-container": "#eceef0",
+                        "primary": "#006591",
+                        "surface-tint": "#006591",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-bright": "#f7f9fb",
+                        "primary-container": "#0ea5e9",
+                        "on-error": "#ffffff",
+                        "on-surface": "#191c1e",
+                        "outline-variant": "#bec8d2",
+                        "on-tertiary-container": "#4d2b00",
+                        "on-primary-fixed": "#001e2f",
+                        "on-primary-container": "#003751",
+                        "on-primary-fixed-variant": "#004c6e"
+                    },
+                    fontFamily: {
+                        "headline": ["Manrope"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    },
+                    borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .active-nav-shadow {
+            box-shadow: 0 2px 4px rgba(14, 165, 233, 0.1);
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #e2e8f0;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body class="bg-surface font-body text-on-surface antialiased flex h-screen overflow-hidden">
+<!-- SIDEBAR (Left) -->
+<aside class="w-64 bg-surface-container-lowest border-r border-outline-variant flex flex-col h-full shrink-0">
+<div class="p-8 pb-4">
+<h1 class="text-2xl font-headline font-extrabold tracking-tighter text-on-surface">OW Finance</h1>
+<p class="text-[10px] font-bold text-outline tracking-widest uppercase mt-1">Terminal de Datos</p>
+</div>
+<nav class="flex-1 px-4 mt-6 space-y-1">
+<!-- Dashboard -->
+<a class="flex items-center px-4 py-3 rounded-full text-secondary hover:bg-surface-container-low transition-all duration-200" href="#">
+<span class="material-symbols-outlined mr-3">dashboard</span>
+<span class="font-headline font-semibold tracking-tight text-sm">Dashboard</span>
+</a>
+<!-- Transacciones (ACTIVE) -->
+<a class="flex items-center px-4 py-3 rounded-full bg-primary-container/10 text-primary-container active-nav-shadow transition-all duration-200" href="#">
+<span class="material-symbols-outlined mr-3" style="font-variation-settings: 'FILL' 1;">receipt_long</span>
+<span class="font-headline font-bold tracking-tight text-sm">Transacciones</span>
+</a>
+<!-- Presupuestos -->
+<a class="flex items-center px-4 py-3 rounded-full text-secondary hover:bg-surface-container-low transition-all duration-200" href="#">
+<span class="material-symbols-outlined mr-3">account_balance_wallet</span>
+<span class="font-headline font-semibold tracking-tight text-sm">Presupuestos</span>
+</a>
+<!-- Inversiones -->
+<a class="flex items-center px-4 py-3 rounded-full text-secondary hover:bg-surface-container-low transition-all duration-200" href="#">
+<span class="material-symbols-outlined mr-3">monitoring</span>
+<span class="font-headline font-semibold tracking-tight text-sm">Inversiones</span>
+</a>
+<!-- Ajustes -->
+<a class="flex items-center px-4 py-3 rounded-full text-secondary hover:bg-surface-container-low transition-all duration-200" href="#">
+<span class="material-symbols-outlined mr-3">settings</span>
+<span class="font-headline font-semibold tracking-tight text-sm">Ajustes</span>
+</a>
+</nav>
+<div class="p-6">
+<button class="w-full bg-primary-container text-white rounded-full py-3 px-6 font-headline font-bold text-sm shadow-lg shadow-primary-container/20 flex items-center justify-center gap-2 hover:opacity-90 transition-opacity">
+<span class="material-symbols-outlined text-sm">add_circle</span>
+                Nueva Operación
+            </button>
+</div>
+</aside>
+<!-- ACCOUNTS TREE PANEL (Secondary Left) -->
+<aside class="w-72 bg-surface-container-low border-r border-outline-variant flex flex-col h-full shrink-0">
+<div class="p-8">
+<h2 class="text-xs font-bold text-outline tracking-widest uppercase mb-6">Cuentas</h2>
+<div class="space-y-6">
+<!-- Efectivo -->
+<div>
+<div class="flex items-center justify-between text-sm font-headline font-bold text-on-surface-variant mb-2">
+<div class="flex items-center">
+<span class="material-symbols-outlined text-lg mr-2 text-outline">payments</span>
+                            Efectivo
+                        </div>
+<span class="text-xs">$420.00</span>
+</div>
+</div>
+<!-- Bancos -->
+<div>
+<div class="flex items-center justify-between text-sm font-headline font-bold text-on-surface-variant mb-3">
+<div class="flex items-center">
+<span class="material-symbols-outlined text-lg mr-2 text-outline">account_balance</span>
+                            Bancos
+                        </div>
+<span class="text-xs">$8,230.50</span>
+</div>
+<div class="pl-6 space-y-3">
+<div class="flex items-center justify-between text-xs text-secondary font-medium">
+<span>Santander Checking</span>
+<span class="font-body">$5,120.00</span>
+</div>
+<div class="flex items-center justify-between text-xs text-secondary font-medium">
+<span>Revolut (EUR)</span>
+<span class="font-body">$3,110.50</span>
+</div>
+</div>
+</div>
+<!-- Tarjetas -->
+<div>
+<div class="flex items-center justify-between text-sm font-headline font-bold text-on-surface-variant mb-3">
+<div class="flex items-center">
+<span class="material-symbols-outlined text-lg mr-2 text-outline">credit_card</span>
+                            Tarjetas
+                        </div>
+<span class="text-xs">-$1,150.20</span>
+</div>
+<div class="pl-6">
+<div class="flex items-center justify-between text-xs text-secondary font-medium">
+<span>Visa Platinum</span>
+<span class="font-body text-error">-$1,150.20</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Decorative Wealth Orb -->
+<div class="mt-auto p-8 relative overflow-hidden">
+<div class="absolute -bottom-10 -right-10 w-40 h-40 bg-primary-container opacity-10 rounded-full blur-3xl"></div>
+<div class="relative z-10 p-4 bg-surface-container-lowest/50 rounded-lg backdrop-blur-sm border border-white/20">
+<p class="text-[10px] text-outline font-bold uppercase tracking-tighter">Patrimonio Total</p>
+<p class="text-xl font-headline font-extrabold text-on-surface">$12,450.00</p>
+</div>
+</div>
+</aside>
+<!-- MAIN CONTENT (Right) -->
+<main class="flex-1 flex flex-col h-full overflow-hidden relative">
+<!-- TOP BAR -->
+<header class="h-16 flex items-center justify-between px-8 bg-surface-container-lowest/80 backdrop-blur-xl sticky top-0 z-20 border-b border-outline-variant">
+<div class="flex items-center gap-6">
+<h2 class="text-xl font-headline font-extrabold text-on-surface">Transacciones</h2>
+<div class="flex items-center gap-2 px-3 py-1 bg-surface-container-low rounded-full">
+<span class="material-symbols-outlined text-sm text-outline">calendar_month</span>
+<span class="text-xs font-bold text-on-surface-variant">Marzo 2026</span>
+</div>
+</div>
+<div class="flex items-center gap-3">
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-lg">search</span>
+<input class="pl-10 pr-4 py-2 bg-surface-container-low border-none rounded-full text-xs w-64 focus:ring-1 focus:ring-primary-container transition-all" placeholder="Buscar movimientos..." type="text"/>
+</div>
+<button class="p-2 text-outline hover:text-primary-container transition-colors">
+<span class="material-symbols-outlined">filter_list</span>
+</button>
+<button class="flex items-center gap-2 px-4 py-2 text-primary-container font-headline font-bold text-xs hover:bg-primary-container/5 rounded-full transition-colors">
+<span class="material-symbols-outlined text-sm">ios_share</span>
+                    Exportar
+                </button>
+<div class="w-8 h-8 rounded-full bg-slate-200 overflow-hidden border border-outline-variant">
+<img alt="Avatar" data-alt="professional male portrait with neutral background and soft studio lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDoHTxn0JjEzBFdhG_2XCc_8MkmtojubZxWEuXxObHwFDj0PIl1MJ9YHMA4htlMHSCk6g_s56aTMzZ4JoQggYt_-Wzk_SbGN2W2z7db-3AARvGEqHywDhCH_sQRlBV-VDtTMANhFAVI83y1g0T5RUBe7ttwX1vDotz_hho06pp9e6seIugrWAZ6U1WdFRSarORo68XjkXstLyJk9Kv1cj4GjAmY44Oj29iBpUff5vD-MIvucbHw0yD_s3_CWUTOmSv75ligLegGb_c"/>
+</div>
+</div>
+</header>
+<!-- CONTENT SCROLL AREA -->
+<div class="flex-1 overflow-y-auto custom-scrollbar p-8 pt-6 space-y-6">
+<!-- Category Chips -->
+<div class="flex items-center gap-3">
+<button class="px-4 py-2 bg-surface-container-lowest border border-outline-variant rounded-full text-xs font-semibold text-on-surface hover:bg-surface-container transition-colors">Alimentación</button>
+<button class="px-4 py-2 bg-surface-container-lowest border border-outline-variant rounded-full text-xs font-semibold text-on-surface hover:bg-surface-container transition-colors">Vivienda</button>
+<button class="px-4 py-2 bg-surface-container-lowest border border-outline-variant rounded-full text-xs font-semibold text-on-surface hover:bg-surface-container transition-colors">Suscripciones</button>
+<button class="px-4 py-2 bg-surface-container-lowest border border-outline-variant rounded-full text-xs font-semibold text-on-surface hover:bg-surface-container transition-colors">Freelance</button>
+<button class="w-8 h-8 flex items-center justify-center rounded-full bg-surface-container-low text-outline">
+<span class="material-symbols-outlined text-sm">add</span>
+</button>
+</div>
+<!-- SUPER GRID TABLE -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl shadow-[0_4px_24px_rgba(0,0,0,0.06)] overflow-hidden">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-low border-b border-outline-variant">
+<th class="px-6 py-4 w-10">
+<input class="rounded text-primary-container focus:ring-primary-container border-outline-variant" type="checkbox"/>
+</th>
+<th class="px-4 py-4 text-[10px] font-bold text-outline tracking-widest uppercase font-headline">Fecha</th>
+<th class="px-4 py-4 text-[10px] font-bold text-outline tracking-widest uppercase font-headline">Concepto</th>
+<th class="px-4 py-4 text-[10px] font-bold text-outline tracking-widest uppercase font-headline">Categoría</th>
+<th class="px-4 py-4 text-[10px] font-bold text-outline tracking-widest uppercase font-headline text-center">Estado</th>
+<th class="px-4 py-4 text-[10px] font-bold text-outline tracking-widest uppercase font-headline">Cuenta</th>
+<th class="px-6 py-4 text-[10px] font-bold text-outline tracking-widest uppercase font-headline text-right">Importe</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-surface-container-low">
+<!-- Row 1 -->
+<tr class="bg-surface-container-lowest hover:bg-surface-container-low/30 transition-colors">
+<td class="px-6 py-4"><input class="rounded border-outline-variant" type="checkbox"/></td>
+<td class="px-4 py-4 text-xs font-medium text-secondary">08 Mar 2026</td>
+<td class="px-4 py-4 text-sm font-semibold text-on-surface">Amazon.es</td>
+<td class="px-4 py-4">
+<span class="px-2 py-1 bg-surface-container rounded text-[10px] font-bold text-on-surface-variant uppercase tracking-tight">Shopping</span>
+</td>
+<td class="px-4 py-4 text-center">
+<span class="material-symbols-outlined text-primary-container text-lg" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</td>
+<td class="px-4 py-4 text-xs text-secondary">Visa Platinum</td>
+<td class="px-6 py-4 text-right text-sm font-bold text-error">-$45.20</td>
+</tr>
+<!-- Row 2 -->
+<tr class="bg-surface-container-low/20 hover:bg-surface-container-low/30 transition-colors">
+<td class="px-6 py-4"><input class="rounded border-outline-variant" type="checkbox"/></td>
+<td class="px-4 py-4 text-xs font-medium text-secondary">05 Mar 2026</td>
+<td class="px-4 py-4 text-sm font-semibold text-on-surface">Nómina TechCorp</td>
+<td class="px-4 py-4">
+<span class="px-2 py-1 bg-primary-container/10 rounded text-[10px] font-bold text-primary-container uppercase tracking-tight">Salario</span>
+</td>
+<td class="px-4 py-4 text-center">
+<span class="material-symbols-outlined text-primary-container text-lg" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</td>
+<td class="px-4 py-4 text-xs text-secondary">Santander Checking</td>
+<td class="px-6 py-4 text-right text-sm font-bold text-[#10B981]">+$4,250.00</td>
+</tr>
+<!-- Row 3 -->
+<tr class="bg-surface-container-lowest hover:bg-surface-container-low/30 transition-colors">
+<td class="px-6 py-4"><input class="rounded border-outline-variant" type="checkbox"/></td>
+<td class="px-4 py-4 text-xs font-medium text-secondary">04 Mar 2026</td>
+<td class="px-4 py-4 text-sm font-semibold text-on-surface">Uber Trip</td>
+<td class="px-4 py-4">
+<span class="px-2 py-1 bg-surface-container rounded text-[10px] font-bold text-on-surface-variant uppercase tracking-tight">Transporte</span>
+</td>
+<td class="px-4 py-4 text-center">
+<span class="material-symbols-outlined text-outline/40 text-lg">schedule</span>
+</td>
+<td class="px-4 py-4 text-xs text-secondary">Visa Platinum</td>
+<td class="px-6 py-4 text-right text-sm font-bold text-error">-$12.45</td>
+</tr>
+<!-- Row 4 -->
+<tr class="bg-surface-container-low/20 hover:bg-surface-container-low/30 transition-colors">
+<td class="px-6 py-4"><input class="rounded border-outline-variant" type="checkbox"/></td>
+<td class="px-4 py-4 text-xs font-medium text-secondary">03 Mar 2026</td>
+<td class="px-4 py-4 text-sm font-semibold text-on-surface">Mercadona Super</td>
+<td class="px-4 py-4">
+<span class="px-2 py-1 bg-surface-container rounded text-[10px] font-bold text-on-surface-variant uppercase tracking-tight">Alimentación</span>
+</td>
+<td class="px-4 py-4 text-center">
+<span class="material-symbols-outlined text-primary-container text-lg" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</td>
+<td class="px-4 py-4 text-xs text-secondary">Revolut (EUR)</td>
+<td class="px-6 py-4 text-right text-sm font-bold text-error">-$82.10</td>
+</tr>
+<!-- Row 5 -->
+<tr class="bg-surface-container-lowest hover:bg-surface-container-low/30 transition-colors">
+<td class="px-6 py-4"><input class="rounded border-outline-variant" type="checkbox"/></td>
+<td class="px-4 py-4 text-xs font-medium text-secondary">02 Mar 2026</td>
+<td class="px-4 py-4 text-sm font-semibold text-on-surface">Netflix Subscription</td>
+<td class="px-4 py-4">
+<span class="px-2 py-1 bg-surface-container rounded text-[10px] font-bold text-on-surface-variant uppercase tracking-tight">Ocio</span>
+</td>
+<td class="px-4 py-4 text-center">
+<span class="material-symbols-outlined text-primary-container text-lg" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</td>
+<td class="px-4 py-4 text-xs text-secondary">Revolut (EUR)</td>
+<td class="px-6 py-4 text-right text-sm font-bold text-error">-$17.99</td>
+</tr>
+<!-- Row 6 -->
+<tr class="bg-surface-container-low/20 hover:bg-surface-container-low/30 transition-colors">
+<td class="px-6 py-4"><input class="rounded border-outline-variant" type="checkbox"/></td>
+<td class="px-4 py-4 text-xs font-medium text-secondary">01 Mar 2026</td>
+<td class="px-4 py-4 text-sm font-semibold text-on-surface">Venta MacBook Pro</td>
+<td class="px-4 py-4">
+<span class="px-2 py-1 bg-primary-container/10 rounded text-[10px] font-bold text-primary-container uppercase tracking-tight">Ingresos</span>
+</td>
+<td class="px-4 py-4 text-center">
+<span class="material-symbols-outlined text-primary-container text-lg" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</td>
+<td class="px-4 py-4 text-xs text-secondary">Santander Checking</td>
+<td class="px-6 py-4 text-right text-sm font-bold text-[#10B981]">+$1,200.00</td>
+</tr>
+<!-- Row 7 -->
+<tr class="bg-surface-container-lowest hover:bg-surface-container-low/30 transition-colors">
+<td class="px-6 py-4"><input class="rounded border-outline-variant" type="checkbox"/></td>
+<td class="px-4 py-4 text-xs font-medium text-secondary">28 Feb 2026</td>
+<td class="px-4 py-4 text-sm font-semibold text-on-surface">Alquiler Marzo</td>
+<td class="px-4 py-4">
+<span class="px-2 py-1 bg-surface-container rounded text-[10px] font-bold text-on-surface-variant uppercase tracking-tight">Vivienda</span>
+</td>
+<td class="px-4 py-4 text-center">
+<span class="material-symbols-outlined text-primary-container text-lg" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</td>
+<td class="px-4 py-4 text-xs text-secondary">Santander Checking</td>
+<td class="px-6 py-4 text-right text-sm font-bold text-error">-$950.00</td>
+</tr>
+<!-- Row 8 -->
+<tr class="bg-surface-container-low/20 hover:bg-surface-container-low/30 transition-colors">
+<td class="px-6 py-4"><input class="rounded border-outline-variant" type="checkbox"/></td>
+<td class="px-4 py-4 text-xs font-medium text-secondary">27 Feb 2026</td>
+<td class="px-4 py-4 text-sm font-semibold text-on-surface">Starbucks Coffee</td>
+<td class="px-4 py-4">
+<span class="px-2 py-1 bg-surface-container rounded text-[10px] font-bold text-on-surface-variant uppercase tracking-tight">Restauración</span>
+</td>
+<td class="px-4 py-4 text-center">
+<span class="material-symbols-outlined text-primary-container text-lg" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</td>
+<td class="px-4 py-4 text-xs text-secondary">Efectivo</td>
+<td class="px-6 py-4 text-right text-sm font-bold text-error">-$4.50</td>
+</tr>
+<!-- Row 9 -->
+<tr class="bg-surface-container-lowest hover:bg-surface-container-low/30 transition-colors">
+<td class="px-6 py-4"><input class="rounded border-outline-variant" type="checkbox"/></td>
+<td class="px-4 py-4 text-xs font-medium text-secondary">26 Feb 2026</td>
+<td class="px-4 py-4 text-sm font-semibold text-on-surface">Gimnasio FitLife</td>
+<td class="px-4 py-4">
+<span class="px-2 py-1 bg-surface-container rounded text-[10px] font-bold text-on-surface-variant uppercase tracking-tight">Salud</span>
+</td>
+<td class="px-4 py-4 text-center">
+<span class="material-symbols-outlined text-primary-container text-lg" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</td>
+<td class="px-4 py-4 text-xs text-secondary">Revolut (EUR)</td>
+<td class="px-6 py-4 text-right text-sm font-bold text-error">-$35.00</td>
+</tr>
+<!-- Row 10 -->
+<tr class="bg-surface-container-low/20 hover:bg-surface-container-low/30 transition-colors">
+<td class="px-6 py-4"><input class="rounded border-outline-variant" type="checkbox"/></td>
+<td class="px-4 py-4 text-xs font-medium text-secondary">25 Feb 2026</td>
+<td class="px-4 py-4 text-sm font-semibold text-on-surface">Shell Gasolinera</td>
+<td class="px-4 py-4">
+<span class="px-2 py-1 bg-surface-container rounded text-[10px] font-bold text-on-surface-variant uppercase tracking-tight">Transporte</span>
+</td>
+<td class="px-4 py-4 text-center">
+<span class="material-symbols-outlined text-primary-container text-lg" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</td>
+<td class="px-4 py-4 text-xs text-secondary">Visa Platinum</td>
+<td class="px-6 py-4 text-right text-sm font-bold text-error">-$68.40</td>
+</tr>
+</tbody>
+</table>
+<div class="px-8 py-6 bg-surface-container-low flex justify-between items-center border-t border-outline-variant">
+<p class="text-xs text-secondary font-medium">Mostrando 10 de 1,245 transacciones</p>
+<p class="text-sm font-headline font-bold text-on-surface">Balance Actualizado: <span class="text-primary-container ml-2">$12,450.00</span></p>
+</div>
+</div>
+<!-- SUMMARY ROW (Bottom) -->
+<div class="grid grid-cols-4 gap-6 pb-20">
+<div class="bg-surface-container-lowest p-6 rounded-xl border border-outline-variant shadow-sm">
+<p class="text-[10px] font-bold text-outline tracking-widest uppercase mb-1">Ingresos Totales</p>
+<h3 class="text-xl font-headline font-extrabold text-[#10B981]">$5,450.00</h3>
+<div class="mt-2 flex items-center gap-1 text-[10px] text-primary-container font-bold">
+<span class="material-symbols-outlined text-xs">trending_up</span>
+                        +12% vs feb
+                    </div>
+</div>
+<div class="bg-surface-container-lowest p-6 rounded-xl border border-outline-variant shadow-sm">
+<p class="text-[10px] font-bold text-outline tracking-widest uppercase mb-1">Gastos Totales</p>
+<h3 class="text-xl font-headline font-extrabold text-error">$1,250.64</h3>
+<div class="mt-2 flex items-center gap-1 text-[10px] text-error font-bold">
+<span class="material-symbols-outlined text-xs">trending_down</span>
+                        -4% vs feb
+                    </div>
+</div>
+<div class="bg-surface-container-lowest p-6 rounded-xl border border-outline-variant shadow-sm">
+<p class="text-[10px] font-bold text-outline tracking-widest uppercase mb-1">Ahorro Neto</p>
+<h3 class="text-xl font-headline font-extrabold text-on-surface">$4,199.36</h3>
+<div class="mt-2 flex items-center gap-1 text-[10px] text-secondary font-bold">
+<span class="material-symbols-outlined text-xs">savings</span>
+                        77% de ingresos
+                    </div>
+</div>
+<div class="bg-primary text-white p-6 rounded-xl border border-primary shadow-lg shadow-primary/20">
+<p class="text-[10px] font-bold text-white/60 tracking-widest uppercase mb-1">Previsión Abril</p>
+<h3 class="text-xl font-headline font-extrabold">$14,800.00</h3>
+<div class="mt-2 flex items-center gap-1 text-[10px] text-white/80 font-bold">
+<span class="material-symbols-outlined text-xs">insights</span>
+                        Crecimiento estimado
+                    </div>
+</div>
+</div>
+</div>
+<!-- ACTION FAB -->
+<div class="absolute bottom-8 right-8 flex flex-col items-center gap-4">
+<button class="w-12 h-12 bg-white rounded-full shadow-lg border border-outline-variant flex items-center justify-center text-primary-container hover:scale-110 transition-transform">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">psychology</span>
+</button>
+<button class="w-16 h-16 bg-gradient-to-br from-primary-container to-primary text-white rounded-full shadow-2xl shadow-primary-container/40 flex items-center justify-center hover:scale-105 transition-transform">
+<span class="material-symbols-outlined text-3xl">add</span>
+</button>
+</div>
+</main>
+</body></html>

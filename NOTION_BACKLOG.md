@@ -1333,9 +1333,118 @@ curl -X POST "https://api.notion.com/v1/pages" \
 
 ---
 
-> **Estado Notion:** ✅ Las 7 tareas están sincronizadas con la base de datos Notion (ID: `32de7ace976781958d00dd0d61583eac`). Cada tarea incluye User Story, Criterios de Aceptación, Desglose Técnico completo y Estimación de Horas desglosada por componente.
+## 6. Cuentas de Deuda Bidireccional (Ajenas)
+
+### Información Básica
+- **Name:** Implementar Cuentas de Deuda Bidireccionales (Ajenas)
+- **Status:** To Do
+- **Priority:** Alta
+- **Role:** Backend, Fullstack
+- **Estimación de Horas:** 12 a 16 horas
+
+### User Story
+"Como usuario que presta y pide dinero, quiero poder registrar cuentas de 'Deuda' donde el balance inicie en negativo (si yo debo dinero) o en positivo (si me deben a mí), para tener claro mi patrimonio real líquido."
+
+### Criterios de Aceptación
+- Nuevo `type` de cuenta en BD: `debt_payable` (lo que debo, balance negativo) y `debt_receivable` (lo que me deben, balance positivo).
+- Al crear la cuenta, el usuario debe indicar quién es la contraparte (Nombre del deudor/acreedor).
+- Estas cuentas deben restar o sumar del "Patrimonio Neto" global, pero aislarse del "Dinero Disponible" diario.
 
 ---
 
-*Documento actualizado: 2026-03-24*
-*Versión: 2.0 - Expanded Technical Details*
+## 7. Cuentas Crypto con Interés Compuesto (Estilo Binance Earn)
+
+### Información Básica
+- **Name:** Soporte para Cuentas Crypto con Cálculo de Interés Compuesto
+- **Status:** To Do
+- **Priority:** Media
+- **Role:** Backend, Finanzas
+- **Estimación de Horas:** 16 a 24 horas
+
+### User Story
+"Como inversor, quiero poder tracking de mis saldos en Crypto (ej. USDT en Binance Earn) y visualizar cómo el interés compuesto diario afecta mi balance automáticamente."
+
+### Criterios de Aceptación
+- Nuevo `type` de cuenta: `crypto_earn`.
+- Campo para configurar el **APY (Annual Percentage Yield)**.
+- Un CRON job diario que calcule el rendimiento del día sumando el interés compuesto al capital.
+- Registro visual en el frontend mostrando "Rendimiento acumulado".
+
+---
+
+## 8. Cuentas de Financiamiento "Cashea" (BNPL atado a BCV)
+
+### Información Básica
+- **Name:** Integración de Cuentas tipo "Cashea" (BNPL anclado a Tasa BCV)
+- **Status:** To Do
+- **Priority:** Alta
+- **Role:** Backend, Contexto Local (Venezuela)
+- **Estimación de Horas:** 20 a 24 horas
+
+### User Story
+"Como usuario en Venezuela que usa Cashea, quiero registrar una compra a cuotas financiadas sin interés, pero donde la deuda total varíe dinámicamente según la tasa BCV del día de pago."
+
+### Criterios de Aceptación
+- Generador de plan de pagos (Inicial + 3 cuotas cada 14 días).
+- La deuda se registra en USD, pero la UI muestra equivalente en VES actualizado en tiempo real según tasa BCV.
+- Alertas 2 días antes del vencimiento.
+
+---
+
+## 9. Sincronización Automática de Tasa BCV
+
+### Información Básica
+- **Name:** Cronjob de Actualización Automática Tasa BCV (2x al día)
+- **Status:** To Do
+- **Priority:** Crítica
+- **Role:** Backend, Infraestructura
+- **Estimación de Horas:** 8 a 12 horas
+
+### User Story
+"Quiero que el sistema actualice automáticamente la tasa del Banco Central de Venezuela dos veces al día sin ingreso manual."
+
+### Criterios de Aceptación
+- CRON Job programado en Laravel (8:30 AM y 1:00 PM).
+- API/Scraper seguro para extraer tasa USD/VES.
+- Almacenamiento histórico de tasas en `exchange_rates_history`.
+
+---
+
+## 10. Perfil: Formulario de "Sueños y Metas"
+
+### Información Básica
+- **Name:** Formulario Dinámico de Sueños y Metas en Perfil
+- **Status:** To Do
+- **Priority:** Media
+- **Role:** UX/UI, Frontend
+- **Estimación de Horas:** 10 a 14 horas
+
+### Criterios de Aceptación
+- Componente Vue: `ProfileGoalsTable.vue` con "Agregar Fila".
+- Columnas: Nombre, Costo Estimado, Plazo, Importancia.
+- Integración con el Contexto del LLM para el AI Coach.
+
+---
+
+## 11. Perfil: Identificación de "Obstáculos" Financieros
+
+### Información Básica
+- **Name:** Formulario Tabular de Obstáculos y Fricciones
+- **Status:** To Do
+- **Priority:** Media
+- **Role:** UX/UI, Frontend
+- **Estimación de Horas:** 8 a 12 horas
+
+### Criterios de Aceptación
+- Componente Vue: `ProfileObstaclesTable.vue`.
+- Columnas: Tipo de Obstáculo, Descripción corta, Impacto estimado mensual.
+- Reflejar en la UI de "Settings Desktop Pro".
+
+---
+
+> **Estado Notion:** ⚠️ Pendiente de sincronización manual o mediante MCP (Herramientas MCP de Notion no estaban activas al momento de añadir los tickets 6-11).
+
+---
+
+*Documento actualizado: 2026-03-25*
+*Versión: 3.0 - Nuevos Tickets BCV, Cashea, Crypto & Profile*

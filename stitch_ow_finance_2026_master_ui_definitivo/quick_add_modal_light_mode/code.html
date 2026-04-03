@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Manrope:wght@600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "on-tertiary-fixed-variant": "#693c00",
+              "surface-container-lowest": "#ffffff",
+              "secondary": "#3c627d",
+              "on-primary": "#ffffff",
+              "surface-variant": "#e0e3e5",
+              "on-surface": "#191c1e",
+              "primary-fixed-dim": "#89ceff",
+              "surface-container": "#eceef0",
+              "primary-container": "#0ea5e9",
+              "surface-container-highest": "#e0e3e5",
+              "on-primary-container": "#003751",
+              "surface-container-high": "#e6e8ea",
+              "on-secondary-container": "#3d637d",
+              "outline-variant": "#bec8d2",
+              "tertiary-fixed-dim": "#ffb86e",
+              "primary": "#006591",
+              "primary-fixed": "#c9e6ff",
+              "surface-tint": "#006591",
+              "on-secondary-fixed-variant": "#234b64",
+              "on-tertiary-container": "#4d2b00",
+              "on-primary-fixed": "#001e2f",
+              "on-background": "#191c1e",
+              "inverse-surface": "#2d3133",
+              "on-surface-variant": "#3e4850",
+              "inverse-on-surface": "#eff1f3",
+              "surface-dim": "#d8dadc",
+              "error-container": "#ffdad6",
+              "tertiary-container": "#de8712",
+              "secondary-container": "#b8dffe",
+              "tertiary-fixed": "#ffdcbd",
+              "on-secondary": "#ffffff",
+              "outline": "#6e7881",
+              "surface-bright": "#f7f9fb",
+              "on-tertiary-fixed": "#2c1600",
+              "on-secondary-fixed": "#001e2f",
+              "surface-container-low": "#f2f4f6",
+              "surface": "#f7f9fb",
+              "error": "#ba1a1a",
+              "secondary-fixed": "#c9e6ff",
+              "on-error-container": "#93000a",
+              "background": "#f7f9fb",
+              "tertiary": "#8a5100",
+              "on-tertiary": "#ffffff",
+              "inverse-primary": "#89ceff",
+              "secondary-fixed-dim": "#a5cbe9",
+              "on-error": "#ffffff",
+              "on-primary-fixed-variant": "#004c6e"
+            },
+            fontFamily: {
+              "headline": ["Manrope"],
+              "body": ["Inter"],
+              "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-scrim {
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(8px);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface font-body text-on-surface overflow-hidden">
+<!-- Dimmed Dashboard Background Mockup -->
+<div class="fixed inset-0 z-0 p-6 flex flex-col gap-8 opacity-40 grayscale-[0.5]">
+<div class="flex justify-between items-center">
+<div class="w-12 h-12 rounded-full bg-surface-container-high"></div>
+<div class="w-24 h-6 bg-surface-container-high rounded-full"></div>
+</div>
+<div class="h-48 w-full bg-surface-container-lowest rounded-xl border border-outline-variant/20 shadow-sm p-6 flex flex-col justify-end gap-2">
+<div class="w-16 h-3 bg-surface-container-high rounded"></div>
+<div class="w-32 h-8 bg-surface-container-high rounded"></div>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div class="h-32 bg-surface-container-lowest rounded-xl shadow-sm"></div>
+<div class="h-32 bg-surface-container-lowest rounded-xl shadow-sm"></div>
+</div>
+</div>
+<!-- Scrim Overlay -->
+<div class="fixed inset-0 z-10 glass-scrim"></div>
+<!-- Bottom Sheet Modal Content -->
+<div class="fixed inset-x-0 bottom-0 z-20 flex flex-col items-center max-w-[390px] mx-auto">
+<!-- Shared Component: TopAppBar (Acting as Modal Header) -->
+<header class="bg-white dark:bg-slate-900 rounded-t-[3rem] w-full px-6 pt-4 flex items-center justify-between shadow-[0_-8px_32px_rgba(0,0,0,0.06)]">
+<div class="flex items-center justify-between w-full max-w-2xl mx-auto py-2">
+<button class="hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-colors scale-95 active:duration-100 p-2">
+<span class="material-symbols-outlined text-slate-400 dark:text-slate-500" data-icon="close">close</span>
+</button>
+<h1 class="font-manrope font-bold text-lg tracking-tight text-on-surface">Add Transaction</h1>
+<div class="w-10"></div> <!-- Spacer for centering -->
+</div>
+</header>
+<!-- Modal Body -->
+<div class="bg-white w-full px-6 pb-12 flex flex-col">
+<!-- Sheet Handle -->
+<div class="flex justify-center -mt-10 mb-6">
+<div class="w-12 h-1.5 bg-[#E2E8F0] rounded-full"></div>
+</div>
+<!-- Header Selectors -->
+<div class="flex justify-between items-center mb-10">
+<div class="bg-[#FEF2F2] px-4 py-2 rounded-full flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-[#EF4444]"></span>
+<span class="text-[#EF4444] font-semibold text-sm">Gasto</span>
+</div>
+<div class="bg-surface-container-low px-4 py-2 rounded-full flex items-center gap-2">
+<span class="material-symbols-outlined text-outline text-lg" data-icon="calendar_today">calendar_today</span>
+<span class="text-on-surface-variant font-medium text-sm">Hoy</span>
+</div>
+</div>
+<!-- Amount Input Display -->
+<div class="flex flex-col items-center mb-10">
+<span class="label-md text-secondary font-bold tracking-[0.05em] uppercase mb-2">Cantidad</span>
+<div class="relative">
+<!-- Wealth Orb Background Glow -->
+<div class="absolute inset-0 -z-10 bg-primary-container/10 blur-3xl rounded-full transform scale-150"></div>
+<h2 class="font-headline font-extrabold text-[56px] text-[#0F172A] leading-none tracking-tight">
+                        $ 0.00
+                    </h2>
+</div>
+</div>
+<!-- Metadata Row -->
+<div class="flex gap-3 mb-8">
+<div class="flex-1 bg-surface-container-high rounded-full px-5 py-3 flex items-center gap-3">
+<span class="material-symbols-outlined text-outline" data-icon="notes">notes</span>
+<span class="text-on-surface-variant/60 text-sm">Nota</span>
+</div>
+<div class="bg-surface-container-high rounded-full px-5 py-3 flex items-center gap-3 border border-primary/10">
+<span class="material-symbols-outlined text-primary" data-icon="category" data-weight="fill" style="font-variation-settings: 'FILL' 1;">category</span>
+<span class="text-primary font-semibold text-sm">Elegir categoría</span>
+</div>
+</div>
+<!-- Numeric Keypad Grid -->
+<div class="grid grid-cols-3 gap-3 mb-8">
+<!-- Row 1 -->
+<button class="bg-[#F8FAFC] py-5 rounded-2xl font-headline font-bold text-2xl text-on-surface hover:bg-slate-100 transition-colors active:scale-95">1</button>
+<button class="bg-[#F8FAFC] py-5 rounded-2xl font-headline font-bold text-2xl text-on-surface hover:bg-slate-100 transition-colors active:scale-95">2</button>
+<button class="bg-[#F8FAFC] py-5 rounded-2xl font-headline font-bold text-2xl text-on-surface hover:bg-slate-100 transition-colors active:scale-95">3</button>
+<!-- Row 2 -->
+<button class="bg-[#F8FAFC] py-5 rounded-2xl font-headline font-bold text-2xl text-on-surface hover:bg-slate-100 transition-colors active:scale-95">4</button>
+<button class="bg-[#F8FAFC] py-5 rounded-2xl font-headline font-bold text-2xl text-on-surface hover:bg-slate-100 transition-colors active:scale-95">5</button>
+<button class="bg-[#F8FAFC] py-5 rounded-2xl font-headline font-bold text-2xl text-on-surface hover:bg-slate-100 transition-colors active:scale-95">6</button>
+<!-- Row 3 -->
+<button class="bg-[#F8FAFC] py-5 rounded-2xl font-headline font-bold text-2xl text-on-surface hover:bg-slate-100 transition-colors active:scale-95">7</button>
+<button class="bg-[#F8FAFC] py-5 rounded-2xl font-headline font-bold text-2xl text-on-surface hover:bg-slate-100 transition-colors active:scale-95">8</button>
+<button class="bg-[#F8FAFC] py-5 rounded-2xl font-headline font-bold text-2xl text-on-surface hover:bg-slate-100 transition-colors active:scale-95">9</button>
+<!-- Row 4 -->
+<button class="bg-[#F8FAFC] py-5 rounded-2xl font-headline font-bold text-2xl text-on-surface hover:bg-slate-100 transition-colors active:scale-95">.</button>
+<button class="bg-[#F8FAFC] py-5 rounded-2xl font-headline font-bold text-2xl text-on-surface hover:bg-slate-100 transition-colors active:scale-95">0</button>
+<button class="bg-[#F8FAFC] py-5 rounded-2xl flex items-center justify-center text-on-surface hover:bg-slate-100 transition-colors active:scale-95">
+<span class="material-symbols-outlined text-2xl" data-icon="backspace">backspace</span>
+</button>
+</div>
+<!-- Primary Action -->
+<button class="w-full bg-gradient-to-br from-primary-container to-primary py-5 rounded-full shadow-lg shadow-primary-container/20 text-white font-headline font-bold text-lg active:scale-[0.98] transition-all">
+                Guardar
+            </button>
+<!-- Bottom Safe Area Spacer -->
+<div class="h-8"></div>
+</div>
+<!-- Shared Component: BottomNavBar (Active Indicator on 'Add' tab) -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 py-3 bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl rounded-t-[3rem] shadow-[0_-4px_24px_rgba(15,23,42,0.06)] pb-safe">
+<div class="flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 py-2 px-5 hover:text-sky-500 transition-all">
+<span class="material-symbols-outlined" data-icon="grid_view">grid_view</span>
+<span class="font-manrope font-semibold text-[10px] uppercase tracking-wider mt-1">Summary</span>
+</div>
+<div class="flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 py-2 px-5 hover:text-sky-500 transition-all">
+<span class="material-symbols-outlined" data-icon="receipt_long">receipt_long</span>
+<span class="font-manrope font-semibold text-[10px] uppercase tracking-wider mt-1">Activity</span>
+</div>
+<div class="flex flex-col items-center justify-center bg-sky-100 dark:bg-sky-900/40 text-sky-700 dark:text-sky-200 rounded-full py-2 px-5 transition-all scale-90 active:duration-150">
+<span class="material-symbols-outlined text-2xl" data-icon="add_circle">add_circle</span>
+<span class="font-manrope font-semibold text-[10px] uppercase tracking-wider mt-1">Add</span>
+</div>
+<div class="flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 py-2 px-5 hover:text-sky-500 transition-all">
+<span class="material-symbols-outlined" data-icon="track_changes">track_changes</span>
+<span class="font-manrope font-semibold text-[10px] uppercase tracking-wider mt-1">Goals</span>
+</div>
+<div class="flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 py-2 px-5 hover:text-sky-500 transition-all">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span class="font-manrope font-semibold text-[10px] uppercase tracking-wider mt-1">Profile</span>
+</div>
+</nav>
+</div>
+</body></html>

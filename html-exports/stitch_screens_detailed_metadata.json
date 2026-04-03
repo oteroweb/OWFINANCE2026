@@ -1,0 +1,1022 @@
+[
+  {
+    "id": "ai_coach_chat",
+    "name": "Ai Coach Chat",
+    "has_code": true,
+    "has_image": true,
+    "code_size": 10772,
+    "image_size": 249788,
+    "components": [
+      {
+        "type": "button",
+        "class": "w-10 h-10 flex items-center justify-center rounded-full hover:bg-white/10 active:scale-95 transition-all"
+      },
+      {
+        "type": "button",
+        "class": "w-10 h-10 flex items-center justify-center rounded-full hover:bg-white/10 active:scale-95 transition-all"
+      },
+      {
+        "type": "button",
+        "class": "px-5 py-2.5 bg-primary-container text-white text-sm font-semibold rounded-full shadow-lg shadow-primary/20 active:scale-95 transition-transform"
+      },
+      {
+        "type": "button",
+        "class": "px-5 py-2.5 bg-surface-container-highest text-on-surface text-sm font-medium rounded-full active:scale-95 transition-transform"
+      },
+      {
+        "type": "button",
+        "class": "px-5 py-2.5 bg-primary-container text-white text-sm font-semibold rounded-full shadow-lg shadow-primary/20 active:scale-95 transition-transform flex items-center gap-2"
+      },
+      {
+        "type": "button",
+        "class": "flex-none px-4 py-2 bg-surface-container-high border border-outline-variant/30 text-on-surface-variant text-sm font-medium rounded-full hover:bg-surface-bright transition-colors"
+      },
+      {
+        "type": "button",
+        "class": "flex-none px-4 py-2 bg-surface-container-high border border-outline-variant/30 text-on-surface-variant text-sm font-medium rounded-full hover:bg-surface-bright transition-colors"
+      },
+      {
+        "type": "button",
+        "class": "flex-none px-4 py-2 bg-surface-container-high border border-outline-variant/30 text-on-surface-variant text-sm font-medium rounded-full hover:bg-surface-bright transition-colors"
+      },
+      {
+        "type": "button",
+        "class": "flex-none px-4 py-2 bg-surface-container-high border border-outline-variant/30 text-on-surface-variant text-sm font-medium rounded-full hover:bg-surface-bright transition-colors"
+      },
+      {
+        "type": "input",
+        "class": "bg-transparent border-none flex-1 focus:ring-0 text-on-surface placeholder:text-outline text-[15px]"
+      }
+    ],
+    "unique_classes": [
+      "-bottom-1/4",
+      "-left-1/4",
+      "-mx-2",
+      "-right-1/4",
+      "-top-1/4",
+      "absolute",
+      "active:scale-90",
+      "active:scale-95",
+      "ai-avatar-gradient",
+      "animate-pulse",
+      "antialiased",
+      "bg-gradient-to-br",
+      "bg-primary-container",
+      "bg-primary/15",
+      "bg-primary/5",
+      "bg-secondary",
+      "bg-surface",
+      "bg-surface-container-high",
+      "bg-surface-container-highest",
+      "bg-surface-container-lowest"
+    ],
+    "layout_type": "Flexbox",
+    "responsive": "unknown"
+  },
+  {
+    "id": "c_ntaros_mobile_lite",
+    "name": "C Ntaros Mobile Lite",
+    "has_code": true,
+    "has_image": true,
+    "code_size": 11839,
+    "image_size": 161853,
+    "components": [
+      {
+        "type": "button",
+        "class": "text-[#006591] hover:opacity-80 transition-opacity active:scale-95 duration-200"
+      },
+      {
+        "type": "button",
+        "class": "text-[#006591] hover:opacity-80 transition-opacity active:scale-95 duration-200"
+      },
+      {
+        "type": "button",
+        "class": "absolute -top-16 right-8 w-12 h-12 bg-white rounded-full shadow-lg flex items-center justify-center text-primary-container hover:scale-110 transition-transform active:scale-95"
+      },
+      {
+        "type": "button",
+        "class": "w-12 h-12 bg-gradient-to-tr from-primary to-primary-container rounded-full flex items-center justify-center text-white shadow-lg -mt-1 active:scale-90 transition-transform duration-200"
+      }
+    ],
+    "unique_classes": [
+      "-mt-1",
+      "-top-16",
+      "-translate-x-1/2",
+      "-z-10",
+      "absolute",
+      "active:scale-90",
+      "active:scale-95",
+      "backdrop-blur-xl",
+      "bg-[#0EA5E9]",
+      "bg-[#10B981]",
+      "bg-[#8B5CF6]",
+      "bg-[#F59E0B]",
+      "bg-[#F7F9FB]",
+      "bg-[#F8FAFC]",
+      "bg-emerald-50",
+      "bg-gradient-to-r",
+      "bg-gradient-to-tr",
+      "bg-purple-50",
+      "bg-purple-500",
+      "bg-sky-50"
+    ],
+    "layout_type": "Grid",
+    "responsive": "Mobile Optimized"
+  },
+  {
+    "id": "desktop_pro_dashboard_home_1",
+    "name": "Desktop Pro Dashboard Home 1",
+    "has_code": true,
+    "has_image": true,
+    "code_size": 23393,
+    "image_size": 374791,
+    "components": [
+      {
+        "type": "button",
+        "class": "text-slate-400 hover:text-sky-300 transition-colors"
+      },
+      {
+        "type": "button",
+        "class": "text-slate-400 hover:text-sky-300 transition-colors"
+      },
+      {
+        "type": "svg",
+        "class": "w-full h-full stroke-primary fill-none stroke-[3] overflow-visible"
+      },
+      {
+        "type": "svg",
+        "class": "absolute inset-0 w-full h-full -rotate-90"
+      },
+      {
+        "type": "button",
+        "class": "w-full mt-6 py-3 rounded-full bg-tertiary text-on-tertiary font-bold text-sm tracking-tight transition-transform active:scale-95"
+      },
+      {
+        "type": "button",
+        "class": "text-xs font-bold text-sky-400 uppercase tracking-widest"
+      },
+      {
+        "type": "button",
+        "class": "w-full flex items-center justify-between p-4 bg-surface-container-low rounded-lg group hover:bg-surface-bright transition-colors"
+      },
+      {
+        "type": "button",
+        "class": "w-full flex items-center justify-between p-4 bg-surface-container-low rounded-lg group hover:bg-surface-bright transition-colors"
+      },
+      {
+        "type": "button",
+        "class": "w-full flex items-center justify-between p-4 bg-surface-container-low rounded-lg group hover:bg-surface-bright transition-colors"
+      },
+      {
+        "type": "button",
+        "class": "w-16 h-16 rounded-full bg-gradient-to-br from-primary to-primary-container text-on-primary shadow-[0_0_40px_rgba(14,165,233,0.3)] flex items-center justify-center transition-transform hover:scale-110 active:scale-95"
+      }
+    ],
+    "unique_classes": [
+      "-mr-32",
+      "-mt-32",
+      "-rotate-90",
+      "-space-x-3",
+      "absolute",
+      "active:scale-95",
+      "backdrop-blur-md",
+      "backdrop-blur-xl",
+      "bg-[#1A1A2E]",
+      "bg-[#222A3D]",
+      "bg-error",
+      "bg-gradient-to-br",
+      "bg-gradient-to-t",
+      "bg-primary",
+      "bg-primary/10",
+      "bg-secondary",
+      "bg-secondary-container/20",
+      "bg-secondary/10",
+      "bg-sky-500/10",
+      "bg-slate-900/60"
+    ],
+    "layout_type": "Grid",
+    "responsive": "Desktop Optimized"
+  },
+  {
+    "id": "desktop_pro_dashboard_home_2",
+    "name": "Desktop Pro Dashboard Home 2",
+    "has_code": true,
+    "has_image": true,
+    "code_size": 22491,
+    "image_size": 353357,
+    "components": [
+      {
+        "type": "button",
+        "class": "px-4 py-1 text-xs font-bold bg-[#0ea5e9] text-on-primary rounded-full shadow-lg transition-all"
+      },
+      {
+        "type": "button",
+        "class": "px-4 py-1 text-xs font-medium text-[#bec8d2] hover:text-[#dae2fd] transition-all"
+      },
+      {
+        "type": "button",
+        "class": "px-4 py-1 text-xs font-medium text-[#bec8d2] hover:text-[#dae2fd] transition-all"
+      },
+      {
+        "type": "button",
+        "class": "hover:text-[#89ceff] transition-all p-2 rounded-full hover:bg-[#171f33]/50"
+      },
+      {
+        "type": "button",
+        "class": "hover:text-[#89ceff] transition-all p-2 rounded-full hover:bg-[#171f33]/50 relative"
+      },
+      {
+        "type": "button",
+        "class": "text-primary text-sm font-bold flex items-center gap-1 hover:underline"
+      },
+      {
+        "type": "svg",
+        "class": "w-full h-full transform -rotate-90"
+      },
+      {
+        "type": "button",
+        "class": "w-full bg-[#0ea5e9] text-on-primary py-4 rounded-3xl font-bold text-sm tracking-wide hover:brightness-110 transition-all shadow-[0_10px_30px_rgba(14,165,233,0.3)]"
+      },
+      {
+        "type": "button",
+        "class": "text-sm font-bold text-primary px-4 py-2 hover:bg-primary/5 rounded-full transition-all"
+      },
+      {
+        "type": "button",
+        "class": "w-full mt-10 py-4 border-2 border-dashed border-outline-variant/30 rounded-2xl text-on-surface-variant font-bold text-sm hover:border-primary/50 hover:text-primary transition-all"
+      }
+    ],
+    "unique_classes": [
+      "-rotate-90",
+      "absolute",
+      "active:scale-100",
+      "active:scale-95",
+      "backdrop-blur-xl",
+      "bg-[#0b1326]/60",
+      "bg-[#0ea5e9]",
+      "bg-[#0ea5e9]/20",
+      "bg-[#131b2e]",
+      "bg-error",
+      "bg-error/10",
+      "bg-gradient-to-br",
+      "bg-gradient-to-r",
+      "bg-outline",
+      "bg-primary",
+      "bg-primary-container",
+      "bg-primary/10",
+      "bg-secondary",
+      "bg-surface",
+      "bg-surface-container"
+    ],
+    "layout_type": "Grid",
+    "responsive": "Desktop Optimized"
+  },
+  {
+    "id": "desktop_pro_dashboard_light_mode",
+    "name": "Desktop Pro Dashboard Light Mode",
+    "has_code": true,
+    "has_image": true,
+    "code_size": 23490,
+    "image_size": 318298,
+    "components": [
+      {
+        "type": "button",
+        "class": "px-4 py-1.5 rounded-full bg-surface-container-lowest shadow-sm text-xs font-bold text-primary tracking-wide"
+      },
+      {
+        "type": "button",
+        "class": "px-4 py-1.5 rounded-full text-xs font-semibold text-outline hover:text-on-surface transition-colors"
+      },
+      {
+        "type": "button",
+        "class": "px-4 py-1.5 rounded-full text-xs font-semibold text-outline hover:text-on-surface transition-colors"
+      },
+      {
+        "type": "button",
+        "class": "w-11 h-11 flex items-center justify-center rounded-full bg-surface-container-lowest text-on-surface-variant hover:bg-primary-container hover:text-white transition-all duration-300"
+      },
+      {
+        "type": "button",
+        "class": "w-11 h-11 flex items-center justify-center rounded-full bg-surface-container-lowest text-on-surface-variant hover:bg-primary-container hover:text-white transition-all duration-300"
+      },
+      {
+        "type": "svg",
+        "class": "w-full h-full transform -rotate-90"
+      },
+      {
+        "type": "button",
+        "class": "mt-6 w-full py-4 bg-on-tertiary-fixed text-white font-bold rounded-xl text-sm transition-transform active:scale-95 shadow-lg shadow-tertiary/20"
+      },
+      {
+        "type": "button",
+        "class": "text-xs font-bold text-primary hover:underline"
+      },
+      {
+        "type": "button",
+        "class": "w-full mt-10 py-4 border-2 border-dashed border-outline-variant/30 text-outline font-bold text-sm rounded-xl hover:border-primary-container hover:text-primary-container transition-all"
+      },
+      {
+        "type": "button",
+        "class": "w-16 h-16 rounded-full bg-gradient-to-br from-primary-container to-primary flex items-center justify-center text-white shadow-xl shadow-primary-container/30 transition-transform active:scale-90 group"
+      }
+    ],
+    "unique_classes": [
+      "-left-20",
+      "-rotate-90",
+      "-space-x-2",
+      "-top-20",
+      "absolute",
+      "active:scale-90",
+      "active:scale-95",
+      "animate-pulse",
+      "antialiased",
+      "bg-error",
+      "bg-gradient-to-br",
+      "bg-on-tertiary-fixed",
+      "bg-outline-variant/30",
+      "bg-primary-container",
+      "bg-primary-container/10",
+      "bg-primary-container/100",
+      "bg-primary-container/20",
+      "bg-primary-container/30",
+      "bg-primary-container/40",
+      "bg-primary-container/50"
+    ],
+    "layout_type": "Grid",
+    "responsive": "Desktop Optimized"
+  },
+  {
+    "id": "desktop_pro_jars_management",
+    "name": "Desktop Pro Jars Management",
+    "has_code": true,
+    "has_image": true,
+    "code_size": 20938,
+    "image_size": 331172,
+    "components": [
+      {
+        "type": "input",
+        "class": "bg-transparent border-none focus:ring-0 text-sm text-on-surface placeholder-slate-500 w-64"
+      },
+      {
+        "type": "button",
+        "class": "w-10 h-10 flex items-center justify-center rounded-full hover:bg-white/5 text-slate-400 hover:text-sky-400 transition-all"
+      },
+      {
+        "type": "button",
+        "class": "w-10 h-10 flex items-center justify-center rounded-full hover:bg-white/5 text-slate-400 hover:text-sky-400 transition-all"
+      },
+      {
+        "type": "button",
+        "class": "mt-4 w-full py-2 bg-tertiary/10 hover:bg-tertiary/20 text-tertiary text-[10px] font-bold uppercase tracking-widest rounded-lg transition-colors"
+      },
+      {
+        "type": "button",
+        "class": "p-2 hover:bg-white/5 rounded-lg text-slate-400"
+      },
+      {
+        "type": "button",
+        "class": "p-2 hover:bg-white/5 rounded-lg text-slate-400"
+      },
+      {
+        "type": "button",
+        "class": "opacity-0 group-hover:opacity-100 p-1 hover:text-sky-400 transition-all"
+      },
+      {
+        "type": "button",
+        "class": "opacity-0 group-hover:opacity-100 p-1 hover:text-sky-400 transition-all"
+      },
+      {
+        "type": "button",
+        "class": "opacity-0 group-hover:opacity-100 p-1 hover:text-sky-400 transition-all"
+      },
+      {
+        "type": "button",
+        "class": "opacity-0 group-hover:opacity-100 p-1 hover:text-sky-400 transition-all"
+      }
+    ],
+    "unique_classes": [
+      "-right-4",
+      "-rotate-90",
+      "-top-4",
+      "absolute",
+      "active:scale-95",
+      "after:absolute",
+      "after:bg-white",
+      "after:border",
+      "after:border-gray-300",
+      "after:content-['']",
+      "after:h-5",
+      "after:left-[2px]",
+      "after:rounded-full",
+      "after:top-[2px]",
+      "after:transition-all",
+      "after:w-5",
+      "antialiased",
+      "backdrop-blur-md",
+      "backdrop-blur-xl",
+      "bg-[#0b1326]/80"
+    ],
+    "layout_type": "Grid",
+    "responsive": "Desktop Optimized"
+  },
+  {
+    "id": "desktop_pro_settings",
+    "name": "Desktop Pro Settings",
+    "has_code": true,
+    "has_image": true,
+    "code_size": 16527,
+    "image_size": 365273,
+    "components": [
+      {
+        "type": "button",
+        "class": "p-2 hover:bg-slate-800/40 rounded-full transition-all active:scale-95 duration-200"
+      },
+      {
+        "type": "button",
+        "class": "p-2 hover:bg-slate-800/40 rounded-full transition-all active:scale-95 duration-200"
+      },
+      {
+        "type": "button",
+        "class": "w-full bg-gradient-to-r from-primary to-primary-container text-on-primary py-3 rounded-full font-bold text-sm shadow-lg hover:brightness-110 transition-all"
+      },
+      {
+        "type": "button",
+        "class": "px-6 py-2.5 rounded-full bg-primary-container text-on-primary-fixed font-semibold text-sm whitespace-nowrap"
+      },
+      {
+        "type": "button",
+        "class": "px-6 py-2.5 rounded-full bg-surface-container-high text-on-surface-variant hover:bg-surface-bright transition-colors font-semibold text-sm whitespace-nowrap"
+      },
+      {
+        "type": "button",
+        "class": "px-6 py-2.5 rounded-full bg-surface-container-high text-on-surface-variant hover:bg-surface-bright transition-colors font-semibold text-sm whitespace-nowrap"
+      },
+      {
+        "type": "button",
+        "class": "px-6 py-2.5 rounded-full bg-surface-container-high text-on-surface-variant hover:bg-surface-bright transition-colors font-semibold text-sm whitespace-nowrap"
+      },
+      {
+        "type": "button",
+        "class": "px-6 py-2.5 rounded-full bg-surface-container-high text-on-surface-variant hover:bg-surface-bright transition-colors font-semibold text-sm whitespace-nowrap"
+      },
+      {
+        "type": "form",
+        "class": "space-y-4"
+      },
+      {
+        "type": "input",
+        "class": "w-full bg-surface-container-lowest border-none rounded-lg p-4 focus:ring-2 focus:ring-primary/20 transition-all text-on-surface"
+      }
+    ],
+    "unique_classes": [
+      "absolute",
+      "accent-primary",
+      "active:scale-95",
+      "active:scale-[0.98]",
+      "active:translate-x-1",
+      "after:absolute",
+      "after:bg-white",
+      "after:border",
+      "after:border-gray-300",
+      "after:content-['']",
+      "after:h-5",
+      "after:left-[2px]",
+      "after:rounded-full",
+      "after:top-[2px]",
+      "after:transition-all",
+      "after:w-5",
+      "appearance-none",
+      "backdrop-blur-lg",
+      "backdrop-blur-xl",
+      "bg-black/40"
+    ],
+    "layout_type": "Grid",
+    "responsive": "Desktop Optimized"
+  },
+  {
+    "id": "expanded_navigation_menu",
+    "name": "Expanded Navigation Menu",
+    "has_code": true,
+    "has_image": true,
+    "code_size": 10227,
+    "image_size": 204997,
+    "components": [
+      {
+        "type": "button",
+        "class": "bg-surface-container-high rounded-xl p-4 flex flex-col items-center gap-3 active:scale-95 transition-transform"
+      },
+      {
+        "type": "button",
+        "class": "bg-surface-container-high rounded-xl p-4 flex flex-col items-center gap-3 active:scale-95 transition-transform"
+      },
+      {
+        "type": "button",
+        "class": "bg-surface-container-high rounded-xl p-4 flex flex-col items-center gap-3 active:scale-95 transition-transform"
+      },
+      {
+        "type": "button",
+        "class": "bg-surface-container-high rounded-xl p-4 flex flex-col items-center gap-3 active:scale-95 transition-transform"
+      },
+      {
+        "type": "button",
+        "class": "bg-surface-container-high rounded-xl p-4 flex flex-col items-center gap-3 active:scale-95 transition-transform"
+      },
+      {
+        "type": "button",
+        "class": "bg-surface-container-high rounded-xl p-4 flex flex-col items-center gap-3 active:scale-95 transition-transform relative overflow-hidden"
+      },
+      {
+        "type": "button",
+        "class": "w-full h-16 bg-gradient-to-r from-[#8B5CF6] to-[#0EA5E9] rounded-2xl flex items-center justify-center gap-3 px-6 shadow-xl shadow-primary/10 active:scale-[0.98] transition-all"
+      },
+      {
+        "type": "button",
+        "class": "w-16 h-16 bg-surface-container-highest rounded-full flex items-center justify-center shadow-2xl ring-4 ring-primary-container shadow-primary/40 active:scale-90 duration-300"
+      }
+    ],
+    "unique_classes": [
+      "-top-6",
+      "absolute",
+      "active:scale-90",
+      "active:scale-95",
+      "active:scale-[0.98]",
+      "backdrop-blur-xl",
+      "bg-[#0EA5E9]/10",
+      "bg-[#10B981]/10",
+      "bg-[#1A1A2E]",
+      "bg-[#8B5CF6]/10",
+      "bg-[#EF4444]/10",
+      "bg-[#FBBF24]/10",
+      "bg-gradient-to-br",
+      "bg-gradient-to-r",
+      "bg-outline-variant/30",
+      "bg-slate-900/60",
+      "bg-surface",
+      "bg-surface-container",
+      "bg-surface-container-high",
+      "bg-surface-container-highest"
+    ],
+    "layout_type": "Grid",
+    "responsive": "unknown"
+  },
+  {
+    "id": "liquid_glass_unified_1",
+    "name": "Liquid Glass Unified 1",
+    "has_code": false,
+    "has_image": false,
+    "code_size": 0,
+    "image_size": 0,
+    "components": [],
+    "unique_classes": [],
+    "layout_type": "unknown",
+    "responsive": "unknown"
+  },
+  {
+    "id": "liquid_glass_unified_2",
+    "name": "Liquid Glass Unified 2",
+    "has_code": false,
+    "has_image": false,
+    "code_size": 0,
+    "image_size": 0,
+    "components": [],
+    "unique_classes": [],
+    "layout_type": "unknown",
+    "responsive": "unknown"
+  },
+  {
+    "id": "ow_finance_dashboard_lite_1",
+    "name": "Ow Finance Dashboard Lite 1",
+    "has_code": true,
+    "has_image": true,
+    "code_size": 13711,
+    "image_size": 241467,
+    "components": [
+      {
+        "type": "button",
+        "class": "w-10 h-10 flex items-center justify-center text-[#006591] dark:text-sky-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-all"
+      },
+      {
+        "type": "button",
+        "class": "bg-white text-primary px-4 py-1.5 rounded-full text-xs font-bold transition-all"
+      },
+      {
+        "type": "button",
+        "class": "text-white/70 hover:text-white px-4 py-1.5 rounded-full text-xs font-bold transition-all"
+      },
+      {
+        "type": "button",
+        "class": "text-white/70 hover:text-white px-4 py-1.5 rounded-full text-xs font-bold transition-all"
+      },
+      {
+        "type": "button",
+        "class": "text-primary font-bold text-sm"
+      },
+      {
+        "type": "svg",
+        "class": "w-full h-full transform -rotate-90"
+      },
+      {
+        "type": "svg",
+        "class": "w-full h-full transform -rotate-90"
+      },
+      {
+        "type": "svg",
+        "class": "w-full h-full transform -rotate-90"
+      },
+      {
+        "type": "svg",
+        "class": "w-full h-full transform -rotate-90"
+      },
+      {
+        "type": "button",
+        "class": "flex flex-col items-center justify-center text-sky-500 dark:text-sky-400 font-bold"
+      }
+    ],
+    "unique_classes": [
+      "-rotate-90",
+      "-top-8",
+      "active:scale-90",
+      "animate-pulse",
+      "backdrop-blur-xl",
+      "bg-[#F7F9FB]",
+      "bg-amber-500/10",
+      "bg-gradient-to-br",
+      "bg-primary-container/10",
+      "bg-purple-500/10",
+      "bg-slate-200",
+      "bg-success-custom/10",
+      "bg-surface",
+      "bg-surface-container-low",
+      "bg-surface-container-lowest",
+      "bg-white",
+      "bg-white/80",
+      "border",
+      "border-outline-variant/30",
+      "border-white/10"
+    ],
+    "layout_type": "Grid",
+    "responsive": "Mobile Optimized"
+  },
+  {
+    "id": "ow_finance_dashboard_lite_2",
+    "name": "Ow Finance Dashboard Lite 2",
+    "has_code": true,
+    "has_image": true,
+    "code_size": 13497,
+    "image_size": 229453,
+    "components": [
+      {
+        "type": "button",
+        "class": "w-11 h-11 rounded-full flex items-center justify-center bg-surface-container hover:opacity-80 transition-opacity active:scale-95 transition-transform"
+      },
+      {
+        "type": "button",
+        "class": "px-5 py-2 bg-white text-on-primary-fixed font-label text-xs font-bold rounded-full"
+      },
+      {
+        "type": "button",
+        "class": "px-5 py-2 bg-white/10 text-white font-label text-xs font-bold rounded-full"
+      },
+      {
+        "type": "button",
+        "class": "px-5 py-2 bg-white/10 text-white font-label text-xs font-bold rounded-full"
+      },
+      {
+        "type": "svg",
+        "class": "w-full h-full -rotate-90"
+      },
+      {
+        "type": "svg",
+        "class": "w-full h-full -rotate-90"
+      },
+      {
+        "type": "svg",
+        "class": "w-full h-full -rotate-90"
+      },
+      {
+        "type": "svg",
+        "class": "w-full h-full -rotate-90"
+      },
+      {
+        "type": "button",
+        "class": "bg-gradient-to-br from-sky-400 to-sky-600 text-white rounded-full p-3 shadow-lg scale-110 active:scale-90 transition-all duration-300"
+      },
+      {
+        "type": "button",
+        "class": "text-slate-400 p-3 hover:text-sky-300 transition-colors active:scale-90 transition-all duration-300"
+      }
+    ],
+    "unique_classes": [
+      "-right-10",
+      "-rotate-90",
+      "-top-10",
+      "-translate-x-1/2",
+      "absolute",
+      "active:scale-90",
+      "active:scale-95",
+      "backdrop-blur-lg",
+      "backdrop-blur-md",
+      "bg-gradient-to-br",
+      "bg-primary",
+      "bg-slate-900/60",
+      "bg-surface-container",
+      "bg-surface-container-highest",
+      "bg-white",
+      "bg-white/10",
+      "blur-3xl",
+      "border",
+      "border-2",
+      "border-primary/20"
+    ],
+    "layout_type": "Grid",
+    "responsive": "Mobile Optimized"
+  },
+  {
+    "id": "ow_finance_dashboard_lite_home",
+    "name": "Ow Finance Dashboard Lite Home",
+    "has_code": true,
+    "has_image": true,
+    "code_size": 14027,
+    "image_size": 209722,
+    "components": [
+      {
+        "type": "button",
+        "class": "w-10 h-10 flex items-center justify-center rounded-full hover:bg-sky-50 transition-colors"
+      },
+      {
+        "type": "button",
+        "class": "text-primary font-bold text-sm"
+      },
+      {
+        "type": "svg",
+        "class": "w-full h-full transform -rotate-90"
+      },
+      {
+        "type": "svg",
+        "class": "w-full h-full transform -rotate-90"
+      },
+      {
+        "type": "svg",
+        "class": "w-full h-full transform -rotate-90"
+      },
+      {
+        "type": "svg",
+        "class": "w-full h-full transform -rotate-90"
+      },
+      {
+        "type": "button",
+        "class": "bg-primary-container text-white w-14 h-14 rounded-full flex items-center justify-center shadow-xl shadow-sky-200 active:scale-95 duration-200"
+      }
+    ],
+    "unique_classes": [
+      "-bottom-12",
+      "-left-12",
+      "-right-10",
+      "-rotate-90",
+      "-top-10",
+      "-top-8",
+      "-translate-x-1/2",
+      "absolute",
+      "active:scale-95",
+      "animate-bounce",
+      "backdrop-blur-md",
+      "backdrop-blur-xl",
+      "bg-[#F7F9FB]",
+      "bg-background",
+      "bg-gradient-to-br",
+      "bg-primary",
+      "bg-primary-container",
+      "bg-primary-container/20",
+      "bg-sky-100",
+      "bg-sky-50"
+    ],
+    "layout_type": "Grid",
+    "responsive": "Mobile Optimized"
+  },
+  {
+    "id": "precision_vault",
+    "name": "Precision Vault",
+    "has_code": false,
+    "has_image": false,
+    "code_size": 0,
+    "image_size": 0,
+    "components": [],
+    "unique_classes": [],
+    "layout_type": "unknown",
+    "responsive": "unknown"
+  },
+  {
+    "id": "quick_add_modal_light_mode",
+    "name": "Quick Add Modal Light Mode",
+    "has_code": true,
+    "has_image": true,
+    "code_size": 11690,
+    "image_size": 162965,
+    "components": [
+      {
+        "type": "button",
+        "class": "hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-colors scale-95 active:duration-100 p-2"
+      },
+      {
+        "type": "button",
+        "class": "bg-[#F8FAFC] py-5 rounded-2xl font-headline font-bold text-2xl text-on-surface hover:bg-slate-100 transition-colors active:scale-95"
+      },
+      {
+        "type": "button",
+        "class": "bg-[#F8FAFC] py-5 rounded-2xl font-headline font-bold text-2xl text-on-surface hover:bg-slate-100 transition-colors active:scale-95"
+      },
+      {
+        "type": "button",
+        "class": "bg-[#F8FAFC] py-5 rounded-2xl font-headline font-bold text-2xl text-on-surface hover:bg-slate-100 transition-colors active:scale-95"
+      },
+      {
+        "type": "button",
+        "class": "bg-[#F8FAFC] py-5 rounded-2xl font-headline font-bold text-2xl text-on-surface hover:bg-slate-100 transition-colors active:scale-95"
+      },
+      {
+        "type": "button",
+        "class": "bg-[#F8FAFC] py-5 rounded-2xl font-headline font-bold text-2xl text-on-surface hover:bg-slate-100 transition-colors active:scale-95"
+      },
+      {
+        "type": "button",
+        "class": "bg-[#F8FAFC] py-5 rounded-2xl font-headline font-bold text-2xl text-on-surface hover:bg-slate-100 transition-colors active:scale-95"
+      },
+      {
+        "type": "button",
+        "class": "bg-[#F8FAFC] py-5 rounded-2xl font-headline font-bold text-2xl text-on-surface hover:bg-slate-100 transition-colors active:scale-95"
+      },
+      {
+        "type": "button",
+        "class": "bg-[#F8FAFC] py-5 rounded-2xl font-headline font-bold text-2xl text-on-surface hover:bg-slate-100 transition-colors active:scale-95"
+      },
+      {
+        "type": "button",
+        "class": "bg-[#F8FAFC] py-5 rounded-2xl font-headline font-bold text-2xl text-on-surface hover:bg-slate-100 transition-colors active:scale-95"
+      }
+    ],
+    "unique_classes": [
+      "-mt-10",
+      "-z-10",
+      "absolute",
+      "active:duration-100",
+      "active:duration-150",
+      "active:scale-95",
+      "active:scale-[0.98]",
+      "backdrop-blur-xl",
+      "bg-[#E2E8F0]",
+      "bg-[#EF4444]",
+      "bg-[#F8FAFC]",
+      "bg-[#FEF2F2]",
+      "bg-gradient-to-br",
+      "bg-primary-container/10",
+      "bg-sky-100",
+      "bg-surface",
+      "bg-surface-container-high",
+      "bg-surface-container-low",
+      "bg-surface-container-lowest",
+      "bg-white"
+    ],
+    "layout_type": "Grid",
+    "responsive": "unknown"
+  },
+  {
+    "id": "transactions_mobile_lite",
+    "name": "Transactions Mobile Lite",
+    "has_code": true,
+    "has_image": true,
+    "code_size": 10619,
+    "image_size": 213188,
+    "components": [
+      {
+        "type": "button",
+        "class": "active:scale-95 duration-200 text-sky-400"
+      },
+      {
+        "type": "button",
+        "class": "active:scale-95 duration-200 text-sky-400"
+      },
+      {
+        "type": "input",
+        "class": "bg-transparent border-none focus:ring-0 text-on-surface placeholder-outline-variant w-full font-body"
+      },
+      {
+        "type": "button",
+        "class": "px-6 py-2 rounded-full whitespace-nowrap bg-primary text-on-primary font-medium text-sm transition-all duration-200"
+      },
+      {
+        "type": "button",
+        "class": "px-6 py-2 rounded-full whitespace-nowrap bg-surface-container-high text-on-surface-variant font-medium text-sm hover:bg-surface-bright transition-all duration-200"
+      },
+      {
+        "type": "button",
+        "class": "px-6 py-2 rounded-full whitespace-nowrap bg-surface-container-high text-on-surface-variant font-medium text-sm hover:bg-surface-bright transition-all duration-200"
+      },
+      {
+        "type": "button",
+        "class": "px-6 py-2 rounded-full whitespace-nowrap bg-surface-container-high text-on-surface-variant font-medium text-sm hover:bg-surface-bright transition-all duration-200"
+      },
+      {
+        "type": "button",
+        "class": "w-14 h-14 rounded-full bg-gradient-to-br from-primary to-primary-container text-on-primary shadow-lg shadow-primary/20 flex items-center justify-center active:scale-90 transition-transform"
+      }
+    ],
+    "unique_classes": [
+      "-bottom-4",
+      "-mx-2",
+      "-right-4",
+      "-top-8",
+      "absolute",
+      "active:scale-90",
+      "active:scale-95",
+      "active:scale-[0.98]",
+      "backdrop-blur-lg",
+      "backdrop-blur-xl",
+      "bg-[#0b1326]/60",
+      "bg-[#171f33]/60",
+      "bg-background",
+      "bg-error-container/20",
+      "bg-error/10",
+      "bg-gradient-to-br",
+      "bg-primary",
+      "bg-secondary-container/20",
+      "bg-secondary/10",
+      "bg-sky-500/10"
+    ],
+    "layout_type": "Grid",
+    "responsive": "Mobile Optimized"
+  },
+  {
+    "id": "transactions_pro_super_grid",
+    "name": "Transactions Pro Super Grid",
+    "has_code": true,
+    "has_image": true,
+    "code_size": 25248,
+    "image_size": 307041,
+    "components": [
+      {
+        "type": "button",
+        "class": "w-full bg-primary-container text-white rounded-full py-3 px-6 font-headline font-bold text-sm shadow-lg shadow-primary-container/20 flex items-center justify-center gap-2 hover:opacity-90 transition-opacity"
+      },
+      {
+        "type": "input",
+        "class": "pl-10 pr-4 py-2 bg-surface-container-low border-none rounded-full text-xs w-64 focus:ring-1 focus:ring-primary-container transition-all"
+      },
+      {
+        "type": "button",
+        "class": "p-2 text-outline hover:text-primary-container transition-colors"
+      },
+      {
+        "type": "button",
+        "class": "flex items-center gap-2 px-4 py-2 text-primary-container font-headline font-bold text-xs hover:bg-primary-container/5 rounded-full transition-colors"
+      },
+      {
+        "type": "button",
+        "class": "px-4 py-2 bg-surface-container-lowest border border-outline-variant rounded-full text-xs font-semibold text-on-surface hover:bg-surface-container transition-colors"
+      },
+      {
+        "type": "button",
+        "class": "px-4 py-2 bg-surface-container-lowest border border-outline-variant rounded-full text-xs font-semibold text-on-surface hover:bg-surface-container transition-colors"
+      },
+      {
+        "type": "button",
+        "class": "px-4 py-2 bg-surface-container-lowest border border-outline-variant rounded-full text-xs font-semibold text-on-surface hover:bg-surface-container transition-colors"
+      },
+      {
+        "type": "button",
+        "class": "px-4 py-2 bg-surface-container-lowest border border-outline-variant rounded-full text-xs font-semibold text-on-surface hover:bg-surface-container transition-colors"
+      },
+      {
+        "type": "button",
+        "class": "w-8 h-8 flex items-center justify-center rounded-full bg-surface-container-low text-outline"
+      },
+      {
+        "type": "input",
+        "class": "rounded text-primary-container focus:ring-primary-container border-outline-variant"
+      }
+    ],
+    "unique_classes": [
+      "-bottom-10",
+      "-right-10",
+      "-translate-y-1/2",
+      "absolute",
+      "active-nav-shadow",
+      "antialiased",
+      "backdrop-blur-sm",
+      "backdrop-blur-xl",
+      "bg-gradient-to-br",
+      "bg-primary",
+      "bg-primary-container",
+      "bg-primary-container/10",
+      "bg-slate-200",
+      "bg-surface",
+      "bg-surface-container",
+      "bg-surface-container-low",
+      "bg-surface-container-low/20",
+      "bg-surface-container-lowest",
+      "bg-surface-container-lowest/50",
+      "bg-surface-container-lowest/80"
+    ],
+    "layout_type": "Grid",
+    "responsive": "Desktop Optimized"
+  }
+]

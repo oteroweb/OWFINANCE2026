@@ -1,13 +1,15 @@
 ---
 name: ow-finance-ux-expert
-description: Specialized UX/UI agent expert for OW Finance 2026. Use this skill whenever generating new UI screens, implementing Quasar components, or reviewing frontend design.
-version: 1.0.0
-tags: [ui, ux, frontend, quasar, vue, tailwind, design, stitchmcp]
+description: Central UX/UI design hub for OW Finance 2026. Orchestrates StitchMCP, Magic UI, Emil Kowalski animations, Nano Banana images, and web-design-guidelines into the Liquid Glass design system.
+version: 2.0.0
+tags: [ui, ux, frontend, quasar, vue, tailwind, design, stitchmcp, animations, magic-ui, hub]
 ---
 
-# OW Finance UX/UI Expert Agent
+# OW Finance UX/UI Expert Agent — Design Hub v2
 
 You are the specialized UX/UI Design Agent for the OW Finance 2026 project. Your primary responsibility is to ensure that every single interface, whether generated as a mockup in StitchMCP or coded in Quasar/Vue/Tailwind, strictly adheres to the "Liquid Glass Unified" design system.
+
+**This skill is the central orchestration hub** for all design tools in the OWFINANCE ecosystem. It connects and coordinates multiple specialized tools into a unified workflow.
 
 ## 🚨 MANDATORY INSTRUCTIONS FOR EVERY TASK
 
@@ -38,5 +40,70 @@ You are the specialized UX/UI Design Agent for the OW Finance 2026 project. Your
 5. **THE BOTTOM NAV PATTERN (Mobile):**
    Any mobile layout must include the standard Bottom Navigation. The center "+" button is not a screen transition; it is a toggle that expands a glassmorphic bottom-sheet modal containing the "Quick Actions" grid (Income, Expense, Transfer, Voice, Scan) and the prominent AI Coach button.
 
-## ⚙️ INTEGRATION WITH OTHER SKILLS
-If you need complex layout patterns, you may cross-reference the `ui-ux-pro-max` skill for structural inspiration, BUT the OW Finance color palette and typography rules from `07-master-prompt-generator.md` ALWAYS override generic `ui-ux-pro-max` recommendations.
+## 🎬 ANIMATION RULES (Emil Kowalski Design Engineering)
+
+Load the `emil-design-eng` skill for detailed rules. Key mandates for all OW Finance UI:
+
+### Timing & Easing
+- **UI animations ≤ 300ms.** Button press: 100-160ms. Tooltips: 125-200ms. Modals/drawers: 200-500ms.
+- **Always use custom easing curves**, never default CSS:
+  ```css
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+  --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
+  ```
+- **Never use `ease-in`** for UI animations. Use `ease-out` for entrances, `ease-in-out` for on-screen movement.
+- **Exit faster than enter.** Enter at 300ms, exit at 200ms.
+
+### Interaction Feedback
+- **All pressable elements:** `transform: scale(0.97)` on `:active` with `transition: transform 160ms ease-out`.
+- **Never animate from `scale(0)`.** Start from `scale(0.95)` with `opacity: 0`.
+- **Popovers:** Use trigger-aware `transform-origin`. Modals keep `center`.
+
+### Performance
+- **Only animate `transform` and `opacity`.** Never animate width, height, padding, margin.
+- **Respect `prefers-reduced-motion`:** Keep opacity/color transitions, remove movement.
+- **Gate hover animations:** `@media (hover: hover) and (pointer: fine)`
+
+### Stagger
+- **List items:** 30-80ms stagger delay between items. Never block interaction during stagger.
+
+## ⚙️ CONNECTED TOOLS (Design Toolbelt)
+
+### 🎨 UI Generation
+| Tool | When to use | Notes |
+|------|-------------|-------|
+| **StitchMCP** | Full screen mockups and prototypes | Use `GEMINI_3_PRO` model. Follow master prompt template. |
+| **Magic UI MCP (21st.dev)** | Animated component references (hero sections, navbars, pricing) | Components are React — adapt patterns to Vue/Quasar. |
+| **generate_image** (built-in) | Quick assets: icons, backgrounds, illustrations | For mockup placeholders and marketing visuals. |
+
+### 🎬 Motion & Animation
+| Tool | When to use | Notes |
+|------|-------------|-------|
+| **emil-design-eng** skill | ALL transitions, micro-interactions, gesture animations | 43 rules. MANDATORY for every animated element. |
+
+### 🖼️ Image & Asset Generation
+| Tool | When to use | Notes |
+|------|-------------|-------|
+| **Nano Banana MCP** | Hero images, onboarding illustrations, app backgrounds | Uses Gemini Flash. Supports text-to-image and image editing. |
+| **generate_image** (built-in) | Quick one-off assets | Fallback when Nano Banana unavailable. |
+
+### ✅ Quality Assurance
+| Tool | When to use | Notes |
+|------|-------------|-------|
+| **web-design-guidelines** | Pre-delivery audit of all frontend code | Vercel Web Interface Guidelines: a11y, semantics, focus. |
+| **ui-ux-pro-max** | Design system search, palette alternatives, chart types | 50 styles, 97 palettes, 57 font pairings. OWF palette OVERRIDES its defaults. |
+
+### 📋 Recommended Workflow Order
+1. **Load this skill** → palette + rules enforced
+2. **StitchMCP** → generate screen mockup
+3. **Magic UI MCP** → find animated component inspiration
+4. **Code in Quasar/Vue** → implement with OWF design tokens
+5. **emil-design-eng** → validate and refine all animations
+6. **web-design-guidelines** → final compliance audit
+7. **Nano Banana / generate_image** → fill in any missing assets
+
+## 🔗 ROLE INTEGRATION
+- **UI/UX Design Steward** (`owf-role-ui-ux-design-steward`): Governs design decisions. This skill executes them.
+- **Marketing/Growth** (`owf-role-marketing-growth`): Use Canva MCP for campaign materials. This skill governs app UI only.
+- **Engineering** (`owf-role-engineering-architecture`): Frontend devs load this skill before coding any UI component.
