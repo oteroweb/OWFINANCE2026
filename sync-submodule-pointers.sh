@@ -37,6 +37,14 @@ git_cfg_get() {
   printf '%s\n' "$value"
 }
 
+git_status_porcelain() {
+  if [[ -x "$(command -v git.exe 2>/dev/null || true)" ]]; then
+    git.exe status --porcelain
+  else
+    git status --porcelain
+  fi
+}
+
 ensure_git_identity() {
   local name
   local email
@@ -126,7 +134,7 @@ is_allowed_root_change() {
   return 1
 }
 
-ROOT_STATUS="$(git status --porcelain)"
+ROOT_STATUS="$(git_status_porcelain)"
 if [[ -n "$ROOT_STATUS" ]]; then
   while IFS= read -r line; do
     [[ -z "$line" ]] && continue
