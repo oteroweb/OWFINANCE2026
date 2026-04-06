@@ -47,9 +47,14 @@ git_status_porcelain() {
 
 repo_status_porcelain() {
   local repo_path="$1"
+  local native_repo_path="$repo_path"
+
+  if [[ -x "$(command -v cygpath 2>/dev/null || true)" ]]; then
+    native_repo_path="$(cygpath -w "$repo_path")"
+  fi
 
   if [[ -x "$(command -v git.exe 2>/dev/null || true)" ]]; then
-    git.exe -C "$repo_path" status --porcelain
+    git.exe -C "$native_repo_path" status --porcelain
   else
     git -C "$repo_path" status --porcelain
   fi
