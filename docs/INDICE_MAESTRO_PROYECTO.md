@@ -72,15 +72,17 @@ Uso:
 
 ### 2.6 UI / UX
 
+- `docs/ui-ux/README.md`
+  Indice interno y auditoria del paquete UI/UX.
 - `docs/ui-ux/MASTER_UI_SOURCES.md`
-- `docs/ui-ux/02-current-ui-inventory-and-architecture.md`
 - `docs/ui-ux/03-unified-design-rules.md`
+- `docs/ui-ux/05-current-state-live-inventory.md`
 - `docs/ui-ux/08-frozen-canonical-design-system-brief.md`
 - `docs/ui-ux/09-freeze-stitch-flujo-core-matrix.md`
 - `docs/ui-ux/10-layout-refactor-legacy-pro-lite-mini-spec.md`
 
 Nota:
-- Este bloque aun necesita depuracion fina, porque mezcla material vigente, congelado y transicional.
+- Este bloque ya fue reducido a un nucleo activo y transicional. El material duplicado o historico se movio a legacy.
 
 ## 3. Documentacion legacy o secundaria
 
@@ -218,10 +220,7 @@ Conclusiones:
 ### 7.2 Consolidar despues
 
 - `docs/ui-ux/*`
-  Separar en:
-  - vigente
-  - congelado
-  - historico
+  Corregir encoding y etiquetar estado visible dentro de los archivos que siguen activos.
 - `docs/02-backend/*`
   Crear un README indice por dominio.
 - `docs/03-frontend/*`
