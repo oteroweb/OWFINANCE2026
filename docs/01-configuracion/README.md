@@ -21,6 +21,14 @@ Documentación de **configuración multi-entorno**, variables de entorno, y estr
   - Seleccion por prioridad, status y role
   - Skills OWFINANCE, `documentator` y uso de Notion MCP vs fallback
   - Cierre de Drive, Notion, Telegram y contexto local
+- **STITCH_MCP_OPERATIONAL_SETUP.md** - Contrato operativo de Stitch y runtime MCP
+  - IDs canonicos
+  - Como referenciar Stitch en tickets
+  - Que hacer si MCP o Stitch no estan disponibles
+- **DOCUMENTATION_CLEANUP_POLICY.md** - Politica de archivo y consolidacion documental
+  - Archivo antes de eliminar
+  - Estados documentales
+  - Criterios de archivo y mantenimiento
 - **../../set-herramientas.md** - Mapa practico del stack activo de agentes
   - Superpowers, `ui-ux-pro-max`, ECC y Engram
   - Comparativa concreta `Engram vs Claude-mem`

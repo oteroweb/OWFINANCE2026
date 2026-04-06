@@ -1,5 +1,7 @@
 # OpenCode Runtime Setup
 
+Estado documental: `transicional`
+
 Configuracion local aplicada para OpenCode en esta maquina.
 
 ## Modelo real configurado para agentes
@@ -17,14 +19,18 @@ Configuracion local aplicada para OpenCode en esta maquina.
   - `sdd-verify`
   - `sdd-archive`
 
-## MCPs agregados a OpenCode
+## Estado real encontrado durante el saneamiento
 
-- `engram` (preservado)
-- `NotionMCP`
-- `StitchMCP`
-- `FetchMCP`
-- `TimeMCP`
+- `c:\Users\pc\.config\opencode\opencode.json` estaba invalido y no cargaba MCPs.
+- `opencode.cmd mcp list` devolvia `No MCP servers configured`.
+- No se detecto una configuracion local reproducible de Notion o Stitch en OpenCode lista para reusar sin rearmar credenciales o endpoints.
+
+## MCPs objetivo para OpenCode
+
 - `context7`
+- `NotionMCP` o equivalente local reproducible
+- `StitchMCP` o equivalente local reproducible
+- `engram` cuando exista una entrada MCP valida en este runtime
 
 ## Integraciones bloqueadas por credenciales o autorizacion faltante
 
@@ -40,3 +46,4 @@ Configuracion local aplicada para OpenCode en esta maquina.
 
 - Config global OpenCode: `/Users/joseluisoterolopez/.config/opencode/opencode.json`
 - Config MCP adicional usada como referencia local: `/Users/joseluisoterolopez/.gemini/antigravity/mcp_config.json`
+- Guia operativa de Stitch: `docs/01-configuracion/STITCH_MCP_OPERATIONAL_SETUP.md`
