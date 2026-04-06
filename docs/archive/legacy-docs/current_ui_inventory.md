@@ -1,5 +1,9 @@
 # Inventario Actual de UI/UX (OW Finance) y Propuesta Lite vs Pro
 
+Estado documental: `archivado`
+
+Documento movido a legacy. Las referencias activas viven en `docs/ui-ux/` y `docs/01-configuracion/STITCH_MCP_OPERATIONAL_SETUP.md`.
+
 Este documento hace un "vaciado" de todas las vistas, componentes y widgets existentes actualmente en el repositorio `OWFinanceFrontend2025`, y sugiere una categorización para la nueva experiencia separada en versiones **Lite** y **Pro**.
 
 ## 1. Inventario de Vistas (Páginas y Rutas)

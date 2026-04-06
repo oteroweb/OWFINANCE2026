@@ -1,5 +1,9 @@
 # Arquitectura del Proyecto OWFINANCE2026
 
+Estado documental: `archivado`
+
+Documento movido a legacy. La referencia activa vive en `docs/ARQUITECTURA_PROYECTO.md`.
+
 ## 1. Resumen ejecutivo
 OWFINANCE2026 es un sistema financiero con dos aplicaciones desacopladas:
 - Backend API en Laravel (`OWFINANCEBackend2025`)

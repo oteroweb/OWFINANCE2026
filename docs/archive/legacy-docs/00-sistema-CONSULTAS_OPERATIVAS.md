@@ -1,5 +1,9 @@
 # Consultas Operativas para IA - OWFINANCE2026
 
+Estado documental: `archivado`
+
+Documento movido a legacy. La referencia activa vive en `docs/CONSULTAS_OPERATIVAS.md`.
+
 Este documento define respuestas estandar por tipo de consulta tecnica.
 
 ## 1. "Quiero levantar el proyecto local"

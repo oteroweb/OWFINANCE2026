@@ -1,34 +1,23 @@
-# 📋 00 - Sistema & Arquitectura
+# 00 - Sistema y Flujo
 
-Documentación de **arquitectura general**, estructura del proyecto y visión del sistema.
+Estado documental: `vigente`
 
-## Archivos
+Esta carpeta ya no replica documentos activos de la raiz. Aqui viven los playbooks estructurales del sistema.
 
-### 📐 Arquitectura General
-- **ARQUITECTURA_PROYECTO.md** - Estructura y componentes del sistema
-  - Backend: Laravel 12 + Sanctum
-  - Frontend: Quasar 2 + Vue 3 + TypeScript
-  - Mobile: Capacitor
-  - Integración general
-  - Stack completo
+## Documentos activos
 
-- **CONSULTAS_OPERATIVAS.md** - Playbook de consultas frecuentes
-  - Preguntas comunes y respuestas técnicas
-  - Checklist de operaciones
-  - Resolución rápida de problemas
+- `FLUJO_OPERATIVO_UNIFICADO.md`
+  Flujo oficial entre Git, Drive, Notion, repo, Stitch y cleanup.
+- `GIT_HYGIENE_AND_SAFE_UPDATE.md`
+  Paso 0 obligatorio antes de `pull` o trabajo por repo.
 
-### 📄 Raíz Original
-- **README-root.md** - README principal del proyecto (en raíz)
+## Documentos autoridad fuera de esta carpeta
 
----
+- `docs/ARQUITECTURA_PROYECTO.md`
+- `docs/CONSULTAS_OPERATIVAS.md`
+- `docs/03-frontend/RUTAS.md`
+- `docs/01-configuracion/NOTION_TICKET_WORKFLOW.md`
 
-## 🔗 Referencias Especiales
-- **Guía para Agentes IA:** Ver [`AGENTS.md`](../../AGENTS.md) en raíz
-  - Flujo de trabajo recomendado
-  - Contratos técnicos que NO romper
-  - Riesgos conocidos del proyecto
-  - Comandos base
+## Legacy
 
----
-
-**📍 Última actualización:** 2026-03-01
+Las copias viejas o duplicadas de arquitectura, consultas operativas y README raiz deben moverse a `docs/archive/legacy-docs/`.
