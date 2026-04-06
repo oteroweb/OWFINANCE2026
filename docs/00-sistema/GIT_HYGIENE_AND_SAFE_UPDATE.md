@@ -54,3 +54,33 @@ Si el preflight detecta detached HEAD, working tree ambiguo o tracking roto:
 - documentar el hallazgo;
 - abrir ticket o nota de higiene Git si hace falta;
 - no ocultar el riesgo dentro de otra tarea.
+
+## 6. Sincronizacion de punteros del repo central
+
+El repo raiz no se actualiza solo cuando backend o frontend avanzan en sus propios remotos.
+
+Flujo recomendado:
+1. Hacer `commit` y `push` dentro de `OWFINANCEBackend2025` o `OWFinanceFrontend2025`.
+2. Volver al root `OWFINANCE2026`.
+3. Ejecutar `./sync-submodule-pointers.sh --report` para diagnosticar.
+4. Si el root queda desfasado, ejecutar `./sync-submodule-pointers.sh --commit`.
+5. Solo si hace falta compartir ese estado oficial del workspace, hacer `git push` del repo raiz.
+
+Wrapper recomendado para evitar pasos manuales:
+1. Ejecutar `./push-workspace.sh backend "mensaje"` o `./push-workspace.sh frontend "mensaje"`.
+2. El wrapper:
+   - normaliza el subrepo a la rama declarada en `.gitmodules`;
+   - commitea el subrepo si hace falta;
+   - hace `push` del subrepo;
+   - sincroniza el puntero del repo central;
+   - opcionalmente puede empujar tambien el root con `--push-root`.
+
+El script:
+- normaliza backend y frontend sobre sus ramas objetivo;
+- bloquea el flujo si hay cambios locales ambiguos;
+- detecta cuando el root sigue apuntando a commits viejos;
+- puede crear el commit del repo raiz solo con los punteros de submodulo.
+
+Nota operativa:
+- la rama objetivo de cada submodulo se lee desde `.gitmodules`;
+- hoy el workspace integra backend y frontend contra `dev`.

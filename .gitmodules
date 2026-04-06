@@ -5,4 +5,4 @@
 [submodule "OWFinanceFrontend2025"]
 	path = OWFinanceFrontend2025
 	url = git@github.com:oteroweb/OWFINANCEFRONTEND2025.git
-	branch = main
+	branch = dev

@@ -75,6 +75,11 @@ Directorio raiz de coordinacion (scripts y docs compartidos):
 - Estado operativo extendido:
   - `./ops-status.sh dev`
   - `./ops-status.sh stage`
+- Sincronizacion de punteros del workspace:
+  - `./sync-submodule-pointers.sh --report`
+  - `./sync-submodule-pointers.sh --commit`
+  - `./push-workspace.sh backend "mensaje"`
+  - `./push-workspace.sh frontend "mensaje"`
 - Avisos por Telegram:
   - `./telegram-notify.sh test --title OWFINANCE`
   - `./telegram-step.sh --title Worker "Task step happened"`
@@ -151,6 +156,7 @@ Directorio raiz de coordinacion (scripts y docs compartidos):
 3. GitHub Actions `deploy.yml` requiere que el secret `SSH_KEY` este configurado en el repo.
 4. Existen dos repositorios Git independientes; commits/versionado deben hacerse por repo.
 5. El `.htaccess` de `public/` tiene regla critica para `/app/` — NO eliminar.
+6. El repo central usa punteros Git para backend y frontend; despues de hacer push en esos repos puede hacer falta sincronizar el root con `./sync-submodule-pointers.sh --commit`.
 
 ## Regla de oro para agentes
 Antes de modificar deployment, auth, rutas o jars:

@@ -31,3 +31,4 @@ tags: [owfinance, saas, role, devops, sre, platform, reliability]
 ## Collaboration
 - Work with `owf-role-engineering-architecture`, `owf-role-risk-compliance`, `owf-role-scrum-master-planning`, and `owf-role-qa-release-quality`.
 - Load `documentator` when platform docs need discovery, structure, or repo-summary sync.
+- Load `workspace-pointer-sync` when backend/frontend git pushes must stay aligned with the central workspace pointers.
