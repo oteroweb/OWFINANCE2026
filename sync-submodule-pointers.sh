@@ -45,6 +45,16 @@ git_status_porcelain() {
   fi
 }
 
+repo_status_porcelain() {
+  local repo_path="$1"
+
+  if [[ -x "$(command -v git.exe 2>/dev/null || true)" ]]; then
+    git.exe -C "$repo_path" status --porcelain
+  else
+    git -C "$repo_path" status --porcelain
+  fi
+}
+
 ensure_git_identity() {
   local name
   local email
@@ -192,7 +202,7 @@ sync_one() {
     current_branch="$target_branch"
   fi
 
-  if [[ -n "$(git -C "$ROOT_DIR/$path" status --porcelain)" ]]; then
+  if [[ -n "$(repo_status_porcelain "$ROOT_DIR/$path")" ]]; then
     error "$path tiene cambios locales. Limpialos o committealos antes de sincronizar"
   fi
 
