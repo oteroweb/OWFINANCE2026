@@ -1,0 +1,35 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "backend-laravel",
+      "runtimeExecutable": "/usr/local/bin/php",
+      "runtimeArgs": [
+        "artisan",
+        "serve"
+      ],
+      "port": 8000,
+      "cwd": "/Users/joseluisoterolopez/Desktop/dev/OWFINANCE2026/OWFINANCEBackend2025"
+    },
+    {
+      "name": "frontend-quasar",
+      "runtimeExecutable": "/usr/local/bin/npm",
+      "runtimeArgs": [
+        "run",
+        "dev"
+      ],
+      "port": 3000,
+      "cwd": "/Users/joseluisoterolopez/Desktop/dev/OWFINANCE2026/OWFinanceFrontend2025"
+    },
+    {
+      "name": "backend-vite",
+      "runtimeExecutable": "/usr/local/bin/npm",
+      "runtimeArgs": [
+        "run",
+        "dev"
+      ],
+      "port": 5173,
+      "cwd": "/Users/joseluisoterolopez/Desktop/dev/OWFINANCE2026/OWFINANCEBackend2025"
+    }
+  ]
+}
