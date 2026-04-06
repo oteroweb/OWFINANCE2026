@@ -24,6 +24,40 @@ success() { echo -e "${GREEN}OK${NC} $*"; }
 warn() { echo -e "${YELLOW}WARN${NC} $*"; }
 error() { echo -e "${RED}ERR${NC} $*" >&2; exit 1; }
 
+git_cfg_get() {
+  local scope="$1"
+  local key="$2"
+  local value
+
+  value="$(git config "$scope" --get "$key" 2>/dev/null || true)"
+  if [[ -z "$value" && -x "$(command -v git.exe 2>/dev/null || true)" ]]; then
+    value="$(git.exe config "$scope" --get "$key" 2>/dev/null || true)"
+  fi
+
+  printf '%s\n' "$value"
+}
+
+ensure_git_identity() {
+  local name
+  local email
+
+  name="$(git config --local --get user.name 2>/dev/null || true)"
+  email="$(git config --local --get user.email 2>/dev/null || true)"
+
+  if [[ -n "$name" && -n "$email" ]]; then
+    return 0
+  fi
+
+  name="${name:-$(git_cfg_get --global user.name)}"
+  email="${email:-$(git_cfg_get --global user.email)}"
+
+  [[ -n "$name" ]] || error "No se encontro user.name para Git"
+  [[ -n "$email" ]] || error "No se encontro user.email para Git"
+
+  git config --local user.name "$name"
+  git config --local user.email "$email"
+}
+
 usage() {
   cat <<'EOF'
 Uso:
@@ -74,6 +108,7 @@ fi
 
 cd "$ROOT_DIR"
 git rev-parse --is-inside-work-tree >/dev/null 2>&1 || error "El root no es un repo git"
+ensure_git_identity
 
 ROOT_BRANCH="$(git branch --show-current)"
 [[ -n "$ROOT_BRANCH" ]] || error "El repo raiz esta en detached HEAD"

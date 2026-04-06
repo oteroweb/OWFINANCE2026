@@ -14,6 +14,41 @@ success() { echo -e "${GREEN}OK${NC} $*"; }
 warn() { echo -e "${YELLOW}WARN${NC} $*"; }
 error() { echo -e "${RED}ERR${NC} $*" >&2; exit 1; }
 
+git_cfg_get() {
+  local scope="$1"
+  local key="$2"
+  local value
+
+  value="$(git config "$scope" --get "$key" 2>/dev/null || true)"
+  if [[ -z "$value" && -x "$(command -v git.exe 2>/dev/null || true)" ]]; then
+    value="$(git.exe config "$scope" --get "$key" 2>/dev/null || true)"
+  fi
+
+  printf '%s\n' "$value"
+}
+
+ensure_repo_git_identity() {
+  local repo_path="$1"
+  local name
+  local email
+
+  name="$(git -C "$repo_path" config --local --get user.name 2>/dev/null || true)"
+  email="$(git -C "$repo_path" config --local --get user.email 2>/dev/null || true)"
+
+  if [[ -n "$name" && -n "$email" ]]; then
+    return 0
+  fi
+
+  name="${name:-$(git_cfg_get --global user.name)}"
+  email="${email:-$(git_cfg_get --global user.email)}"
+
+  [[ -n "$name" ]] || error "No se encontro user.name para Git"
+  [[ -n "$email" ]] || error "No se encontro user.email para Git"
+
+  git -C "$repo_path" config --local user.name "$name"
+  git -C "$repo_path" config --local user.email "$email"
+}
+
 usage() {
   cat <<'EOF'
 Uso:
@@ -91,6 +126,7 @@ prepare_and_push_repo() {
   local current_branch
 
   branch="$(target_branch_for "$path")"
+  ensure_repo_git_identity "$ROOT_DIR/$path"
 
   info "Preparando $path en rama $branch"
   git -C "$ROOT_DIR/$path" fetch --all --prune >/dev/null
