@@ -1,0 +1,53 @@
+{
+  "name": "owfinance-layout-architecture",
+  "version": "1.0.0",
+  "description": "Sistema de layouts dinámicos OWFINANCE (Lite, Pro, Legacy). Patrones de desarrollo, debugging, y organización de componentes.",
+  "category": "frontend-architecture",
+  "tags": [
+    "layouts",
+    "vue3",
+    "quasar",
+    "dynamic-layouts",
+    "responsive",
+    "component-architecture"
+  ],
+  "author": "OWFINANCE Dev Team",
+  "created": "2026-04-06",
+  "updated": "2026-04-06",
+  "triggers": [
+    "layout dinámico",
+    "cambiar layout",
+    "páginas vacías",
+    "layout no cambia",
+    "organizar componentes layout",
+    "crear nuevo layout",
+    "lite mobile desktop",
+    "pro layout sidebar",
+    "legacy topbar"
+  ],
+  "applies_to": {
+    "tech_stack": [
+      "Vue 3",
+      "Quasar v2.18.2",
+      "TypeScript",
+      "Vue Router",
+      "Pinia"
+    ],
+    "file_patterns": [
+      "src/layouts/**/*.vue",
+      "src/components/liquid/**/*.vue",
+      "src/components/pro/**/*.vue",
+      "src/stores/auth.ts"
+    ]
+  },
+  "dependencies": [
+    "Quasar Framework",
+    "Vue Router",
+    "Pinia auth store"
+  ],
+  "references": [
+    "docs/03-frontend/SISTEMA_LAYOUTS_DINAMICOS.md",
+    "docs/ui-ux/MASTER_UI_SOURCES.md",
+    ".agents/skills/owfinance-dev-routes-testing/"
+  ]
+}

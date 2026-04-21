@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="es"><head><title>Configuración del Sistema | OW Finance</title>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0b1326;
+            color: #dae2fd;
+        }
+        .font-headline { font-family: 'Manrope', sans-serif; }
+        .glass-card {
+            background: rgba(23, 31, 51, 0.6);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              colors: {
+                "on-surface": "#dae2fd",
+                "on-secondary-fixed-variant": "#005236",
+                "secondary": "#4edea3",
+                "on-primary-container": "#003751",
+                "surface-tint": "#89ceff",
+                "on-secondary": "#003824",
+                "secondary-container": "#00a572",
+                "surface-variant": "#2d3449",
+                "on-secondary-fixed": "#002113",
+                "on-primary-fixed-variant": "#004c6e",
+                "inverse-surface": "#dae2fd",
+                "secondary-fixed": "#6ffbbe",
+                "surface-container-highest": "#2d3449",
+                "surface-container-lowest": "#060e20",
+                "primary-fixed-dim": "#89ceff",
+                "secondary-fixed-dim": "#4edea3",
+                "primary-container": "#0ea5e9",
+                "inverse-primary": "#006591",
+                "surface-container-high": "#222a3d",
+                "on-primary-fixed": "#001e2f",
+                "primary": "#89ceff",
+                "tertiary-fixed": "#ffdf9f",
+                "on-error-container": "#ffdad6",
+                "outline-variant": "#3e4850",
+                "on-error": "#690005",
+                "surface-bright": "#31394d",
+                "surface-container": "#171f33",
+                "surface": "#0b1326",
+                "tertiary-fixed-dim": "#f9bd22",
+                "on-tertiary-container": "#433000",
+                "error": "#ffb4ab",
+                "on-tertiary": "#402d00",
+                "error-container": "#93000a",
+                "inverse-on-surface": "#283044",
+                "surface-container-low": "#131b2e",
+                "on-background": "#dae2fd",
+                "tertiary-container": "#c59300",
+                "on-primary": "#00344d",
+                "tertiary": "#f9bd22",
+                "on-secondary-container": "#00311f",
+                "surface-dim": "#0b1326",
+                "on-tertiary-fixed": "#261a00",
+                "on-surface-variant": "#bec8d2",
+                "on-tertiary-fixed-variant": "#5c4300",
+                "primary-fixed": "#c9e6ff",
+                "background": "#0b1326",
+                "outline": "#88929b"
+              },
+              fontFamily: {
+                "headline": ["Manrope"],
+                "body": ["Inter"],
+                "label": ["Inter"]
+              },
+              borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+            },
+          },
+        }
+      </script>
+</head>
+<body class="bg-surface text-on-surface min-h-screen selection:bg-primary/30">
+<!-- Top Navigation Shell -->
+<header class="fixed top-0 w-full z-50 bg-slate-900/60 backdrop-blur-lg shadow-[0_0_40px_rgba(0,30,47,0.08)] flex justify-between items-center h-16 px-8 w-full">
+<div class="flex items-center gap-8">
+<span class="text-2xl font-black text-sky-500 tracking-tighter font-headline">OW Finance</span>
+<nav class="hidden md:flex gap-6 items-center">
+<a class="text-slate-400 hover:text-slate-200 transition-colors font-['Manrope'] font-bold tracking-tight" href="#">Dashboard</a>
+<a class="text-slate-400 hover:text-slate-200 transition-colors font-['Manrope'] font-bold tracking-tight" href="#">Analytics</a>
+<a class="text-slate-400 hover:text-slate-200 transition-colors font-['Manrope'] font-bold tracking-tight" href="#">Reports</a>
+<a class="text-slate-400 hover:text-slate-200 transition-colors font-['Manrope'] font-bold tracking-tight" href="#">Vault</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 hover:bg-slate-800/40 rounded-full transition-all active:scale-95 duration-200">
+<span class="material-symbols-outlined text-slate-400">notifications</span>
+</button>
+<button class="p-2 hover:bg-slate-800/40 rounded-full transition-all active:scale-95 duration-200">
+<span class="material-symbols-outlined text-slate-400">help_outline</span>
+</button>
+<div class="h-8 w-8 rounded-full overflow-hidden border border-outline-variant/20">
+<img alt="User profile avatar" class="w-full h-full object-cover" data-alt="Close-up professional portrait of a man with subtle lighting and clean background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCM87gpY0uVGHEJ09Jj9-K3ojXvTyzP5fOmQO0s_t-DvjBeOoFkRy0bIt0yEPpp06NatMNmQSdMzRvnZZcUJlBUKR5nl1DwtfY8dPPWAewgNk9a8qZL4byoaL8LQK7C205EaTGQ7MGabFQ2qNWctSnxqTSEQQCisDr5AFbZKM4i8FNOpUQS8yXW3FnkM23jEQXuMmK450KRclswmq3FsZZwtmypgaox0fLK7DjB_0zaX9epab7X4VBTpduHZtfzE74Kv7TYVcJ07p4"/>
+</div>
+</div>
+</header>
+<!-- Side Navigation Shell -->
+<aside class="fixed left-0 top-0 h-full w-64 pt-20 bg-slate-900/40 backdrop-blur-xl flex flex-col gap-2 border-r border-slate-800/20 z-40">
+<div class="px-6 mb-6">
+<h2 class="text-lg font-bold text-slate-100 font-headline">Settings</h2>
+<p class="text-xs text-slate-500">System Configuration</p>
+</div>
+<nav class="flex-1">
+<a class="text-slate-500 py-3 px-6 hover:text-slate-300 transition-all flex items-center gap-3 font-['Inter'] font-medium text-sm" href="#">
+<span class="material-symbols-outlined">settings</span> General
+            </a>
+<a class="text-slate-500 py-3 px-6 hover:text-slate-300 transition-all flex items-center gap-3 font-['Inter'] font-medium text-sm" href="#">
+<span class="material-symbols-outlined">account_balance</span> Accounts
+            </a>
+<a class="text-slate-500 py-3 px-6 hover:text-slate-300 transition-all flex items-center gap-3 font-['Inter'] font-medium text-sm" href="#">
+<span class="material-symbols-outlined">shield</span> Security
+            </a>
+<a class="text-sky-400 font-bold bg-sky-500/10 rounded-r-full py-3 px-6 transition-all flex items-center gap-3 font-['Inter'] font-medium text-sm active:translate-x-1" href="#"><span class="material-symbols-outlined">tune</span> Configuración del Sistema</a>
+<a class="text-slate-500 py-3 px-6 hover:text-slate-300 transition-all flex items-center gap-3 font-['Inter'] font-medium text-sm" href="#">
+<span class="material-symbols-outlined">code</span> API Keys
+            </a>
+<a class="text-slate-500 py-3 px-6 hover:text-slate-300 transition-all flex items-center gap-3 font-['Inter'] font-medium text-sm" href="#">
+<span class="material-symbols-outlined">payments</span> Billing
+            </a>
+</nav>
+<div class="p-6">
+<button class="w-full bg-gradient-to-r from-primary to-primary-container text-on-primary py-3 rounded-full font-bold text-sm shadow-lg hover:brightness-110 transition-all">
+                Upgrade Pro
+            </button>
+</div>
+<div class="border-t border-slate-800/20 py-4">
+<a class="text-slate-500 py-3 px-6 hover:text-slate-300 transition-all flex items-center gap-3 font-['Inter'] font-medium text-sm" href="#">
+<span class="material-symbols-outlined">logout</span> Logout
+            </a>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="ml-64 pt-24 pb-12 px-10">
+<!-- Sub-Navigation -->
+<div class="mb-10 flex flex-col gap-6">
+<h1 class="text-4xl font-black font-headline tracking-tight text-on-surface">Configuración del Sistema</h1>
+<div class="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
+<button class="px-6 py-2.5 rounded-full bg-primary-container text-on-primary-fixed font-semibold text-sm whitespace-nowrap">Perfil</button>
+<button class="px-6 py-2.5 rounded-full bg-surface-container-high text-on-surface-variant hover:bg-surface-bright transition-colors font-semibold text-sm whitespace-nowrap">Finanzas</button>
+<button class="px-6 py-2.5 rounded-full bg-surface-container-high text-on-surface-variant hover:bg-surface-bright transition-colors font-semibold text-sm whitespace-nowrap">Categorías</button>
+<button class="px-6 py-2.5 rounded-full bg-surface-container-high text-on-surface-variant hover:bg-surface-bright transition-colors font-semibold text-sm whitespace-nowrap">Cuentas</button>
+<button class="px-6 py-2.5 rounded-full bg-surface-container-high text-on-surface-variant hover:bg-surface-bright transition-colors font-semibold text-sm whitespace-nowrap">Impuestos</button>
+</div>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+<!-- Left Column: Personal Info -->
+<div class="flex flex-col gap-8">
+<!-- Datos Personales Card -->
+<section class="glass-card rounded-xl p-8 shadow-2xl relative overflow-hidden">
+<div class="flex items-center gap-6 mb-8">
+<div class="relative group">
+<img alt="Avatar" class="w-20 h-20 rounded-full border-2 border-primary-container/30 object-cover" data-alt="High quality close up of a professional male headshot with warm studio lighting and neutral background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCP-AHj-QAZ1qSCkArjMsRFIalIH401sx5ehJ984vrP3pmxW4Jz4zyOdvcbp6acUCcxupiNNEdVpmfTEW5_oxnoT0JInpdHkbVjZ-RLaxuB5CZvnmIu5smX6VDiaLk7PDgO6zTJYWFd4DEZWkMRqLM_p4Ms5TYItLuJ3ITcMINF2m4dIJtXGOvm_MlMMrsalzDaNHF6Vp5lmnh8cPndyXw7jlDuo3R5NP-0LEYlrECQMhWA0xCziub5jdS3b3O59pWlzeHJvsOYNFM"/>
+<div class="absolute inset-0 bg-black/40 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
+<span class="material-symbols-outlined text-white">edit</span>
+</div>
+</div>
+<div>
+<h3 class="text-xl font-headline font-bold text-on-surface">Datos Personales</h3>
+<p class="text-sm text-on-surface-variant">Actualiza tu información de contacto</p>
+</div>
+</div>
+<form class="space-y-4">
+<div class="grid grid-cols-1 gap-4">
+<div class="space-y-2">
+<label class="text-xs font-bold uppercase tracking-widest text-on-surface-variant ml-2">Nombre</label>
+<input class="w-full bg-surface-container-lowest border-none rounded-lg p-4 focus:ring-2 focus:ring-primary/20 transition-all text-on-surface" type="text" value="Alexander Wright"/>
+</div>
+<div class="space-y-2">
+<label class="text-xs font-bold uppercase tracking-widest text-on-surface-variant ml-2">Email</label>
+<input class="w-full bg-surface-container-lowest border-none rounded-lg p-4 focus:ring-2 focus:ring-primary/20 transition-all text-on-surface" type="email" value="a.wright@owfinance.com"/>
+</div>
+<div class="space-y-2">
+<label class="text-xs font-bold uppercase tracking-widest text-on-surface-variant ml-2">Teléfono</label>
+<input class="w-full bg-surface-container-lowest border-none rounded-lg p-4 focus:ring-2 focus:ring-primary/20 transition-all text-on-surface" type="tel" value="+34 600 000 000"/>
+</div>
+</div>
+<button class="mt-4 w-full bg-gradient-to-br from-primary to-primary-container text-on-primary py-4 rounded-full font-bold text-lg shadow-[0_0_20px_rgba(14,165,233,0.3)] hover:brightness-110 active:scale-[0.98] transition-all">
+                            Guardar Cambios
+                        </button>
+</form>
+</section>
+<!-- Seguridad Card -->
+<section class="glass-card rounded-xl p-8 shadow-2xl">
+<div class="flex justify-between items-center mb-6">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-secondary">verified_user</span>
+<h3 class="text-xl font-headline font-bold text-on-surface">Seguridad</h3>
+</div>
+</div>
+<div class="flex items-center justify-between p-4 bg-surface-container-lowest rounded-lg">
+<div class="flex flex-col">
+<span class="font-bold text-on-surface">Autenticación de dos factores (2FA)</span>
+<span class="text-xs text-on-surface-variant">Añade una capa extra de seguridad a tu cuenta</span>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-11 h-6 bg-surface-container-highest peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-secondary"></div>
+</label>
+</div>
+</section>
+</div>
+<!-- Right Column: AI & Preferences -->
+<div class="flex flex-col gap-8">
+<!-- AI Profile Card -->
+<section class="relative p-[2px] rounded-xl bg-gradient-to-br from-primary via-purple-500 to-tertiary">
+<div class="bg-surface-container rounded-xl p-8 h-full">
+<div class="flex items-center gap-3 mb-4">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">psychology</span>
+<h3 class="text-xl font-headline font-bold text-on-surface">Perfil Financiero IA</h3>
+</div>
+<p class="text-sm text-primary-fixed-dim mb-6 font-medium">Tu perfil personaliza las recomendaciones del Coach IA</p>
+<div class="space-y-4">
+<label class="text-xs font-bold uppercase tracking-widest text-on-surface-variant ml-2">Contexto para la IA</label>
+<textarea class="w-full bg-surface-container-lowest border-none rounded-lg p-4 focus:ring-2 focus:ring-primary/20 transition-all text-on-surface resize-none leading-relaxed" rows="4">Freelancer de tecnología, padre de 2 hijos. Ingreso variable. Tolerancia al riesgo moderada.</textarea>
+<div class="flex items-center gap-2 p-3 bg-primary/5 rounded-lg border border-primary/10">
+<span class="material-symbols-outlined text-primary text-sm">info</span>
+<p class="text-[10px] text-primary/70 uppercase font-black tracking-tighter">AI Processing Active</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Preferencias Card -->
+<section class="glass-card rounded-xl p-8 shadow-2xl">
+<h3 class="text-xl font-headline font-bold text-on-surface mb-8">Preferencias</h3>
+<div class="space-y-8">
+<div class="space-y-4">
+<div class="flex justify-between items-center">
+<label class="text-sm font-bold text-on-surface">Tolerancia al Riesgo</label>
+<span class="text-xs font-bold bg-tertiary/20 text-tertiary px-3 py-1 rounded-full">Moderada</span>
+</div>
+<input class="w-full h-2 bg-surface-container-lowest rounded-lg appearance-none cursor-pointer accent-primary" max="100" min="0" type="range" value="50"/>
+<div class="flex justify-between text-[10px] text-on-surface-variant font-bold uppercase tracking-widest">
+<span>Conservador</span>
+<span>Equilibrado</span>
+<span>Agresivo</span>
+</div>
+</div>
+<div class="flex items-center justify-between pt-4 border-t border-slate-800/20">
+<div class="flex flex-col">
+<span class="font-bold text-on-surface">Modo Oscuro</span>
+<span class="text-xs text-on-surface-variant">Interfaz optimizada para baja luminosidad</span>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-11 h-6 bg-surface-container-highest peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+</label>
+</div>
+</div>
+</section>
+</div>
+</div>
+</main>
+<!-- Floating Action Button -->
+<button class="fixed bottom-8 right-8 w-16 h-16 rounded-full bg-gradient-to-br from-primary to-primary-container shadow-[0_8px_32px_rgba(14,165,233,0.4)] flex items-center justify-center text-on-primary hover:scale-110 active:scale-95 transition-all z-50">
+<span class="material-symbols-outlined text-3xl" style="font-variation-settings: 'FILL' 1;">psychology</span>
+</button>
+</body></html>

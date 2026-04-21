@@ -134,22 +134,36 @@ npx quasar build -m spa 2>&1 | tail -10
 [ -d "$DIST_DIR" ] || error "Build fallido — dist/spa no encontrado"
 success "Build completado → $DIST_DIR"
 
-# ── 5. Inyectar .htaccess para SPA (hash router — mínimo necesario) ──────────
+# ── 5. Inyectar .htaccess + PHP wrapper (LiteSpeed no soporta Header en .htaccess) ──
 info "Creando .htaccess para SPA..."
 cat > "$DIST_DIR/.htaccess" << 'HTACCESS'
 Options -Indexes
+DirectoryIndex index.php index.html
 <IfModule mod_rewrite.c>
     RewriteEngine On
     RewriteBase /app/
-    # Servir archivos estáticos directamente
+    # Servir archivos estáticos directamente (assets, icons, etc.)
     RewriteCond %{REQUEST_FILENAME} -f [OR]
     RewriteCond %{REQUEST_FILENAME} -d
     RewriteRule ^ - [L]
-    # Todo lo demás → index.html (Vue Router history mode)
-    RewriteRule ^ index.html [L]
+    # Todo lo demás → index.php (Vue Router history mode + Cache-Control via PHP)
+    RewriteRule ^ index.php [L]
 </IfModule>
 HTACCESS
 success ".htaccess creado"
+
+# Renombrar index.html → _app.html y crear PHP wrapper con no-cache headers
+# LiteSpeed no admite Header set en .htaccess pero sí procesa PHP
+info "Creando PHP wrapper para Cache-Control headers..."
+mv "$DIST_DIR/index.html" "$DIST_DIR/_app.html"
+cat > "$DIST_DIR/index.php" << 'PHPEOF'
+<?php
+header('Cache-Control: no-cache, no-store, must-revalidate');
+header('Pragma: no-cache');
+header('Expires: 0');
+readfile(__DIR__ . '/_app.html');
+PHPEOF
+success "PHP wrapper creado (index.php → _app.html)"
 
 # ── 6. Deploy al servidor remoto via rsync ───────────────────────────────────
 info "Creando carpeta remota si no existe..."
@@ -162,6 +176,12 @@ rsync -az --delete \
 
 FILE_COUNT=$(find "$DIST_DIR" -type f | wc -l | tr -d ' ')
 success "$FILE_COUNT archivos subidos → ~/$REMOTE_DIR/"
+
+# ── 7. Actualizar root .htaccess para que apunte a index.php (no index.html) ─
+# El root .htaccess de Laravel/LiteSpeed necesita apuntar al PHP wrapper del SPA
+info "Actualizando root .htaccess en servidor (SPA entry: index.php)..."
+ssh $SSH_OPTS ${REMOTE_USER}@${REMOTE_HOST} \
+  "sed -i 's|RewriteRule \^ /app/index\.html \[L\]|RewriteRule ^ /app/index.php [L]|g' ~/public_html/.htaccess && echo OK || echo SKIP"
 
 echo ""
 echo -e "${GREEN}══════════════════════════════════════════════════════════${NC}"

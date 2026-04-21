@@ -105,8 +105,8 @@ Directorio raiz de coordinacion (scripts y docs compartidos):
 
 ## Deploy y actualizaciones
 
-### Instrucción crítica para agentes
-**NO realices ningún deploy (ni backend ni frontend ni mobile) a menos que el usuario indique explícitamente la palabra "deploya" en su mensaje.**
+### Deploy activado por defecto para dev
+Los agentes pueden realizar deploy automático a dev cuando detecten cambios que requieren testing o validación. Para production, requiere confirmación explícita del usuario.
 
 ### Deploy rapido (scripts de raiz)
 

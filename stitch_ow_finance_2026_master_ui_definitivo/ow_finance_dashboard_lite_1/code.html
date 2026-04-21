@@ -1,270 +1,258 @@
 <!DOCTYPE html>
-
-<html lang="es"><head>
+<html class="dark" lang="es"><head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style type="text/tailwindcss">
+        :root {
+            --bg-dark: #0A1121;
+            --surface-glass: rgba(26, 35, 58, 0.6);
+            --brand-primary: #1E3A8A;
+            --accent-info: #0EA5E9;
+            --text-on-surface: #F8FAFC;
+        }
+        @font-face {
+            font-family: 'Satoshi';
+            src: url('https://api.fontshare.com/v2/css?f[]=satoshi@700,900&display=swap');
+        }
+        body {
+            background-color: var(--bg-dark);
+            font-family: 'DM Sans', sans-serif;
+            color: var(--text-on-surface);
+            -webkit-font-smoothing: antialiased;
+        }
+        .font-satoshi {
+            font-family: 'Satoshi', 'DM Sans', sans-serif;
+        }
+        .glass-card {
+            background: var(--surface-glass);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .hero-gradient {
+            background: linear-gradient(135deg, #0EA5E9 0%, #1E3A8A 100%);
+        }
+        .nav-pill-active {
+            background: rgba(30, 58, 138, 0.4);
+            color: #0EA5E9;
+        }
+        .custom-shadow {
+            box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.5);
+        }
+    </style>
 <script id="tailwind-config">
         tailwind.config = {
             darkMode: "class",
             theme: {
                 extend: {
                     colors: {
-                        "error": "#ba1a1a",
-                        "on-error": "#ffffff",
-                        "primary-container": "#0ea5e9",
-                        "on-primary-container": "#003751",
-                        "primary": "#006591",
-                        "on-primary": "#ffffff",
-                        "surface": "#f7f9fb",
-                        "surface-container-lowest": "#ffffff",
-                        "surface-container-low": "#f2f4f6",
-                        "surface-container-high": "#e6e8ea",
-                        "on-surface": "#191c1e",
-                        "on-surface-variant": "#3e4850",
-                        "outline-variant": "#bec8d2",
-                        "secondary": "#3c627d",
-                        "success-custom": "#10B981",
-                        "danger-custom": "#EF4444"
-                    },
-                    fontFamily: {
-                        "headline": ["Manrope", "sans-serif"],
-                        "body": ["Inter", "sans-serif"],
-                        "label": ["Inter", "sans-serif"]
+                        primary: "#1E3A8A",
+                        accent: "#0EA5E9",
+                        surface: "#1A233A",
                     },
                     borderRadius: {
-                        "DEFAULT": "1rem",
-                        "lg": "2rem",
-                        "xl": "3rem",
-                        "full": "9999px"
-                    },
-                },
-            },
+                        'xl': '1.5rem',
+                        '2xl': '2rem',
+                        '3xl': '3rem',
+                    }
+                }
+            }
         }
     </script>
-<style>
-        .material-symbols-outlined {
-            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
-        }
-        .glass-pill {
-            background: rgba(255, 255, 255, 0.2);
-            backdrop-filter: blur(8px);
-        }
-        .wealth-orb {
-            position: absolute;
-            top: -20%;
-            right: -10%;
-            width: 300px;
-            height: 300px;
-            background: radial-gradient(circle, rgba(14, 165, 233, 0.15) 0%, rgba(247, 249, 251, 0) 70%);
-            z-index: -1;
-            pointer-events: none;
-        }
-    </style>
-<style>
-    body {
-      min-height: max(884px, 100dvh);
-    }
-  </style>
-  </head>
-<body class="bg-surface font-body text-on-surface min-h-screen pb-32">
-<!-- TopAppBar -->
-<header class="bg-[#F7F9FB] dark:bg-slate-950 flex justify-between items-center w-full px-6 py-4 max-w-md mx-auto sticky top-0 z-40">
+</head>
+<body class="min-h-screen">
+<header class="sticky top-0 z-50 w-full px-8 py-4 glass-card border-b border-white/5">
+<div class="max-w-7xl mx-auto flex items-center justify-between">
 <div class="flex items-center gap-3">
-<div class="w-10 h-10 rounded-full overflow-hidden bg-slate-200">
-<img alt="José" class="w-full h-full object-cover" data-alt="Professional portrait of a young man with a friendly expression in soft studio lighting, clean background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCaSGRcHPvQdZUrgMJO9AuUoiYg0rizlhFeuto9oVMqnaLi_VYTB8jBkfR7lHVxNJBiGn_os-BtX-18GoemBojVqM77Dh5ifzA8D6fcA2zrFq_I0CUa6WV0qE3XDORV-Qtq2cDUexpbTThbjy1ZyjVEIqoe6eAvqSkE-9wfpToPjCogelawvXwmBAIzwLDiO14c0ipFZd6l0lLtdDIi-enjC3BcEIrnj1184Ws2uT9304MT_ks0OkGjqOiq07E_T2JxET24nm7WKog"/>
+<div class="w-10 h-10 bg-accent rounded-xl flex items-center justify-center shadow-lg shadow-accent/20">
+<span class="material-symbols-outlined text-white text-2xl" style="font-variation-settings: 'FILL' 1;">savings</span>
 </div>
-<h1 class="font-headline font-bold text-xl text-[#0F172A]">Hola, José 👋</h1>
+<h1 class="font-satoshi text-xl font-bold tracking-tight">OW Finance <span class="text-accent/80 font-normal text-sm ml-1">Lite</span></h1>
 </div>
-<button class="w-10 h-10 flex items-center justify-center text-[#006591] dark:text-sky-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-all">
-<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+<nav class="flex items-center bg-white/5 p-1 rounded-full border border-white/10">
+<button class="flex items-center gap-2 px-6 py-2 rounded-full nav-pill-active transition-all">
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">home</span>
+<span class="text-sm font-medium">Home</span>
 </button>
+<button class="flex items-center gap-2 px-6 py-2 rounded-full text-slate-400 hover:text-white transition-all">
+<span class="material-symbols-outlined text-[20px]">receipt_long</span>
+<span class="text-sm font-medium">Transactions</span>
+</button>
+<button class="flex items-center gap-2 px-6 py-2 rounded-full text-slate-400 hover:text-white transition-all">
+<span class="material-symbols-outlined text-[20px]">savings</span>
+<span class="text-sm font-medium">Jars</span>
+</button>
+<button class="flex items-center gap-2 px-6 py-2 rounded-full text-slate-400 hover:text-white transition-all">
+<span class="material-symbols-outlined text-[20px]">settings</span>
+<span class="text-sm font-medium">Settings</span>
+</button>
+</nav>
+<div class="flex items-center gap-4">
+<button class="bg-accent hover:bg-accent/90 text-white flex items-center gap-2 pl-3 pr-5 py-2.5 rounded-full transition-all shadow-lg shadow-accent/20 active:scale-95">
+<span class="material-symbols-outlined">add</span>
+<span class="text-sm font-bold">Nuevo</span>
+</button>
+<button class="w-10 h-10 flex items-center justify-center rounded-full text-slate-400 hover:text-white hover:bg-white/5 transition-all">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<div class="h-8 w-[1px] bg-white/10 mx-1"></div>
+<div class="flex items-center gap-3 pl-2">
+<div class="text-right hidden lg:block">
+<p class="text-xs text-slate-400 font-medium leading-none mb-1">Hola,</p>
+<p class="text-sm font-bold leading-none">José</p>
+</div>
+<div class="w-10 h-10 rounded-full border-2 border-accent/20 overflow-hidden">
+<img alt="Avatar" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAsW0ZMSocZrE7i8VJOCoS6gew740YGWe0ad3pmzGRQ89fuIh-iFgKLQ6c4gVgFcKWaTIW_cEteoLBi-yqcs11-EFne0HjMD33rRwAuZJLILdwnVlGVVcx3auZVRSRcTk8KmMxDdv_CmPXqVdMoNpx9K8MLCzRI5f-R8Y2I04F7s6DA0_S7SxiKQCBX3tRRaMGBPgXMMvoSMWieADf8DqFzPfvUEK7f_GznMKIcoCo8CmN66knZZGOg1urpGZ62p1qUS8wHV2E6-nE"/>
+</div>
+</div>
+</div>
+</div>
 </header>
-<main class="max-w-md mx-auto px-6 space-y-8 relative">
-<div class="wealth-orb"></div>
-<!-- HERO: Balance Card -->
-<section class="relative overflow-hidden bg-gradient-to-br from-[#0EA5E9] to-[#006591] rounded-xl p-8 text-white shadow-xl">
-<div class="flex justify-between items-start mb-6">
+<main class="max-w-7xl mx-auto px-8 py-10 space-y-10">
+<section>
+<div class="hero-gradient rounded-3xl p-10 relative overflow-hidden custom-shadow">
+<div class="relative z-10 flex flex-col md:flex-row md:items-end justify-between gap-8">
 <div>
-<p class="text-white/80 font-label text-sm uppercase tracking-wider mb-1">Balance Total</p>
-<h2 class="font-headline font-extrabold text-4xl tracking-tight">$12,450.00</h2>
+<div class="flex items-center gap-2 text-white/70 mb-2">
+<span class="text-xs font-bold uppercase tracking-widest">Balance Total</span>
+<span class="material-symbols-outlined text-sm cursor-pointer">visibility</span>
 </div>
-<div class="glass-pill px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest border border-white/10">
-                    USD
-                </div>
+<h2 class="font-satoshi text-6xl font-black text-white">$12,450.00</h2>
+<div class="flex gap-4 mt-8">
+<div class="bg-white/10 backdrop-blur-md px-4 py-2 rounded-2xl flex items-center gap-2">
+<span class="material-symbols-outlined text-[#10B981] text-lg">trending_up</span>
+<span class="text-white font-bold">$3,200</span>
+<span class="text-white/50 text-xs">ingresos</span>
 </div>
-<div class="flex gap-3 mb-8">
-<div class="glass-pill flex items-center gap-2 px-4 py-2 rounded-full">
-<span class="material-symbols-outlined text-success-custom text-sm font-bold" data-icon="arrow_upward">arrow_upward</span>
-<span class="font-semibold text-sm">$3,200</span>
-</div>
-<div class="glass-pill flex items-center gap-2 px-4 py-2 rounded-full">
-<span class="material-symbols-outlined text-danger-custom text-sm font-bold" data-icon="arrow_downward">arrow_downward</span>
-<span class="font-semibold text-sm">$1,850</span>
+<div class="bg-white/10 backdrop-blur-md px-4 py-2 rounded-2xl flex items-center gap-2">
+<span class="material-symbols-outlined text-[#EF4444] text-lg">trending_down</span>
+<span class="text-white font-bold">$1,850</span>
+<span class="text-white/50 text-xs">gastos</span>
 </div>
 </div>
-<!-- Filter Pills -->
-<div class="flex gap-2">
-<button class="bg-white text-primary px-4 py-1.5 rounded-full text-xs font-bold transition-all">Mensual</button>
-<button class="text-white/70 hover:text-white px-4 py-1.5 rounded-full text-xs font-bold transition-all">Semanal</button>
-<button class="text-white/70 hover:text-white px-4 py-1.5 rounded-full text-xs font-bold transition-all">Anual</button>
+</div>
+<div class="flex bg-white/10 backdrop-blur-md p-1.5 rounded-2xl">
+<button class="px-6 py-2 bg-white text-primary font-bold text-xs rounded-xl shadow-sm">Mensual</button>
+<button class="px-6 py-2 text-white font-bold text-xs rounded-xl hover:bg-white/10 transition-all">Semanal</button>
+<button class="px-6 py-2 text-white font-bold text-xs rounded-xl hover:bg-white/10 transition-all">Anual</button>
+</div>
+</div>
+<div class="absolute -right-20 -bottom-20 w-80 h-80 bg-white/10 rounded-full blur-[100px]"></div>
+<div class="absolute -left-10 -top-10 w-40 h-40 bg-accent/20 rounded-full blur-[60px]"></div>
 </div>
 </section>
-<!-- CONTENT: Mis Cántaros -->
-<section>
-<div class="flex justify-between items-end mb-4">
-<h3 class="font-headline font-bold text-lg text-on-surface">Mis Cántaros</h3>
-<button class="text-primary font-bold text-sm">Ver todos</button>
+<section class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+<div class="space-y-6">
+<div class="flex items-center justify-between px-2">
+<h3 class="font-satoshi text-2xl font-bold">Mis Cántaros</h3>
+<button class="text-accent text-sm font-bold flex items-center gap-1 hover:underline">
+                        Ver todos <span class="material-symbols-outlined text-sm">chevron_right</span>
+</button>
 </div>
 <div class="grid grid-cols-2 gap-4">
-<!-- Jar 1 -->
-<div class="bg-white rounded-lg p-5 border border-outline-variant/30 shadow-[0_4px_24px_rgba(15,23,42,0.04)] hover:shadow-md transition-shadow">
-<div class="flex justify-between items-start mb-4">
-<div class="w-10 h-10 rounded-full bg-primary-container/10 flex items-center justify-center text-primary">
-<span class="material-symbols-outlined" data-icon="home">home</span>
+<div class="glass-card p-6 rounded-2xl group hover:border-accent/30 transition-all cursor-pointer">
+<div class="flex justify-between items-start mb-6">
+<div class="w-12 h-12 bg-accent/10 rounded-xl flex items-center justify-center">
+<span class="material-symbols-outlined text-accent">flight_takeoff</span>
 </div>
-<div class="relative w-8 h-8">
-<svg class="w-full h-full transform -rotate-90">
-<circle class="text-slate-100" cx="16" cy="16" fill="transparent" r="14" stroke="currentColor" stroke-width="3"></circle>
-<circle class="text-primary" cx="16" cy="16" fill="transparent" r="14" stroke="currentColor" stroke-dasharray="88" stroke-dashoffset="20" stroke-width="3"></circle>
-</svg>
+<div class="text-right">
+<span class="text-[10px] font-bold text-slate-400 uppercase tracking-tighter">Meta 80%</span>
+<div class="w-16 h-1 bg-white/5 rounded-full mt-1 overflow-hidden">
+<div class="h-full bg-accent w-[80%] rounded-full"></div>
 </div>
 </div>
-<p class="font-label text-xs text-on-surface-variant mb-1">Vivienda</p>
-<p class="font-headline font-bold text-[#0F172A]">$4,500.00</p>
 </div>
-<!-- Jar 2 -->
-<div class="bg-white rounded-lg p-5 border border-outline-variant/30 shadow-[0_4px_24px_rgba(15,23,42,0.04)] hover:shadow-md transition-shadow">
-<div class="flex justify-between items-start mb-4">
-<div class="w-10 h-10 rounded-full bg-success-custom/10 flex items-center justify-center text-success-custom">
-<span class="material-symbols-outlined" data-icon="directions_car">directions_car</span>
+<p class="text-slate-400 text-sm font-medium mb-1">Ahorro Viaje</p>
+<p class="font-satoshi text-2xl font-bold">$4,500</p>
 </div>
-<div class="relative w-8 h-8">
-<svg class="w-full h-full transform -rotate-90">
-<circle class="text-slate-100" cx="16" cy="16" fill="transparent" r="14" stroke="currentColor" stroke-width="3"></circle>
-<circle class="text-success-custom" cx="16" cy="16" fill="transparent" r="14" stroke="currentColor" stroke-dasharray="88" stroke-dashoffset="45" stroke-width="3"></circle>
-</svg>
+<div class="glass-card p-6 rounded-2xl group hover:border-accent/30 transition-all cursor-pointer">
+<div class="flex justify-between items-start mb-6">
+<div class="w-12 h-12 bg-[#10B981]/10 rounded-xl flex items-center justify-center">
+<span class="material-symbols-outlined text-[#10B981]">medical_services</span>
 </div>
-</div>
-<p class="font-label text-xs text-on-surface-variant mb-1">Auto</p>
-<p class="font-headline font-bold text-[#0F172A]">$2,800.00</p>
-</div>
-<!-- Jar 3 -->
-<div class="bg-white rounded-lg p-5 border border-outline-variant/30 shadow-[0_4px_24px_rgba(15,23,42,0.04)] hover:shadow-md transition-shadow">
-<div class="flex justify-between items-start mb-4">
-<div class="w-10 h-10 rounded-full bg-amber-500/10 flex items-center justify-center text-amber-500">
-<span class="material-symbols-outlined" data-icon="flight">flight</span>
-</div>
-<div class="relative w-8 h-8">
-<svg class="w-full h-full transform -rotate-90">
-<circle class="text-slate-100" cx="16" cy="16" fill="transparent" r="14" stroke="currentColor" stroke-width="3"></circle>
-<circle class="text-amber-500" cx="16" cy="16" fill="transparent" r="14" stroke="currentColor" stroke-dasharray="88" stroke-dashoffset="60" stroke-width="3"></circle>
-</svg>
+<div class="text-right">
+<span class="text-[10px] font-bold text-slate-400 uppercase tracking-tighter">Meta 45%</span>
+<div class="w-16 h-1 bg-white/5 rounded-full mt-1 overflow-hidden">
+<div class="h-full bg-[#10B981] w-[45%] rounded-full"></div>
 </div>
 </div>
-<p class="font-label text-xs text-on-surface-variant mb-1">Viajes</p>
-<p class="font-headline font-bold text-[#0F172A]">$1,200.00</p>
 </div>
-<!-- Jar 4 -->
-<div class="bg-white rounded-lg p-5 border border-outline-variant/30 shadow-[0_4px_24px_rgba(15,23,42,0.04)] hover:shadow-md transition-shadow">
-<div class="flex justify-between items-start mb-4">
-<div class="w-10 h-10 rounded-full bg-purple-500/10 flex items-center justify-center text-purple-500">
-<span class="material-symbols-outlined" data-icon="savings">savings</span>
-</div>
-<div class="relative w-8 h-8">
-<svg class="w-full h-full transform -rotate-90">
-<circle class="text-slate-100" cx="16" cy="16" fill="transparent" r="14" stroke="currentColor" stroke-width="3"></circle>
-<circle class="text-purple-500" cx="16" cy="16" fill="transparent" r="14" stroke="currentColor" stroke-dasharray="88" stroke-dashoffset="10" stroke-width="3"></circle>
-</svg>
+<p class="text-slate-400 text-sm font-medium mb-1">Emergencia</p>
+<p class="font-satoshi text-2xl font-bold">$2,100</p>
 </div>
 </div>
-<p class="font-label text-xs text-on-surface-variant mb-1">Inversión</p>
-<p class="font-headline font-bold text-[#0F172A]">$3,950.00</p>
+<button class="w-full py-4 border-2 border-dashed border-white/10 rounded-2xl text-slate-500 font-medium flex items-center justify-center gap-2 hover:border-accent/40 hover:text-accent transition-all">
+<span class="material-symbols-outlined text-sm">add</span>
+                    Crear nuevo cántaro
+                </button>
 </div>
+<div class="space-y-6">
+<div class="flex items-center justify-between px-2">
+<h3 class="font-satoshi text-2xl font-bold">Últimos Movimientos</h3>
+<button class="text-accent text-sm font-bold flex items-center gap-1 hover:underline">
+                        Ver historial <span class="material-symbols-outlined text-sm">chevron_right</span>
+</button>
 </div>
-</section>
-<!-- LIST: Últimos Movimientos -->
-<section class="pb-8">
-<h3 class="font-headline font-bold text-lg text-on-surface mb-4">Últimos Movimientos</h3>
-<div class="space-y-3">
-<!-- Transaction 1 -->
-<div class="bg-surface-container-lowest p-4 rounded-lg flex items-center justify-between group cursor-pointer hover:bg-white transition-all">
+<div class="glass-card rounded-2xl overflow-hidden divide-y divide-white/5">
+<div class="p-4 flex items-center justify-between hover:bg-white/5 transition-all cursor-pointer">
 <div class="flex items-center gap-4">
-<div class="w-12 h-12 rounded-full bg-surface-container-low flex items-center justify-center text-on-surface-variant">
-<span class="material-symbols-outlined" data-icon="shopping_cart">shopping_cart</span>
+<div class="w-11 h-11 bg-white/5 rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined text-slate-300">shopping_cart</span>
 </div>
 <div>
-<p class="font-bold text-[#0F172A]">Supermercado</p>
-<p class="text-xs text-on-surface-variant">Hoy, 10:45 AM</p>
+<p class="font-bold text-sm">Supermercado</p>
+<p class="text-xs text-slate-500">Hoy, 10:45 AM • Compras</p>
 </div>
 </div>
-<p class="font-bold text-danger-custom">-$45.50</p>
+<p class="font-satoshi font-bold text-[#EF4444]">-$45.50</p>
 </div>
-<!-- Transaction 2 -->
-<div class="bg-surface-container-lowest p-4 rounded-lg flex items-center justify-between group cursor-pointer hover:bg-white transition-all">
+<div class="p-4 flex items-center justify-between hover:bg-white/5 transition-all cursor-pointer">
 <div class="flex items-center gap-4">
-<div class="w-12 h-12 rounded-full bg-surface-container-low flex items-center justify-center text-on-surface-variant">
-<span class="material-symbols-outlined" data-icon="work">work</span>
+<div class="w-11 h-11 bg-white/5 rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined text-slate-300">work</span>
 </div>
 <div>
-<p class="font-bold text-[#0F172A]">Freelance</p>
-<p class="text-xs text-on-surface-variant">Ayer, 03:20 PM</p>
+<p class="font-bold text-sm">Freelance Pago</p>
+<p class="text-xs text-slate-500">Ayer, 04:20 PM • Ingresos</p>
 </div>
 </div>
-<p class="font-bold text-success-custom">+$800.00</p>
+<p class="font-satoshi font-bold text-[#10B981]">+$800.00</p>
 </div>
-<!-- Transaction 3 -->
-<div class="bg-surface-container-lowest p-4 rounded-lg flex items-center justify-between group cursor-pointer hover:bg-white transition-all">
+<div class="p-4 flex items-center justify-between hover:bg-white/5 transition-all cursor-pointer">
 <div class="flex items-center gap-4">
-<div class="w-12 h-12 rounded-full bg-surface-container-low flex items-center justify-center text-on-surface-variant">
-<span class="material-symbols-outlined" data-icon="restaurant">restaurant</span>
+<div class="w-11 h-11 bg-white/5 rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined text-slate-300">restaurant</span>
 </div>
 <div>
-<p class="font-bold text-[#0F172A]">Almuerzo Sushi</p>
-<p class="text-xs text-on-surface-variant">22 May, 01:15 PM</p>
+<p class="font-bold text-sm">Almuerzo Sushi</p>
+<p class="text-xs text-slate-500">22 May, 01:15 PM • Ocio</p>
 </div>
 </div>
-<p class="font-bold text-danger-custom">-$32.00</p>
+<p class="font-satoshi font-bold text-[#EF4444]">-$32.00</p>
+</div>
+<div class="p-4 flex items-center justify-between hover:bg-white/5 transition-all cursor-pointer">
+<div class="flex items-center gap-4">
+<div class="w-11 h-11 bg-white/5 rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined text-slate-300">electric_bolt</span>
+</div>
+<div>
+<p class="font-bold text-sm">Luz y Energía</p>
+<p class="text-xs text-slate-500">20 May, 09:00 AM • Servicios</p>
+</div>
+</div>
+<p class="font-satoshi font-bold text-[#EF4444]">-$124.80</p>
+</div>
 </div>
 </div>
 </section>
 </main>
-<!-- BottomNavBar -->
-<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-6 pb-8">
-<div class="bg-white/80 backdrop-blur-xl shadow-[0_-8px_32px_rgba(15,23,42,0.08)] rounded-[3rem] h-20 w-full max-w-md mx-auto flex items-center justify-around px-4 relative">
-<!-- Home -->
-<button class="flex flex-col items-center justify-center text-sky-500 dark:text-sky-400 font-bold">
-<span class="material-symbols-outlined mb-1" data-icon="home">home</span>
-<span class="text-[11px] font-semibold tracking-wide">Inicio</span>
-</button>
-<!-- Transactions -->
-<button class="flex flex-col items-center justify-center text-slate-400 dark:text-slate-500">
-<span class="material-symbols-outlined mb-1" data-icon="receipt_long">receipt_long</span>
-<span class="text-[11px] font-semibold tracking-wide">Transacciones</span>
-</button>
-<!-- Floating Center Button Area -->
-<div class="relative -top-8 flex flex-col items-center">
-<!-- AI Brain Icon -->
-<div class="mb-2 text-primary animate-pulse">
-<span class="material-symbols-outlined text-2xl" data-icon="psychology">psychology</span>
-</div>
-<button class="w-16 h-16 rounded-full bg-gradient-to-br from-[#0EA5E9] to-[#006591] text-white shadow-lg shadow-sky-200 flex items-center justify-center active:scale-90 transition-transform">
-<span class="material-symbols-outlined text-3xl font-bold" data-icon="add">add</span>
+<div class="fixed bottom-10 right-10">
+<button class="w-14 h-14 bg-brand-primary rounded-full flex items-center justify-center shadow-2xl shadow-blue-900/40 border border-accent/30 hover:scale-110 active:scale-95 transition-all group">
+<span class="material-symbols-outlined text-accent group-hover:rotate-12 transition-transform" style="font-variation-settings: 'FILL' 1;">psychology</span>
 </button>
 </div>
-<!-- Jars -->
-<button class="flex flex-col items-center justify-center text-slate-400 dark:text-slate-500">
-<span class="material-symbols-outlined mb-1" data-icon="potted_plant">potted_plant</span>
-<span class="text-[11px] font-semibold tracking-wide">Cántaros</span>
-</button>
-<!-- Settings -->
-<button class="flex flex-col items-center justify-center text-slate-400 dark:text-slate-500">
-<span class="material-symbols-outlined mb-1" data-icon="settings">settings</span>
-<span class="text-[11px] font-semibold tracking-wide">Ajustes</span>
-</button>
-</div>
-</nav>
+
 </body></html>

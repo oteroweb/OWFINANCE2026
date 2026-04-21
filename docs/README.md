@@ -12,6 +12,8 @@ Reglas base:
 
 ## Documentos autoridad
 
+- `docs/00-sistema/DEVELOPMENT_HANDBOOK.md` **[NUEVO 2026-04-06]**
+  Handbook completo de desarrollo: 41 skills catalogados, flujos de trabajo, scripts, principios fundamentales y anti-patterns. **Punto de partida para cualquier tarea de desarrollo.**
 - `docs/INDICE_MAESTRO_PROYECTO.md`
   Mapa maestro de documentacion activa, legacy y estructura interna de backend/frontend.
 - `docs/00-sistema/FLUJO_OPERATIVO_UNIFICADO.md`
@@ -22,6 +24,8 @@ Reglas base:
   Arquitectura tecnica vigente del workspace y de los dos repos.
 - `docs/CONSULTAS_OPERATIVAS.md`
   Playbook operativo corto para agentes y trabajo diario.
+- `docs/03-frontend/SISTEMA_LAYOUTS_DINAMICOS.md` **[NUEVO 2026-04-06]**
+  Sistema de layouts dinámicos (Lite, Pro, Legacy): arquitectura, componentes, rutas, responsive behavior, debugging.
 - `docs/03-frontend/RUTAS.md`
   Fuente de verdad de rutas reales del frontend.
 - `docs/01-configuracion/NOTION_TICKET_WORKFLOW.md`

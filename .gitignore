@@ -37,3 +37,5 @@ vendor/
 
 # Archivos de sesión MCP
 .vscode/mcp.json
+.playwright-mcp
+dev-current-home.png

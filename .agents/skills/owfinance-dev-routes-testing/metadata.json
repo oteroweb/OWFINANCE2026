@@ -1,0 +1,48 @@
+{
+  "name": "owfinance-dev-routes-testing",
+  "version": "1.0.0",
+  "description": "Documenta rutas válidas de OWFINANCE2026 en DEV/STAGE/PROD y credenciales de testing para evitar errores 404",
+  "author": "OWFINANCE Team",
+  "created": "2026-04-06",
+  "updated": "2026-04-06",
+  "keywords": [
+    "owfinance",
+    "dev",
+    "testing",
+    "routes",
+    "navigation",
+    "credentials",
+    "404",
+    "debugging",
+    "vue-router",
+    "authentication"
+  ],
+  "triggers": [
+    "404 error",
+    "testing dev",
+    "probar en dev",
+    "rutas válidas",
+    "valid routes",
+    "credenciales de prueba",
+    "test credentials",
+    "browser testing",
+    "navigation testing"
+  ],
+  "scope": "owfinance-dev-testing",
+  "category": "testing",
+  "languages": [
+    "es",
+    "en"
+  ],
+  "environments": [
+    "DEV",
+    "STAGE",
+    "PROD"
+  ],
+  "key_info": {
+    "primary_test_user": "otero@demo.com",
+    "password": "password",
+    "dev_url": "https://appfinanzasdev.blockshift.website",
+    "common_mistake": "Usar admin@demo.com para testing de usuario normal"
+  }
+}

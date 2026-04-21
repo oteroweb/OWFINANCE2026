@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Liquid Glass Unified - Style Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;400;600;800&amp;family=Inter:wght@300;400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "tertiary-fixed-dim": "#ffb86e",
+                    "primary": "#006591",
+                    "surface-container": "#eceef0",
+                    "on-secondary-container": "#3d637d",
+                    "on-tertiary": "#ffffff",
+                    "on-primary": "#ffffff",
+                    "inverse-primary": "#89ceff",
+                    "on-secondary": "#ffffff",
+                    "on-tertiary-container": "#4d2b00",
+                    "surface-container-low": "#f2f4f6",
+                    "on-error": "#ffffff",
+                    "surface-tint": "#006591",
+                    "secondary": "#3c627d",
+                    "primary-fixed": "#c9e6ff",
+                    "on-primary-container": "#003751",
+                    "inverse-surface": "#2d3133",
+                    "secondary-fixed": "#c9e6ff",
+                    "error-container": "#ffdad6",
+                    "surface-bright": "#f7f9fb",
+                    "surface": "#f7f9fb",
+                    "on-surface-variant": "#3e4850",
+                    "surface-variant": "#e0e3e5",
+                    "on-secondary-fixed": "#001e2f",
+                    "tertiary-fixed": "#ffdcbd",
+                    "secondary-container": "#b8dffe",
+                    "on-background": "#191c1e",
+                    "primary-fixed-dim": "#89ceff",
+                    "outline-variant": "#bec8d2",
+                    "inverse-on-surface": "#eff1f3",
+                    "on-secondary-fixed-variant": "#234b64",
+                    "on-error-container": "#93000a",
+                    "background": "#f7f9fb",
+                    "tertiary-container": "#de8712",
+                    "on-surface": "#191c1e",
+                    "on-primary-fixed": "#001e2f",
+                    "on-tertiary-fixed-variant": "#693c00",
+                    "primary-container": "#0ea5e9",
+                    "surface-container-high": "#e6e8ea",
+                    "surface-container-lowest": "#ffffff",
+                    "surface-container-highest": "#e0e3e5",
+                    "on-primary-fixed-variant": "#004c6e",
+                    "outline": "#6e7881",
+                    "on-tertiary-fixed": "#2c1600",
+                    "tertiary": "#8a5100",
+                    "secondary-fixed-dim": "#a5cbe9",
+                    "error": "#ba1a1a",
+                    "surface-dim": "#d8dadc"
+            },
+            "borderRadius": {
+                    "DEFAULT": "1rem",
+                    "lg": "2rem",
+                    "xl": "3rem",
+                    "full": "9999px"
+            },
+            "fontFamily": {
+                    "headline": ["Manrope"],
+                    "body": ["Inter"],
+                    "label": ["Inter"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; background-color: #f7f9fb; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .liquid-glass { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.3); }
+        .wealth-orb { position: absolute; width: 400px; height: 400px; border-radius: 50%; filter: blur(80px); z-index: -1; opacity: 0.15; }
+    </style>
+</head>
+<body class="bg-surface text-on-surface min-h-screen pb-32">
+<!-- Wealth Orb Decorations -->
+<div class="wealth-orb bg-primary-container top-[-100px] left-[-100px]"></div>
+<div class="wealth-orb bg-tertiary-container bottom-[10%] right-[-100px]"></div>
+<!-- TopAppBar -->
+<nav class="fixed top-0 w-full z-50 bg-slate-50/80 dark:bg-slate-950/80 backdrop-blur-xl">
+<div class="flex justify-between items-center px-6 h-16 w-full max-w-7xl mx-auto">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-sky-600 dark:text-sky-400" data-icon="grid_view">grid_view</span>
+<span class="text-2xl font-bold tracking-tight text-sky-900 dark:text-sky-100">Design System</span>
+</div>
+<div class="hidden md:flex gap-8 items-center">
+<a class="text-sky-600 dark:text-sky-400 font-bold hover:opacity-80 transition-opacity" href="#">Tokens</a>
+<a class="text-slate-500 dark:text-slate-400 hover:opacity-80 transition-opacity" href="#">Atoms</a>
+<a class="text-slate-500 dark:text-slate-400 hover:opacity-80 transition-opacity" href="#">Molecules</a>
+<a class="text-slate-500 dark:text-slate-400 hover:opacity-80 transition-opacity" href="#">Organisms</a>
+</div>
+<div class="flex items-center">
+<span class="material-symbols-outlined text-slate-500" data-icon="account_circle">account_circle</span>
+</div>
+</div>
+</nav>
+<main class="max-w-7xl mx-auto px-6 pt-32 space-y-24">
+<!-- Header Section -->
+<header class="space-y-4">
+<span class="text-secondary label-md uppercase tracking-[0.05em] font-medium">Internal Documentation</span>
+<h1 class="font-headline font-extrabold text-7xl tracking-tighter text-on-background">Liquid Glass Unified</h1>
+<p class="text-xl text-outline max-w-2xl leading-relaxed">A comprehensive design system built on soft minimalism, layering, and tactile depth for high-end financial experiences.</p>
+</header>
+<!-- 1. Typography Section -->
+<section class="space-y-12">
+<div class="flex justify-between items-end">
+<h2 class="font-headline font-bold text-4xl">Typography</h2>
+<span class="text-primary font-bold">Manrope &amp; Inter</span>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-12 bg-surface-container-low p-12 rounded-xl">
+<div class="space-y-8">
+<div>
+<p class="text-outline label-sm mb-2">DISPLAY-LG (3.5rem)</p>
+<h3 class="font-headline font-extrabold text-[3.5rem] leading-none tracking-tight">$142,500.00</h3>
+</div>
+<div>
+<p class="text-outline label-sm mb-2">HEADLINE-LG (2rem)</p>
+<h3 class="font-headline font-bold text-4xl">Unified Financial Assets</h3>
+</div>
+<div>
+<p class="text-outline label-sm mb-2">HEADLINE-MD (1.5rem)</p>
+<h3 class="font-headline font-semibold text-2xl">Monthly Overview</h3>
+</div>
+</div>
+<div class="space-y-8">
+<div>
+<p class="text-outline label-sm mb-2">BODY-LG (1.125rem)</p>
+<p class="font-body text-lg text-on-surface-variant leading-relaxed">This is the standard body text used for longer descriptions and editorial content within the platform.</p>
+</div>
+<div>
+<p class="text-outline label-sm mb-2">LABEL-MD (ALL-CAPS)</p>
+<p class="font-label text-sm uppercase tracking-[0.05em] font-semibold text-secondary">Active Portfolio Assets</p>
+</div>
+<div>
+<p class="text-outline label-sm mb-2">LABEL-SM</p>
+<p class="font-label text-xs text-outline">Last updated: 12 Oct 2023</p>
+</div>
+</div>
+</div>
+</section>
+<!-- 2. Color Palette -->
+<section class="space-y-12">
+<h2 class="font-headline font-bold text-4xl">Color Palette</h2>
+<div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+<div class="space-y-2">
+<div class="h-32 w-full rounded-lg bg-primary shadow-sm"></div>
+<p class="font-bold text-sm">Primary</p>
+<p class="text-xs text-outline">#006591</p>
+</div>
+<div class="space-y-2">
+<div class="h-32 w-full rounded-lg bg-primary-container shadow-sm"></div>
+<p class="font-bold text-sm">Primary Container</p>
+<p class="text-xs text-outline">#0EA5E9</p>
+</div>
+<div class="space-y-2">
+<div class="h-32 w-full rounded-lg bg-secondary shadow-sm"></div>
+<p class="font-bold text-sm">Secondary</p>
+<p class="text-xs text-outline">#3C627D</p>
+</div>
+<div class="space-y-2">
+<div class="h-32 w-full rounded-lg bg-surface-container-lowest border border-surface-container shadow-sm"></div>
+<p class="font-bold text-sm">Surface Lowest</p>
+<p class="text-xs text-outline">#FFFFFF</p>
+</div>
+<div class="space-y-2">
+<div class="h-32 w-full rounded-lg bg-error shadow-sm"></div>
+<p class="font-bold text-sm">Error</p>
+<p class="text-xs text-outline">#BA1A1A</p>
+</div>
+<div class="space-y-2">
+<div class="h-32 w-full rounded-lg bg-tertiary-container shadow-sm"></div>
+<p class="font-bold text-sm">Accent (Gold)</p>
+<p class="text-xs text-outline">#DE8712</p>
+</div>
+</div>
+</section>
+<!-- 3. Buttons & Controls -->
+<section class="space-y-12">
+<h2 class="font-headline font-bold text-4xl">Buttons &amp; Controls</h2>
+<div class="flex flex-wrap gap-8 items-center bg-surface-container-low p-12 rounded-xl">
+<!-- Primary Pill -->
+<button class="bg-gradient-to-br from-primary-container to-primary text-on-primary px-8 py-3.5 rounded-full font-bold shadow-lg hover:opacity-90 active:scale-95 transition-all">
+                    Primary Action
+                </button>
+<!-- Secondary Ghost -->
+<button class="border-2 border-outline-variant/30 text-primary px-8 py-3.5 rounded-full font-bold hover:bg-surface-container transition-colors active:scale-95">
+                    Secondary
+                </button>
+<!-- Tertiary -->
+<button class="text-primary font-bold px-4 py-2 hover:opacity-70 transition-opacity">
+                    Ghost Link
+                </button>
+<!-- Icon Button -->
+<button class="w-12 h-12 flex items-center justify-center rounded-full bg-secondary-container text-on-secondary-container hover:scale-110 transition-transform">
+<span class="material-symbols-outlined" data-icon="add">add</span>
+</button>
+<!-- FAB Context -->
+<div class="fixed bottom-32 right-12">
+<button class="liquid-glass w-16 h-16 rounded-full flex items-center justify-center text-primary shadow-[0_8px_32px_rgba(0,101,145,0.2)] hover:-translate-y-1 transition-all">
+<span class="material-symbols-outlined text-3xl" data-icon="edit">edit</span>
+</button>
+</div>
+</div>
+</section>
+<!-- 4. Form Elements -->
+<section class="space-y-12">
+<h2 class="font-headline font-bold text-4xl">Form Elements</h2>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+<div class="space-y-6">
+<div class="group">
+<label class="block text-secondary text-sm font-semibold mb-2 uppercase tracking-wider">Account Holder</label>
+<input class="w-full bg-surface-container-high border-none rounded-full px-6 py-4 focus:ring-2 focus:ring-primary-container transition-all" placeholder="Enter full name" type="text"/>
+</div>
+<div class="group">
+<label class="block text-secondary text-sm font-semibold mb-2 uppercase tracking-wider">Transaction Type</label>
+<select class="w-full bg-surface-container-high border-none rounded-full px-6 py-4 focus:ring-2 focus:ring-primary-container transition-all appearance-none">
+<option>Investment Deposit</option>
+<option>Regular Transfer</option>
+<option>Savings Allocation</option>
+</select>
+</div>
+</div>
+<div class="flex flex-col justify-center gap-8 pl-12">
+<label class="flex items-center gap-4 cursor-pointer group">
+<div class="w-6 h-6 rounded-sm border-2 border-outline-variant group-hover:border-primary transition-colors flex items-center justify-center">
+<span class="material-symbols-outlined text-primary text-lg" data-icon="check" style="font-variation-settings: 'wght' 700;">check</span>
+</div>
+<span class="text-on-surface font-medium">Enable real-time notifications</span>
+</label>
+<div class="flex gap-8">
+<label class="flex items-center gap-3 cursor-pointer">
+<div class="w-6 h-6 rounded-full border-2 border-primary flex items-center justify-center">
+<div class="w-3 h-3 rounded-full bg-primary"></div>
+</div>
+<span class="font-medium">Active</span>
+</label>
+<label class="flex items-center gap-3 cursor-pointer">
+<div class="w-6 h-6 rounded-full border-2 border-outline-variant"></div>
+<span class="font-medium text-outline">Archived</span>
+</label>
+</div>
+</div>
+</div>
+</section>
+<!-- 5. Cards & Containers (Bento Style) -->
+<section class="space-y-12">
+<h2 class="font-headline font-bold text-4xl">Cards &amp; Containers</h2>
+<div class="grid grid-cols-12 gap-8">
+<!-- Wealth Card -->
+<div class="col-span-12 lg:col-span-8 bg-surface-container-lowest rounded-xl p-10 relative overflow-hidden">
+<div class="wealth-orb bg-primary-container/20 -top-20 -right-20"></div>
+<div class="relative z-10 space-y-6">
+<div class="flex justify-between items-start">
+<span class="text-secondary label-md uppercase tracking-widest font-bold">Total Liquidity</span>
+<span class="text-success text-sm font-bold bg-green-50 px-3 py-1 rounded-full">+4.2% today</span>
+</div>
+<h3 class="font-headline font-extrabold text-6xl tracking-tight text-on-primary-container">$842,910.42</h3>
+<div class="flex gap-4 pt-4">
+<div class="bg-surface-container-low rounded-lg p-4 flex-1">
+<p class="text-xs text-outline uppercase font-bold mb-1">Checking</p>
+<p class="text-xl font-headline font-bold">$12,400</p>
+</div>
+<div class="bg-surface-container-low rounded-lg p-4 flex-1">
+<p class="text-xs text-outline uppercase font-bold mb-1">Investments</p>
+<p class="text-xl font-headline font-bold">$740,210</p>
+</div>
+<div class="bg-surface-container-low rounded-lg p-4 flex-1">
+<p class="text-xs text-outline uppercase font-bold mb-1">Savings</p>
+<p class="text-xl font-headline font-bold">$90,300</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Jar Card -->
+<div class="col-span-12 lg:col-span-4 bg-primary rounded-xl p-10 text-on-primary flex flex-col justify-between">
+<div>
+<span class="material-symbols-outlined text-4xl mb-4" data-icon="savings">savings</span>
+<h4 class="text-2xl font-headline font-bold">Down Payment Jar</h4>
+<p class="opacity-70 mt-2">Target: $100,000</p>
+</div>
+<div class="space-y-4">
+<div class="w-full bg-white/20 h-2 rounded-full overflow-hidden">
+<div class="bg-white h-full w-[65%]"></div>
+</div>
+<div class="flex justify-between font-bold">
+<span>$65,000</span>
+<span>65%</span>
+</div>
+</div>
+</div>
+<!-- Transaction List -->
+<div class="col-span-12 bg-surface-container-low rounded-xl p-10">
+<h4 class="font-headline font-bold text-2xl mb-8">Recent Activity</h4>
+<div class="space-y-4">
+<div class="bg-surface-container-lowest p-6 rounded-lg flex items-center justify-between group hover:shadow-md transition-shadow">
+<div class="flex items-center gap-6">
+<div class="w-12 h-12 bg-sky-50 text-sky-600 rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined" data-icon="shopping_cart">shopping_cart</span>
+</div>
+<div>
+<p class="font-bold text-lg">Apple Store Berlin</p>
+<p class="text-sm text-outline">Technology &amp; Electronics • 2 hours ago</p>
+</div>
+</div>
+<span class="font-headline font-bold text-xl">-$1,299.00</span>
+</div>
+<div class="bg-surface-container-lowest p-6 rounded-lg flex items-center justify-between group hover:shadow-md transition-shadow">
+<div class="flex items-center gap-6">
+<div class="w-12 h-12 bg-emerald-50 text-emerald-600 rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined" data-icon="payments">payments</span>
+</div>
+<div>
+<p class="font-bold text-lg">Monthly Salary Deposit</p>
+<p class="text-sm text-outline">Income • Yesterday</p>
+</div>
+</div>
+<span class="font-headline font-bold text-xl text-emerald-600">+$8,450.00</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- 6. Icons Grid -->
+<section class="space-y-12">
+<h2 class="font-headline font-bold text-4xl">System Icons</h2>
+<div class="grid grid-cols-4 md:grid-cols-8 lg:grid-cols-10 gap-8">
+<div class="flex flex-col items-center gap-2 group">
+<span class="material-symbols-outlined text-3xl group-hover:text-primary transition-colors" data-icon="layers">layers</span>
+<span class="text-xs text-outline">layers</span>
+</div>
+<div class="flex flex-col items-center gap-2 group">
+<span class="material-symbols-outlined text-3xl group-hover:text-primary transition-colors" data-icon="category">category</span>
+<span class="text-xs text-outline">category</span>
+</div>
+<div class="flex flex-col items-center gap-2 group">
+<span class="material-symbols-outlined text-3xl group-hover:text-primary transition-colors" data-icon="view_quilt">view_quilt</span>
+<span class="text-xs text-outline">view_quilt</span>
+</div>
+<div class="flex flex-col items-center gap-2 group">
+<span class="material-symbols-outlined text-3xl group-hover:text-primary transition-colors" data-icon="palette">palette</span>
+<span class="text-xs text-outline">palette</span>
+</div>
+<div class="flex flex-col items-center gap-2 group">
+<span class="material-symbols-outlined text-3xl group-hover:text-primary transition-colors" data-icon="account_balance">account_balance</span>
+<span class="text-xs text-outline">bank</span>
+</div>
+<div class="flex flex-col items-center gap-2 group">
+<span class="material-symbols-outlined text-3xl group-hover:text-primary transition-colors" data-icon="trending_up">trending_up</span>
+<span class="text-xs text-outline">trends</span>
+</div>
+<div class="flex flex-col items-center gap-2 group">
+<span class="material-symbols-outlined text-3xl group-hover:text-primary transition-colors" data-icon="shield">shield</span>
+<span class="text-xs text-outline">security</span>
+</div>
+<div class="flex flex-col items-center gap-2 group">
+<span class="material-symbols-outlined text-3xl group-hover:text-primary transition-colors" data-icon="notifications">notifications</span>
+<span class="text-xs text-outline">alerts</span>
+</div>
+<div class="flex flex-col items-center gap-2 group">
+<span class="material-symbols-outlined text-3xl group-hover:text-primary transition-colors" data-icon="settings">settings</span>
+<span class="text-xs text-outline">config</span>
+</div>
+<div class="flex flex-col items-center gap-2 group">
+<span class="material-symbols-outlined text-3xl group-hover:text-primary transition-colors" data-icon="search">search</span>
+<span class="text-xs text-outline">search</span>
+</div>
+</div>
+</section>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center h-24 pb-4 bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl rounded-t-[3rem] shadow-[0_-4px_24px_rgba(15,23,42,0.06)] border-t border-slate-100 dark:border-slate-800 md:hidden">
+<a class="flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 px-6 py-2 hover:text-sky-500 transition-colors active:scale-90 duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="layers">layers</span>
+<span class="text-[10px] font-bold uppercase tracking-wider mt-1">Atoms</span>
+</a>
+<a class="flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 px-6 py-2 hover:text-sky-500 transition-colors active:scale-90 duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="category">category</span>
+<span class="text-[10px] font-bold uppercase tracking-wider mt-1">Molecules</span>
+</a>
+<a class="flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 px-6 py-2 hover:text-sky-500 transition-colors active:scale-90 duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="view_quilt">view_quilt</span>
+<span class="text-[10px] font-bold uppercase tracking-wider mt-1">Organisms</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-sky-100 dark:bg-sky-900/40 text-sky-700 dark:text-sky-300 rounded-full px-6 py-2 active:scale-90 duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="palette">palette</span>
+<span class="text-[10px] font-bold uppercase tracking-wider mt-1">Tokens</span>
+</a>
+</nav>
+</body></html>
