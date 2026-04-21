@@ -39,3 +39,4 @@ vendor/
 .vscode/mcp.json
 .playwright-mcp
 dev-current-home.png
+.claude/worktrees/
