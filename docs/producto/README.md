@@ -7,8 +7,13 @@
 
 ## 🧭 Qué leer y en qué orden
 
+> 👉 **¿Quieres ver y entender TODO de un vistazo?** Empieza por
+> [`PANORAMA_360.md`](./PANORAMA_360.md) — descripción + experiencia de usuario + todas las
+> pantallas y funciones + índice de dónde vive cada detalle.
+
 | # | Documento | Qué explica | Estado |
 |---|-----------|-------------|--------|
+| 0 | [`PANORAMA_360.md`](./PANORAMA_360.md) | **Visión 360**: qué es, UX, mapa de pantallas, catálogo de funciones, variaciones, índice | ✅ |
 | 1 | [`MODELO_CANTAROS.md`](./MODELO_CANTAROS.md) | Dinámica de cántaros: %/fijo, base, saldo, ciclos, apalancamiento, ajustes/retiros/transferencias | ✅ |
 | 2 | [`CUENTAS_Y_TRANSACCIONES.md`](./CUENTAS_Y_TRANSACCIONES.md) | Tipos de cuenta (banco, tarjeta, efectivo, cashea) y de transacción (income, expense, transfer, payment, ajuste) | ✅ |
 | 3 | [`FLUJOS_TRANSACCIONES.md`](./FLUJOS_TRANSACCIONES.md) | Todos los caminos para registrar un movimiento + diagramas Mermaid + propuestas de optimización (P1–P9) | ✅ |
