@@ -40,6 +40,3 @@ vendor/
 .playwright-mcp
 dev-current-home.png
 .claude/worktrees/
-
-# Contiene secretos (tokens) — NO subir
-PROYECTO/
