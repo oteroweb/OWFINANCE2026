@@ -124,7 +124,7 @@ quasar dev -m capacitor -T ios
 ## 🛠️ Tecnologías
 
 ### Backend
-- **Framework:** Laravel 11.x
+- **Framework:** Laravel 12.x (PHP 8.2)
 - **Base de datos:** MySQL / SQLite
 - **API:** RESTful con Sanctum Auth
 - **Documentación:** Scribe / Swagger

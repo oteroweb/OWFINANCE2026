@@ -150,9 +150,9 @@ Los agentes pueden realizar deploy automático a dev cuando detecten cambios que
 - Entorno mobile usa backend remoto (`.env.mobile`) por defecto.
 
 ## Riesgos conocidos (detectar antes de ejecutar cambios grandes)
-1. Scripts y docs no siempre consistentes:
-   - `env-config.sh` genera frontend `.env` con `/api` en vez de `/api/v1`.
-2. `README.md` raiz menciona Laravel 11, pero backend actual usa Laravel 12.
+1. Scripts y docs: revisar consistencia antes de confiar.
+   - (CORREGIDO 2026-06-01) `env-config.sh` ya genera `/api/v1` correctamente en dev/staging/prod.
+2. (CORREGIDO 2026-06-01) `README.md` raiz ya indica Laravel 12.x.
 3. GitHub Actions `deploy.yml` requiere que el secret `SSH_KEY` este configurado en el repo.
 4. Existen dos repositorios Git independientes; commits/versionado deben hacerse por repo.
 5. El `.htaccess` de `public/` tiene regla critica para `/app/` — NO eliminar.
