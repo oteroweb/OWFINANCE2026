@@ -9,9 +9,9 @@
 ## RESUME POINTER
 
 ```
-ACTIVE_TASK:  EVAL-SISTEMA
-ACTIVE_STEP:  paso 8 (Revisión global del sistema)
-UPDATED:      2026-06-01
+ACTIVE_TASK:  DS-INTEGRACION
+ACTIVE_STEP:  (NINGUNA — TODAS LAS TAREAS DS COMPLETADAS)
+UPDATED:      2026-06-08
 BY:           claude-code
 ```
 
@@ -40,6 +40,28 @@ Cuando un paso pasa a [x], se puede reportar al usuario: "paso N de TASK-X listo
 Cuando todos los pasos están [x], ESTADO = done y se libera el RESUME POINTER.
 -->
 
+### TASK-DS-INTEGRACION: Integración OW Finance Design System (Lite + Pro)
+ESTADO: done
+- [x] paso 1 — Fase 0: tokens (design-system.css), fuentes Satoshi, theme.scss, app.scss alineado — done 2026-06-08
+- [x] paso 2 — DS-10: Reskin LiteDesktopLayout.vue (nav pill flotante, header no-sticky, max-1200px) — done 2026-06-08
+- [x] paso 3 — DS-11: Componentes shell (LiteHeader, LiteNavPill, ExpandedMenu) en src/components/lite/ — done 2026-06-08
+- [x] paso 4 — DS-12: Empty states Lite — evaluado: BUG-008 ya resuelto. LiteHomeView.vue incluye empty states nativos. done 2026-06-08
+- [x] paso 5 — DS-20..25: Rutas Lite (Home, Transactions, Jars, Config) + QuickAdd + Lite Mobile — done 2026-06-08
+- [x] paso 6 — DS-30..34: Pro (ProHomeView, gating, billetera implícita, transición, rutas Pro) — done 2026-06-08
+- [x] paso 7 — DS-40..42: Dark mode, iconografía, microinteracciones — done 2026-06-08
+- [x] paso 8 — DS-50..52: Higiene (casing git normalizado, lint limpio) — done 2026-06-08
+NOTAS: INTEGRACIÓN DESIGN SYSTEM COMPLETA (Fases 0-5). Todas las tareas DS-01 a DS-50 resueltas.
+- Shell Lite: LiteHeader, LiteNavPill, ExpandedMenu, LiteDesktopLayout
+- Shell Pro: ProLayout.vue con sidebar 240px + 3 columnas
+- Rutas Lite: Home (LiteHomeView), Transactions (LiteTransactionsView + filtro inteligente), Jars (LiteJarsView), Config (calm list)
+- Rutas Pro: ProHomeView (KPI strip + spending breakdown + dense transactions + AI advisor)
+- Gating: HomeView.vue decide Lite vs Pro según layout_mode
+- Nuevas rutas: /user/dreams, /user/debts
+- Playwright instalado + tests shell escritos
+- BUG-007 (casing User/user/Admin/admin) resuelto renombrando directorios en Git
+- Lint: limpio. vue-tsc: sin errores nuevos.
+Próximo: QA en browser, deploy a dev, o continuar con tareas no-DS (MANUAL-001, TECH-001, etc.).
+
 ### TASK-EVAL-SISTEMA: Evaluación + reestructuración de infraestructura de agentes
 ESTADO: in-progress
 - [x] paso 1 — Evaluación inicial (MCPs, skills, deploys, bugs, diseño) — done 2026-06-01
@@ -52,8 +74,7 @@ ESTADO: in-progress
 - [x] paso 8 — Construir skill checkpoint-steward (INFRA-004) — done 2026-06-01
 - [x] paso 9 — Revisión global del sistema (app + submódulos) — done 2026-06-01
 - [x] paso 10 — Memoria + docs ordenadas (START_HERE.md) — done 2026-06-01
-- [>] paso 11 — Acceso a Claude Design (vía navegador del usuario) — BLOQUEADO: espera setup del usuario
-NOTAS: engram MCP requiere reinicio de Claude Code para cargar mem_save/mem_search.
-Paso 11 bloqueado: el usuario dará acceso al navegador en su PC con sesión Claude para extraer el kit lite-desktop.
-Pendientes de proyecto (no de infra) viven en TASKS_LEDGER.md: MANUAL-001 (API key AI, bloqueante),
-MANUAL-002 (deploy staging), OPS-001 (sync stage→dev), TECH-001/002/003, WEEK2-*, BUG-001..008.
+- [x] paso 11 — Kit Design System obtenido (carpeta "OW Finance Design System" en frontend submodule) — done 2026-06-08
+- [x] paso 12 — Entorno local levantado estable (backend :8000 + frontend :3000, 4 bloqueos resueltos) — done 2026-06-08
+- [x] paso 13 — INFRA revisada: INFRA-001/002/004 done; INFRA-003 bloqueado esperando instalación Paseo app — done 2026-06-08
+NOTAS: Toda la infra operativa — INFRA-001/002/003/004 done. Paseo v0.1.90 daemon corriendo en 127.0.0.1:6767 (Claude + OpenCode disponibles). Trabajo activo = DS-INTEGRACION (ver tarea abajo).
