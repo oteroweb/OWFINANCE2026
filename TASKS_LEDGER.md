@@ -33,6 +33,7 @@
 | 8 | TECH-001 | TECH | UI Configuración del Asesor IA (+ endpoints CRUD) | todo | — | `.pending/TECH-001-settings-asesor-ui.md` |
 | 9 | TECH-002 | TECH | Tests Frontend (Vitest + Playwright) | todo | staging prod-ready | `.pending/TECH-002-tests-frontend.md` — ver también TECH-005 |
 | 10 | TECH-003 | TECH | Flujo de Password Reset | todo | abrir a usuarios reales | `.pending/TECH-003-password-reset.md` |
+| 10b | TECH-005 | TECH | Implementar suite de pruebas según TESTING-STRATEGY.md | todo | CI/CD prod-ready | a) Configurar PHPUnit backend (Unit + Feature + cobertura mínima 80%); b) Configurar Vitest frontend (`npm run test:unit`, jsdom, `@vitest/coverage-v8`); c) Configurar Playwright E2E (`e2e/` dir, smoke + auth + jars). Ver `TESTING-STRATEGY.md` |
 | 11 | WEEK2-A | TECH | Días 11-15: monitoring, Sentry, feature flags | blocked (← MANUAL-002) | — | `.pending/WEEK2-dias-11-15.md` |
 | 12 | WEEK2-B | TECH | Días 16-20: Android build, PRO pages, bulk import | blocked (← MANUAL-002) | — | `.pending/WEEK2-dias-16-20.md` |
 | 13 | DESIGN-001 | DESIGN | Rediseño con kit Claude Design (lite-desktop) | blocked | — | Acceso vía navegador en PC del usuario (pendiente) |
@@ -74,3 +75,10 @@ Detalle por bug en `BUGS/BUG-*.md`.
 - **Ruta vieja en docs:** `WEEK2-dias-16-20.md` y `BUGS-diferidos.md` referencian `/Users/joseluisoterolopez/...` — corregir al tocarlos.
 - **Cadena bloqueante crítica:** MANUAL-001 → MANUAL-002 → WEEK2-*. Sin la API key de AI nada del módulo IA arranca.
 - Este ledger es la fuente de verdad; los archivos individuales en `.pending/` y `BUGS/` mantienen el detalle.
+
+---
+
+## ESTRATEGIA
+
+- **Despliegue:** ver `DEPLOYMENT-STRATEGY.md` — dominio `owfinances.com`, 3 branches (dev / stage / master), subdomains `dev.owfinances.com` · `stage.owfinances.com` · `app.owfinances.com`.
+- **Pruebas:** ver `TESTING-STRATEGY.md` — PHPUnit (Laravel 12), Vitest (Quasar/Vue 3), Playwright E2E, QA mobile manual (Capacitor/Android).
