@@ -58,6 +58,8 @@ PROD (Live)
 | **STAGE** | `stage` | `stage.owfinances.com` | 178.156.160.70 | appfinan1 | ~5 min |
 | **PROD** | `master` | `app.owfinances.com` | 178.156.160.70 | appfinan1 | ~10 min |
 
+> ⚠️ **Pendiente: separar usuarios/cuentas SSH para stage y prod.** Actualmente STAGE y PROD comparten el mismo servidor (178.156.160.70) y el mismo usuario SSH (`appfinan1`) — esto representa un riesgo de contaminación de entornos. Se debe crear un usuario dedicado para PROD (ej: `appfinan_prod`) con permisos y directorios separados.
+
 > **Nota:** Las URLs de `owfinances.com` están pendientes de configuracion DNS (ver sección abajo).
 
 ---
@@ -214,7 +216,10 @@ git tag -a v1.2.3 -m "Release v1.2.3: OWFINANCE2026"
 git push origin v1.2.3
 
 # Deploy to PROD (manual trigger)
-./deploy-frontend.sh stage   # prod uses appfinan1 / stage env vars
+# TODO: agregar modo `prod` a los scripts de deploy (deploy-frontend.sh y deploy-backend.sh).
+# Actualmente los scripts solo aceptan [stage|dev] — para PROD se usa 'stage' como parámetro
+# porque comparte el mismo usuario SSH (appfinan1) y configuración de servidor.
+./deploy-frontend.sh stage   # prod uses appfinan1 / stage env vars — ver nota SSH abajo
 ./deploy-backend.sh stage
 # Run smoke tests after deploy
 ```
@@ -368,7 +373,8 @@ git tag v1.2.4-rollback
 git push origin master --force-with-lease
 
 # Step 4: Redeploy
-./deploy-frontend.sh stage
+# TODO: usar parámetro `prod` cuando se implemente en los scripts
+./deploy-frontend.sh stage   # prod uses stage param until deploy scripts add prod mode
 ./deploy-backend.sh stage
 
 # Step 5: Post-incident

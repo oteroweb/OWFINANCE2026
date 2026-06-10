@@ -243,9 +243,9 @@ Total target time: < 5 minutes
    └── Coverage check (fail if below minimums)
 
 3. Frontend E2E
-   └── BASE_URL=https://dev.owfinances.com npx playwright test e2e/smoke.spec.ts
-   └── BASE_URL=https://dev.owfinances.com npx playwright test e2e/auth.spec.ts
-   └── BASE_URL=https://dev.owfinances.com npx playwright test e2e/jars.spec.ts
+   └── BASE_URL=https://stage.owfinances.com npx playwright test e2e/smoke.spec.ts
+   └── BASE_URL=https://stage.owfinances.com npx playwright test e2e/auth.spec.ts
+   └── BASE_URL=https://stage.owfinances.com npx playwright test e2e/jars.spec.ts
 
 4. Manual QA sign-off required before merge to stage
 
@@ -322,14 +322,14 @@ After installing APK:
 
 ```bash
 # ---- Backend ----
-cd /home/user/OWFINANCE2026/OWFINANCEBackend2025
+cd OWFINANCEBackend2025
 cp .env.example .env.testing        # configure test DB
 php artisan key:generate --env=testing
 php artisan test                    # all suites
 php artisan test --coverage         # with coverage
 
 # ---- Frontend ----
-cd /home/user/OWFINANCE2026/OWFinanceFrontend2025
+cd OWFinanceFrontend2025
 npm install
 npm run test:unit                   # Vitest unit
 npm run build                       # verify build
@@ -338,8 +338,7 @@ npm run build                       # verify build
 npx playwright install --with-deps chromium
 BASE_URL=http://localhost:9000 npx playwright test   # requires quasar dev running
 
-# ---- All at once (convenience) ----
-cd /home/user/OWFINANCE2026
+# ---- All at once (convenience, run from repo root) ----
 # Run backend tests
 (cd OWFINANCEBackend2025 && php artisan test)
 # Run frontend tests
