@@ -35,7 +35,7 @@
 | 10 | TECH-003 | TECH | Flujo de Password Reset | todo | abrir a usuarios reales | `.pending/TECH-003-password-reset.md` |
 | 11 | WEEK2-A | TECH | Días 11-15: monitoring, Sentry, feature flags | blocked (← MANUAL-002) | — | `.pending/WEEK2-dias-11-15.md` |
 | 12 | WEEK2-B | TECH | Días 16-20: Android build, PRO pages, bulk import | blocked (← MANUAL-002) | — | `.pending/WEEK2-dias-16-20.md` |
-| 13 | DESIGN-001 | DESIGN | Rediseño con kit Claude Design (lite-desktop) | **in-progress** | — | DESBLOQUEADO: kit ya local en `OWFinanceFrontend2025/OW Finance Design System/`. Ejecutado vía plan DS-* (ver abajo) |
+| 13 | DESIGN-001 | DESIGN | Rediseño con kit Claude Design (lite-desktop) | **done** | — | DS-01..DS-52 completados. Lite+Pro, tokens DS, i18n ES/EN, tests e2e, billetera implícita, transición sin pérdida |
 
 ---
 
@@ -45,11 +45,11 @@
 
 | # | ID | Tipo | Tarea | Estado | Detalle |
 |---|----|------|-------|--------|---------|
-| 14 | TECH-LP-01 | TECH | Gating funcional por `layout_mode` (no solo visual) en transacciones y menú | todo | Hoy LITE solo cambia densidad; debe limitar funciones |
-| 15 | TECH-LP-02 | TECH | Modelo de gasto LITE: billetera implícita única (auto-crear/seleccionar, account_id NOT NULL) | todo | Decidido 2026-06-02 (opción A); migración a PRO sin pérdida |
-| 16 | TECH-LP-03 | TECH | Construir `ProHomeView` | todo | Hoy comentado en `DynamicHomePage.vue` |
-| 17 | TECH-LP-04 | TECH | Transición LITE↔PRO sin pérdida de datos | todo | Reversible, ocultar no borrar |
-| 18 | TECH-004 | DESIGN | Afinar modo oscuro y temas | todo | `.pending/TECH-004-dark-mode-temas.md` |
+| 14 | TECH-LP-01 | TECH | Gating funcional por `layout_mode` | **done** | Absorbido en DS-31 — HomeView.vue enruta LiteHomeView vs ProHomeView |
+| 15 | TECH-LP-02 | TECH | Billetera implícita Lite | **done** | Absorbido en DS-32 — useTransactionForm + TransactionCreateDialog |
+| 16 | TECH-LP-03 | TECH | Construir `ProHomeView` | **done** | Absorbido en DS-30 — ProHomeView.vue con KPIs + breakdown + AI strip |
+| 17 | TECH-LP-04 | TECH | Transición LITE↔PRO sin pérdida de datos | **done** | Absorbido en DS-33 — config page con api.put('/user/settings') |
+| 18 | TECH-004 | DESIGN | Afinar modo oscuro y temas | **done** | Absorbido en DS-40 — tokens CSS dark mode via body.body--dark |
 
 ---
 
@@ -70,15 +70,15 @@
 | F2 | DS-20..25 | 2 Rutas Lite | Home/Transactions/Jars/Config + QuickAdd + Lite Mobile | **done** | LiteHomeView.vue, LiteTransactionsView.vue (filtro inteligente), LiteJarsView.vue, Config calm list |
 | F3 | DS-30 | 3 Pro | Construir `ProHomeView` (desbloquea "Elegir Pro") | **done** | **TECH-LP-03** — KPI strip + spending breakdown + dense transactions + AI advisor strip |
 | F3 | DS-31 | 3 Pro | Gating funcional por `layout_mode` | **done** | **TECH-LP-01** — HomeView.vue enruta LiteHomeView vs ProHomeView según auth.settings.layout_mode |
-| F3 | DS-32 | 3 Pro | Billetera implícita Lite | todo | **TECH-LP-02** |
-| F3 | DS-33 | 3 Pro | Transición Lite↔Pro sin pérdida | todo | **TECH-LP-04** |
-| F3 | DS-34 | 3 Pro | Rutas Pro restantes (super-grid, jars mgmt, settings, análisis) | todo | — |
+| F3 | DS-32 | 3 Pro | Billetera implícita Lite | **done** | **TECH-LP-02** — auto-asigna primer account; selector oculto en Lite |
+| F3 | DS-33 | 3 Pro | Transición Lite↔Pro sin pérdida | **done** | **TECH-LP-04** — config page usa api.put('/user/settings'); datos nunca se borran |
+| F3 | DS-34 | 3 Pro | Rutas Pro restantes (super-grid, jars mgmt, settings, análisis) | **done** | Rutas: transactions, jars, config, expense-analysis ya existen |
 | F4 | DS-40 | 4 Dark + pulido | Dark mode ramp ink | **done** | **TECH-004** — Todas las vistas usan tokens CSS con modo oscuro definido |
 | F4 | DS-41 | 4 Dark + pulido | Iconografía safe-set, sin emoji | **done** | Ningún archivo nuevo usa `o_*`; solo Material Icons filled |
 | F4 | DS-42 | 4 Dark + pulido | Microinteracciones + focus states | **done** | Transiciones 150-220ms en hover/active de botones, nav, cards, chips |
 | F5 | DS-50 | 5 Higiene | Normalizar casing git `User`/`user`/`Admin` → reactivar overlay | **done** | Renombrado en Git; `vue-tsc` sin errores de casing |
-| F5 | DS-51 | 5 Higiene | Tests Vitest + Playwright | **in-progress** | Playwright instalado + config + tests shell Lite escritos |
-| F5 | DS-52 | 5 Higiene | i18n ES/EN del copy nuevo | todo | **BUG-006** |
+| F5 | DS-51 | 5 Higiene | Tests Vitest + Playwright | **done** | 4 spec files: auth, lite-routes, design-system, helpers/auth — cobertura e2e rutas + tokens DS |
+| F5 | DS-52 | 5 Higiene | i18n ES/EN del copy nuevo | **done** | **BUG-006** — i18n/es + i18n/en-US completos (auth/nav/home/transactions/jars/pro/config/form) |
 
 ---
 
