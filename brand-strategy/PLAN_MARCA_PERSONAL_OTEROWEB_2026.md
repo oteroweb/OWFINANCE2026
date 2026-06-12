@@ -156,7 +156,7 @@ Sábado:
 **Sábado (Sistema):**
 - [ ] Crear el Sheet de Google para métricas (ver Sección 6 para estructura exacta)
 - [ ] Registrar baseline de métricas actuales: seguidores LinkedIn, Instagram, GitHub stars
-- [ ] Definir con qué herramienta se manejará el Kanban (Notion, Trello, o hoja de papel)
+- [ ] Definir con qué herramienta se manejará el Kanban (Notion, Trello, u hoja de papel)
 
 ---
 
@@ -442,7 +442,7 @@ Para la semana 13 como fecha límite, `owfinances.com` debe tener:
 │   └── 📁 Thumbnails/                   ← Thumbnails de cada video
 │
 ├── 📁 06_METRICAS/
-│   └── Metricas_Semanales_2026.xlsx     ← O Google Sheets (ver Sección 6)
+│   └── Metricas_OTEROWEB_2026.xlsx      ← O Google Sheets (ver Sección 6)
 │
 ├── 📁 07_POSTS_ESCRITOS/
 │   ├── 📁 LinkedIn/
@@ -478,7 +478,7 @@ Para la semana 13 como fecha límite, `owfinances.com` debe tener:
 | **Namecheap o Porkbun** | Dominio `owfinances.com` | ~$10–12/año | Alta — semana 1 |
 | **Notion** (free tier) | Kanban semanal | Gratis | Media — semana 1 |
 
-**Herramientas que NO instalar por ahora:** TubeBuddy, Hootsuite, Later, Adobe Premiere, qualquier herramienta de análisis de audiencia. Complejidad innecesaria para esta etapa.
+**Herramientas que NO instalar por ahora:** TubeBuddy, Hootsuite, Later, Adobe Premiere, cualquier herramienta de análisis de audiencia. Complejidad innecesaria para esta etapa.
 
 ---
 
