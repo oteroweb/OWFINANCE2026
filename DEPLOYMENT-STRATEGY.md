@@ -1,30 +1,30 @@
 # OWFINANCE2026 Deployment & Branch Strategy
 
-**Version:** 1.0
-**Date:** 2026-04-03
+**Version:** 2.0
+**Date:** 2026-06-09
 **Status:** Active
 
 ---
 
-## 📐 Repository Architecture
+## Repository Architecture
 
 OWFINANCE2026 uses a **monorepo + git submodules** structure with 3 interconnected repositories:
 
 ```
 OWFINANCE2026 (central orchestrator)
-├── OWFinanceFrontend2025/ (submodule)
+├── OWFinanceFrontend2025/ (submodule — Quasar 2 + Vue 3 + TypeScript + Capacitor)
 │   ├── src/components/
 │   ├── src/layouts/
 │   ├── src/pages/
 │   ├── src/stores/
 │   └── package.json (npm)
 │
-└── OWFINANCEBackend2025/ (submodule)
-    ├── src/routes/
-    ├── src/controllers/
-    ├── src/models/
-    ├── src/middleware/
-    └── package.json (npm)
+└── OWFINANCEBackend2025/ (submodule — Laravel 12)
+    ├── app/Http/Controllers/
+    ├── app/Models/
+    ├── routes/
+    ├── database/migrations/
+    └── composer.json
 ```
 
 **Why submodules?**
@@ -35,56 +35,60 @@ OWFINANCE2026 (central orchestrator)
 
 ---
 
-## 🌍 Environment Strategy
+## Environment Strategy
 
-### Four-Environment Pipeline
+### Three-Environment Pipeline
 
 ```
 LOCAL (Development)
     ↓ (git push origin feature/xxx)
 DEV (Integration)
-    ↓ (PR merge to dev branch)
-STAGING (Testing)
-    ↓ (Release candidate, sign-off)
+    ↓ (PR merge dev → stage)
+STAGE (Testing / QA)
+    ↓ (PR merge stage → master, release tag)
 PROD (Live)
 ```
 
 ### Environment Details
 
-| Environment | Branch | URL | Deployment | Trigger | Deploy Time |
-|-------------|--------|-----|------------|---------|-------------|
-| **LOCAL** | `feature/*` / `bugfix/*` | localhost:3000 | Manual (npm run dev) | Developer | Instant |
-| **DEV** | `dev` | appfinanzasdev.blockshift.website | CI/CD | Merge to dev | ~5 min |
-| **STAGING** | `staging` | appfinanzas-staging.blockshift.website | CI/CD | Merge to staging | ~5 min |
-| **PROD** | `master` | appfinanzas.blockshift.website | Manual approval | Git tag + CI/CD | ~10 min |
+| Environment | Branch | URL (propuesta) | Servidor | Usuario SSH | Deploy Time |
+|-------------|--------|-----------------|----------|-------------|-------------|
+| **LOCAL** | `feature/*` | localhost:9000 (Quasar) / localhost:8000 (Laravel) | — | — | Instant |
+| **DEV** | `dev` | `dev.owfinances.com` | 178.156.160.70 | appfinan2 | ~5 min |
+| **STAGE** | `stage` | `stage.owfinances.com` | 178.156.160.70 | appfinan1 | ~5 min |
+| **PROD** | `master` | `app.owfinances.com` | 178.156.160.70 | appfinan1 | ~10 min |
+
+> ⚠️ **Pendiente: separar usuarios/cuentas SSH para stage y prod.** Actualmente STAGE y PROD comparten el mismo servidor (178.156.160.70) y el mismo usuario SSH (`appfinan1`) — esto representa un riesgo de contaminación de entornos. Se debe crear un usuario dedicado para PROD (ej: `appfinan_prod`) con permisos y directorios separados.
+
+> **Nota:** Las URLs de `owfinances.com` están pendientes de configuracion DNS (ver sección abajo).
 
 ---
 
-## 🌳 Branch Structure & Workflow
+## Branch Structure & Workflow
 
-### Main Branches (Protected)
+### Permanent Branches (Protected)
 
 ```
 master
 ├── Stable production code
-├── Deployed to: PROD
-├── Create PRs from: staging
-├── Protection: Require 1+ approvals, tests pass
+├── Deployed to: PROD (app.owfinances.com)
+├── Create PRs from: stage
+├── Protection: Require 1+ approvals, all tests pass
 └── Tag: v*.*.* (semantic versioning)
+
+stage
+├── Release candidate / QA environment
+├── Deployed to: STAGE (stage.owfinances.com)
+├── Create PRs from: dev
+├── Protection: Require tests pass, 1+ approvals
+└── Auto-deploy on merge
 
 dev
 ├── Integration branch (daily builds)
-├── Deployed to: DEV
+├── Deployed to: DEV (dev.owfinances.com)
 ├── Create PRs from: feature/*, bugfix/*
-├── Protection: Require tests pass, no manual approvals
+├── Protection: Require tests pass
 └── Auto-deploy on merge
-
-staging
-├── Release candidate
-├── Deployed to: STAGING
-├── Create PRs from: dev
-├── Protection: Require 1+ approvals
-└── Auto-deploy on merge, requires sign-off
 ```
 
 ### Feature Branches
@@ -93,7 +97,6 @@ staging
 feature/ofb-001-header-lite
 feature/ofb-002-bottom-nav
 feature/ofb-029-fab-sheet
-feature/pro-layout-integration
 
 bugfix/fix-responsive-header
 hotfix/critical-auth-bug
@@ -102,25 +105,29 @@ hotfix/critical-auth-bug
 **Branch naming:**
 - `feature/{ticket-code}-{description}` for new features
 - `bugfix/{description}` for bug fixes
-- `hotfix/{description}` for production urgent fixes
+- `hotfix/{description}` for production urgent fixes (branch from master)
 
 ---
 
-## 🔄 Workflow: From Code to Production
+## Workflow: From Code to Production
 
 ### Step 1: Local Development (Developer)
 
 ```bash
-# Start from master
-git checkout master
-git pull origin master
+# Start from dev
+git checkout dev
+git pull origin dev
 
 # Create feature branch
 git checkout -b feature/ofb-001-header-lite
 
 # Work on changes
-npm run dev
-# ... edit components, test locally
+cd OWFinanceFrontend2025
+quasar dev          # Frontend on localhost:9000
+# OR
+cd OWFINANCEBackend2025
+php artisan serve   # Backend on localhost:8000
+
 git add -A
 git commit -m "feat: implement header lite component"
 
@@ -143,112 +150,187 @@ git push origin feature/ofb-001-header-lite
 ```
 
 **Automated on PR:**
-- Tests run (ESLint, TypeScript, unit tests)
+- PHP linting (Laravel Pint)
+- TypeScript compiler (strict mode)
+- ESLint + Prettier
+- Unit tests (PHPUnit + Vitest)
 - Build verification
-- Lighthouse performance report
-- Code coverage report
 
-### Step 3: PR Review & Merge to DEV
+### Step 3: Merge to DEV
 
 ```bash
-# Reviewer checks:
-- Code quality (ESLint/Prettier)
-- Test coverage
-- Performance impact
-- TypeScript strictness
-- Accessibility compliance
-
 # When approved:
 git checkout dev
 git pull origin dev
 git merge --no-ff feature/ofb-001-header-lite
 git push origin dev
 
-# DEV environment auto-deploys (CI/CD)
+# DEV environment auto-deploys via script
 ```
 
 **Auto-deployment to DEV:**
-- Triggers on merge to dev
-- Runs full test suite
-- Builds frontend & backend
-- Deploys to appfinanzasdev.blockshift.website
-- Slack notification to #deployments
+- Triggers: manual or CI/CD on merge to dev
+- Command: `./deploy-frontend.sh dev` + `./deploy-backend.sh dev`
+- Deploys to dev.owfinances.com
+- Telegram notification sent
 
-### Step 4: Integration Testing (QA/Team)
+### Step 4: Integration Testing in DEV (QA/Team)
 
 ```
 Deploy to DEV
 ↓
 Team tests in DEV environment
 - Visual regression testing
-- Cross-device testing
+- Cross-device testing (mobile + web)
 - API integration testing
-- Performance baseline
 ↓
 If issues: Create bugfix PRs against dev
-If OK: Ready for staging
+If OK: Ready for stage
 ```
 
-### Step 5: Promote to STAGING (Tech Lead)
+### Step 5: Promote to STAGE (Tech Lead)
 
 ```bash
-# Create PR from dev → staging
-git checkout staging
-git pull origin staging
+# Create PR from dev → stage
+git checkout stage
+git pull origin stage
 git merge --no-ff dev
-git push origin staging
+git push origin stage
 
-# STAGING auto-deploys
-# - Full test suite runs
-# - Performance regression check
-# - Security scan
-# - Slack notification to leadership
+# STAGE auto-deploys
+./deploy-frontend.sh stage
+./deploy-backend.sh stage
 ```
 
 ### Step 6: Sign-Off & Deploy to PROD (Manager/Tech Lead)
 
 ```bash
-# Create PR from staging → master
+# Create PR from stage → master
 git checkout master
 git pull origin master
-git merge --no-ff staging
+git merge --no-ff stage
 git push origin master
 
 # Create release tag
-git tag -a v1.2.3 -m "Release v1.2.3: OWFINANCE2026 Phase 1"
+git tag -a v1.2.3 -m "Release v1.2.3: OWFINANCE2026"
 git push origin v1.2.3
 
-# Manual trigger to deploy to PROD (via GitHub Actions UI or CLI)
-# - Final security scan
-# - Smoke tests in PROD
-# - Slack notification to on-call
+# Deploy to PROD (manual trigger)
+# TODO: agregar modo `prod` a los scripts de deploy (deploy-frontend.sh y deploy-backend.sh).
+# Actualmente los scripts solo aceptan [stage|dev] — para PROD se usa 'stage' como parámetro
+# porque comparte el mismo usuario SSH (appfinan1) y configuración de servidor.
+./deploy-frontend.sh stage   # prod uses appfinan1 / stage env vars — ver nota SSH abajo
+./deploy-backend.sh stage
+# Run smoke tests after deploy
 ```
 
 ---
 
-## 🔗 Submodule Synchronization
+## Configuracion DNS Pendiente
 
-### How Submodules Work
+Para activar el dominio `owfinances.com`, crear los siguientes registros A en el panel DNS:
 
-Parent repo (OWFINANCE2026) tracks exact commits:
+| Subdominio | Tipo | Valor (IP) | TTL |
+|------------|------|------------|-----|
+| `app.owfinances.com` | A | 178.156.160.70 | 3600 |
+| `stage.owfinances.com` | A | 178.156.160.70 | 3600 |
+| `dev.owfinances.com` | A | 178.156.160.70 | 3600 |
+| `owfinances.com` | A | 178.156.160.70 | 3600 |
+| `www.owfinances.com` | CNAME | owfinances.com | 3600 |
 
+**Pasos post-DNS:**
+1. Confirmar propagacion: `dig app.owfinances.com`
+2. Actualizar VirtualHosts en el servidor (Nginx/Apache) para cada subdominio
+3. Emitir certificados SSL via Let's Encrypt: `certbot --nginx -d app.owfinances.com -d stage.owfinances.com -d dev.owfinances.com`
+4. Actualizar variables de entorno en los scripts (reemplazar `blockshift.website` → `owfinances.com`)
+5. Actualizar `.env.production` y `.env.dev` en los submodulos
+
+---
+
+## Scripts de Deploy
+
+### deploy-frontend.sh
+
+Compila el frontend Quasar y lo sube via rsync+SSH al servidor.
+
+```bash
+# Uso:
+./deploy-frontend.sh [stage|dev] ["mensaje de commit opcional"]
+
+# Ejemplos:
+./deploy-frontend.sh dev                              # Deploy a dev.owfinances.com
+./deploy-frontend.sh stage "feat: nueva pantalla"    # Deploy a stage.owfinances.com
+
+# Que hace:
+# 1. Lee el entorno (stage → appfinan1, dev → appfinan2)
+# 2. Hace git commit + push del submodulo frontend
+# 3. Compila con 'quasar build' usando el .env correspondiente
+# 4. Sube dist/ via rsync al servidor
+# 5. Envia notificacion Telegram al finalizar
 ```
-OWFINANCE2026/
-├── .gitmodules
-│   ├── [submodule "OWFinanceFrontend2025"]
-│   │   path = OWFinanceFrontend2025
-│   │   url = git@github.com:your-org/OWFinanceFrontend2025.git
-│   │
-│   └── [submodule "OWFINANCEBackend2025"]
-│       path = OWFINANCEBackend2025
-│       url = git@github.com:your-org/OWFINANCEBackend2025.git
-│
-└── .git/config (stores exact commit SHAs)
+
+| Parametro | stage | dev |
+|-----------|-------|-----|
+| Usuario SSH | appfinan1 | appfinan2 |
+| Branch | stage | dev |
+| ENV file | .env.production | .env.dev |
+| URL destino | stage.owfinances.com (pendiente) | dev.owfinances.com (pendiente) |
+| Dir remoto | public_html/app | OWFINANCEBACKEND2025/public/app |
+
+### deploy-backend.sh
+
+Sincroniza el backend Laravel via rsync+SSH y ejecuta comandos post-deploy.
+
+```bash
+# Uso:
+./deploy-backend.sh [stage|dev]
+
+# Ejemplos:
+./deploy-backend.sh dev     # Deploy backend a dev
+./deploy-backend.sh stage   # Deploy backend a stage (default)
+
+# Que hace:
+# 1. rsync del directorio OWFINANCEBackend2025/ al servidor
+# 2. Excluye: .env, vendor/, node_modules/, .git/
+# 3. Ejecuta remotamente: composer install, php artisan migrate, php artisan config:cache
+# 4. Verifica health endpoint (/up)
+# 5. Envia notificacion Telegram al finalizar
 ```
+
+### deploy-mobile.sh
+
+Construye y distribuye la app movil (Android/iOS via Capacitor).
+
+```bash
+# Uso:
+./deploy-mobile.sh [android|ios|both] [dev|staging|prod]
+
+# Ejemplos:
+./deploy-mobile.sh android dev      # APK de desarrollo
+./deploy-mobile.sh android prod     # APK de produccion
+./deploy-mobile.sh both staging     # Android + iOS para QA
+
+# Requisitos:
+# - Android: JAVA_HOME configurado, Android SDK instalado
+# - iOS: Solo macOS con Xcode instalado
+```
+
+### Otros scripts utiles
+
+| Script | Descripcion |
+|--------|-------------|
+| `./dev-start.sh` | Levanta entorno de desarrollo local |
+| `./dev-stop.sh` | Detiene entorno de desarrollo local |
+| `./ops-status.sh` | Muestra estado de los entornos remotos |
+| `./sync_stage_to_dev.sh` | Sincroniza stage → dev (hotfixes) |
+| `./push-workspace.sh` | Push del monorepo + submodulos |
+
+---
+
+## Submodule Synchronization
 
 ### Updating Submodules
 
-**Local Development:**
 ```bash
 # Clone with submodules
 git clone --recurse-submodules <repo-url>
@@ -264,135 +346,25 @@ git add -A
 git commit -m "feat: header component"
 git push origin feature/ofb-001-header-lite
 
-# Return to parent
+# Return to parent and commit submodule reference
 cd ..
-
-# Parent repo will show submodule as "modified"
-git status
-# modified:   OWFinanceFrontend2025 (new commits)
-
-# Commit the submodule reference update
 git add OWFinanceFrontend2025
 git commit -m "chore: update frontend submodule to latest"
 git push origin feature/branch-name
 ```
 
-**When merging feature → dev:**
-1. Feature PR in parent repo (OWFINANCE2026) has submodule changes
-2. PR is merged to dev
-3. Parent repo now points to new frontend/backend commits
-4. CI/CD uses those commits to build in DEV
-5. When staging/prod are deployed, they use the parent repo's commit references
-
 ---
 
-## 🚀 CI/CD Automation (GitHub Actions)
-
-### Key Workflows
-
-#### `test.yml` - On every PR and push
-
-```yaml
-trigger: [push, pull_request]
-steps:
-  - ESLint (lint all .js/.ts/.vue)
-  - TypeScript compiler (strict mode)
-  - Unit tests (Jest)
-  - Build verification (webpack/vite)
-  - Lighthouse performance audit
-  - Code coverage report
-```
-
-#### `dev-deploy.yml` - On merge to dev
-
-```yaml
-trigger: [push to dev]
-steps:
-  - Checkout with submodules
-  - Install dependencies (npm ci)
-  - Run tests
-  - Build frontend (npm run build)
-  - Build backend (npm run build)
-  - Deploy to DEV
-  - Run smoke tests
-  - Slack notification
-```
-
-#### `staging-deploy.yml` - On merge to staging
-
-```yaml
-trigger: [push to staging]
-steps:
-  - Same as dev-deploy
-  - Deploy to STAGING
-  - Security scan (OWASP, dependency audit)
-  - Performance regression check
-```
-
-#### `prod-deploy.yml` - On version tag
-
-```yaml
-trigger: [tag v*.*.*]
-steps:
-  - Final security scan
-  - Deploy to PROD (with canary if available)
-  - Health checks
-  - Notification to on-call
-```
-
----
-
-## 📊 Status Checking
-
-### Check Status of All Repos
-
-```bash
-# From OWFINANCE2026 root
-
-# What commits are we using?
-git log --oneline -1 OWFinanceFrontend2025
-git log --oneline -1 OWFINANCEBackend2025
-
-# What branch is each submodule on?
-cd OWFinanceFrontend2025
-git branch -a
-git log --oneline -3
-
-# Any uncommitted changes?
-git status
-
-# Which commits are deployed where?
-# Check GitHub Actions logs or Slack deployment notifications
-```
-
-### Check What's Deployed
-
-```bash
-# Clone deployment info from CI/CD service
-# Example: Last 5 deployments
-curl https://your-ci.example.com/api/deployments?limit=5 \
-  -H "Authorization: Bearer $CI_TOKEN"
-
-# Or check git tags (last 5 releases)
-git describe --tags --always
-git log --oneline -5 master
-```
-
----
-
-## 🔒 Rollback Strategy
+## Rollback Strategy
 
 ### If Production Breaks
 
 ```bash
 # Step 1: Identify the broken commit
 git log --oneline master | head -5
-# Output:
-# abc1234 Release v1.2.3 (broken)
-# def5678 Release v1.2.2 (last stable)
 
-# Step 2: Revert the commit
-git revert abc1234 -m 1  # -m 1 for merge commits
+# Step 2: Revert the commit (preferred — keeps history)
+git revert abc1234 -m 1
 git push origin master
 
 # Step 3: OR reset to previous tag (more aggressive)
@@ -400,131 +372,88 @@ git reset --hard def5678
 git tag v1.2.4-rollback
 git push origin master --force-with-lease
 
-# Step 4: Trigger PROD deployment of rollback commit
-# (via GitHub Actions UI)
+# Step 4: Redeploy
+# TODO: usar parámetro `prod` cuando se implemente en los scripts
+./deploy-frontend.sh stage   # prod uses stage param until deploy scripts add prod mode
+./deploy-backend.sh stage
 
 # Step 5: Post-incident
 # - Create GitHub issue for RCA
 # - Link to failed PR
-# - Add tests to prevent regression
+# - Add regression tests
 ```
 
 ---
 
-## 📋 Checklist: From Feature to Production
+## Checklist: From Feature to Production
 
 - [ ] **Local**
   - [ ] Feature branch created from `dev`
-  - [ ] Changes tested locally (npm run dev)
-  - [ ] Tests pass (`npm run test`)
+  - [ ] Changes tested locally
+  - [ ] Tests pass (PHPUnit + Vitest)
   - [ ] TypeScript strict, no errors
   - [ ] ESLint passes, Prettier formatted
   - [ ] Commit messages follow convention
 
 - [ ] **PR to DEV**
-  - [ ] PR description links to ticket (OFB-001, etc.)
+  - [ ] PR description links to ticket
   - [ ] Acceptance criteria documented
-  - [ ] Testing notes included
   - [ ] Screenshots/videos if UI change
-  - [ ] Lighthouse report shows no regression
   - [ ] Code review approved
 
 - [ ] **Merge to DEV**
   - [ ] CI/CD pipeline passes
-  - [ ] Auto-deployed to DEV
+  - [ ] Deployed to dev.owfinances.com
   - [ ] Team QA testing completes
   - [ ] No blockers found
 
-- [ ] **Promote to STAGING**
-  - [ ] PR from dev → staging approved
-  - [ ] Auto-deployed to STAGING
-  - [ ] Leadership sign-off received
+- [ ] **Promote to STAGE**
+  - [ ] PR from dev → stage approved
+  - [ ] Deployed to stage.owfinances.com
+  - [ ] Full QA sign-off received
   - [ ] No security/compliance issues
 
 - [ ] **Release to PROD**
-  - [ ] PR from staging → master approved
+  - [ ] PR from stage → master approved
   - [ ] Git tag created (v*.*.*)
-  - [ ] Auto-deployed to PROD
+  - [ ] Deployed to app.owfinances.com
   - [ ] Smoke tests pass
-  - [ ] Slack notification sent
+  - [ ] Telegram notification sent
   - [ ] Monitoring alerts configured
 
 ---
 
-## 🎯 Quick Reference: Common Tasks
+## Quick Reference: Common Tasks
 
-### I want to work on OFB-002
+### Start a new feature
 
 ```bash
-git checkout dev
-git pull origin dev
-git checkout -b feature/ofb-002-bottom-nav
-# ... make changes ...
-git push origin feature/ofb-002-bottom-nav
-# Create PR in GitHub (base: dev)
+git checkout dev && git pull origin dev
+git checkout -b feature/ofb-XXX-description
+# ... work ...
+git push origin feature/ofb-XXX-description
+# Create PR → base: dev
 ```
 
-### I need to add a hotfix to production
+### Hotfix to production
 
 ```bash
-git checkout master
-git pull origin master
+git checkout master && git pull origin master
 git checkout -b hotfix/critical-bug-fix
-# ... fix the bug ...
+# ... fix ...
 git push origin hotfix/critical-bug-fix
-# Create PR in GitHub (base: master)
+# Create PR → base: master, then cherry-pick to dev
 ```
 
-### I want to see what's in DEV right now
+### Check deployed version
 
 ```bash
-git log --oneline dev | head -10
-# Or check the DEV environment URL
-# appfinanzasdev.blockshift.website
-```
-
-### I want to merge backend changes to frontend
-
-```bash
-# In OWFinanceFrontend2025
-git fetch origin
-git merge origin/dev  # Merge latest backend API changes
-
-# OR if backend is in OWFINANCEBackend2025 submodule
-cd ../OWFINANCEBackend2025
-git log --oneline -5
-# Note the commit SHA
-cd ../OWFinanceFrontend2025
-# Update your API client to use new endpoints
+# Check what commit is live
+curl https://app.owfinances.com/up
+git log --oneline master | head -5
 ```
 
 ---
 
-## 📞 Support & Escalation
-
-### Issues by Type
-
-| Issue | Action | Escalate To |
-|-------|--------|-------------|
-| Tests failing on PR | Fix code, push to same branch | Tech Lead |
-| Merge conflict | Resolve locally, push to branch | Tech Lead |
-| DEV deployment failed | Check CI/CD logs, revert PR if needed | DevOps |
-| Performance regression | Check Lighthouse report, optimize | Frontend Lead |
-| Production is down | Trigger rollback immediately | On-Call Manager |
-| Security issue found | Create urgent hotfix PR | Security Lead |
-
----
-
-## 🔄 Continuous Improvement
-
-Review this strategy every sprint:
-- Are deployments taking too long?
-- Are there blockers in the pipeline?
-- Should we adjust branch protection rules?
-- Do we need additional environments?
-- Are notification/alerting working?
-
----
-
-**Last Updated:** 2026-04-03
-**Next Review:** 2026-04-17 (end of sprint)
+**Last Updated:** 2026-06-09
+**Next Review:** End of current sprint
