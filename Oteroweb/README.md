@@ -53,9 +53,16 @@ Oteroweb/
 
 ## Identidad en una línea
 
-**José Luis Otero** lleva 18 años construyendo sistemas de infraestructura, 6 años aplicando el Método Cántaros (carro + casa + momentos de libertad financiera), y hoy construye OWFinances — la herramienta que necesitaba y que no existía — mientras busca la libertad financiera sostenida como meta activa.
+**José Luis Otero** lleva 18 años construyendo sistemas de infraestructura, 6 años aplicando el Método Cántaros (carro + casa + momentos de libertad financiera), construyó SOV-OW — un sistema operativo de vida con 13 agentes IA — y hoy construye OWFinances como la herramienta que nació de esa experiencia. Su meta activa: libertad financiera sostenida.
 
-**La tesis:** Software como herramienta de libertad, no solo de empleo.
+**La tesis central:** Si tus emociones y tu vida no están bien, tus finanzas nunca lo estarán. El software es la herramienta de libertad más poderosa — pero solo funciona si el sistema completo funciona.
+
+**Los 3 proyectos del ecosistema @oteroweb:**
+```
+SOV-OW        ← sistema operativo de vida (Coach Central + 12 agentes especializados)
+OWFinances    ← herramienta financiera con IA (producto SaaS, pre-launch)
+oteroweb.com  ← marca personal y consultoría B2B
+```
 
 ---
 
