@@ -1,0 +1,356 @@
+/* ============================================================
+   OW Finance Design System — Colors & Type
+   ------------------------------------------------------------
+   Canonical Lite Desktop foundation. Pro inherits the same
+   tokens; the only thing that changes between Lite and Pro is
+   density/layout posture, not color or type.
+   ============================================================ */
+
+/* ---------- Fonts -----------------------------------------
+   Satoshi is self-hosted (woff2) under assets/fonts/. The
+   variable file covers weights 300–900; the static Regular is
+   kept as a 400 fallback. DM Sans / Manrope / Inter are loaded
+   from Google Fonts as compatible fallbacks (Manrope + Inter
+   are referenced by the legacy "Liquid Glass Unified" doc).
+   NOTE: @import must precede @font-face or it is ignored.
+----------------------------------------------------------- */
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap");
+@font-face {
+  font-family: "Satoshi";
+  src: url("assets/fonts/Satoshi-Variable.woff2") format("woff2-variations"),
+       url("assets/fonts/Satoshi-Variable.woff2") format("woff2");
+  font-weight: 300 900;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Satoshi";
+  src: url("assets/fonts/Satoshi-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ============================================================
+   1. PRIMITIVE TOKENS (raw values — don't use directly in UI)
+   ============================================================ */
+:root {
+  /* Brand */
+  --navy-900: #0F1E4D;
+  --navy-800: #16297A;
+  --navy-700: #1E3A8A;   /* brand primary */
+  --navy-600: #2D4DA6;
+  --navy-500: #4E6FC4;
+  --navy-100: #E5EBF7;
+  --navy-50:  #F1F4FB;
+
+  /* Supporting info accent (cyan) — never CTA-primary in Lite */
+  --cyan-700: #0369A1;
+  --cyan-600: #0284C7;
+  --cyan-500: #0EA5E9;
+  --cyan-100: #E0F2FE;
+
+  /* Semantic */
+  --emerald-700: #047857;
+  --emerald-500: #10B981;
+  --emerald-100: #D1FAE5;
+
+  --red-700: #B91C1C;
+  --red-500: #EF4444;
+  --red-100: #FEE2E2;
+
+  --amber-700: #B45309;
+  --amber-500: #F59E0B;
+  --amber-100: #FEF3C7;
+
+  --violet-500: #8B5CF6;   /* reserved for AI/voice features in Pro */
+
+  /* Neutral — light ramp */
+  --slate-50:  #F8FAFC;
+  --slate-100: #F1F5F9;
+  --slate-150: #E8EDF3;
+  --slate-200: #E2E8F0;
+  --slate-300: #CBD5E1;
+  --slate-400: #94A3B8;
+  --slate-500: #64748B;
+  --slate-600: #475569;
+  --slate-700: #334155;
+  --slate-800: #1E293B;
+  --slate-900: #0F172A;
+
+  /* Neutral — dark surface ramp */
+  --ink-base:    #0F172A;
+  --ink-s1:      #131B2E;
+  --ink-s2:      #1A2238;
+  --ink-s3:      #222A3D;
+  --ink-s4:      #2B3450;
+}
+
+/* ============================================================
+   2. SEMANTIC TOKENS — LIGHT (the canonical baseline)
+   ============================================================ */
+:root,
+[data-theme="light"] {
+  /* Surfaces */
+  --bg-canvas:   var(--slate-50);   /* page background */
+  --surface-1:   #FFFFFF;            /* card */
+  --surface-2:   var(--slate-100);   /* hover, secondary chip */
+  --surface-3:   var(--slate-150);   /* pressed */
+
+  /* Foreground (text & icons) */
+  --fg-1:        var(--slate-900);   /* primary text, big amounts */
+  --fg-2:        var(--slate-500);   /* secondary text, labels */
+  --fg-3:        var(--slate-400);   /* tertiary, placeholder */
+  --fg-on-brand: #FFFFFF;            /* text/icon on brand fills */
+
+  /* Brand */
+  --brand-primary:        var(--navy-700);
+  --brand-primary-hover:  var(--navy-800);
+  --brand-primary-press:  var(--navy-900);
+  --brand-primary-soft:   var(--navy-50);   /* tinted bg, e.g. active nav */
+  --brand-primary-fg-soft:var(--navy-700);  /* text on brand-soft */
+
+  /* Info accent (cyan) — never primary CTA in Lite */
+  --info:         var(--cyan-500);
+  --info-fg:      var(--cyan-700);
+  --info-soft:    var(--cyan-100);
+
+  /* Semantic */
+  --income:       var(--emerald-500);
+  --income-fg:    var(--emerald-700);
+  --income-soft:  var(--emerald-100);
+
+  --expense:      var(--red-500);
+  --expense-fg:   var(--red-700);
+  --expense-soft: var(--red-100);
+
+  --warning:      var(--amber-500);
+  --warning-fg:   var(--amber-700);
+  --warning-soft: var(--amber-100);
+
+  /* Borders & lines */
+  --border-hairline: rgba(15, 23, 42, 0.06);
+  --focus-ring:      var(--navy-700);
+
+  /* Elevation */
+  --shadow-card:   0 4px 24px rgba(15, 23, 42, 0.06);
+  --shadow-hover:  0 6px 28px rgba(15, 23, 42, 0.10);
+  --shadow-float:  0 8px 32px rgba(15, 23, 42, 0.12);   /* floating nav, hero */
+  --shadow-popover:0 16px 48px rgba(15, 23, 42, 0.18);  /* expanded menu */
+
+  /* Glass (used ONLY on the expanded menu overlay) */
+  --glass-bg:     rgba(255, 255, 255, 0.92);
+  --glass-blur:   blur(12px); /* @kind other */
+
+  color-scheme: light;
+}
+
+/* ============================================================
+   3. SEMANTIC TOKENS — DARK (mirror of light, same structure)
+   ============================================================ */
+[data-theme="dark"] {
+  --bg-canvas:   var(--ink-base);
+  --surface-1:   var(--ink-s1);
+  --surface-2:   var(--ink-s2);
+  --surface-3:   var(--ink-s3);
+
+  --fg-1:        #E2E8F0;
+  --fg-2:        #94A3B8;
+  --fg-3:        #64748B;
+  --fg-on-brand: #FFFFFF;
+
+  /* Brand: lift navy slightly so it reads on dark surfaces */
+  --brand-primary:        var(--navy-500);
+  --brand-primary-hover:  #6884D2;
+  --brand-primary-press:  var(--navy-600);
+  --brand-primary-soft:   rgba(78, 111, 196, 0.15);
+  --brand-primary-fg-soft:#A8BCE6;
+
+  --info:         var(--cyan-500);
+  --info-fg:      #7DD3FC;
+  --info-soft:    rgba(14, 165, 233, 0.15);
+
+  --income:       var(--emerald-500);
+  --income-fg:    #6EE7B7;
+  --income-soft:  rgba(16, 185, 129, 0.15);
+
+  --expense:      var(--red-500);
+  --expense-fg:   #FCA5A5;
+  --expense-soft: rgba(239, 68, 68, 0.15);
+
+  --warning:      var(--amber-500);
+  --warning-fg:   #FCD34D;
+  --warning-soft: rgba(245, 158, 11, 0.15);
+
+  --border-hairline: rgba(255, 255, 255, 0.06);
+  --focus-ring:      var(--navy-500);
+
+  /* Dark shadows are barely visible — rely on surface contrast */
+  --shadow-card:   0 1px 0 rgba(255,255,255,0.04) inset, 0 8px 24px rgba(0, 0, 0, 0.30);
+  --shadow-hover:  0 1px 0 rgba(255,255,255,0.06) inset, 0 10px 28px rgba(0, 0, 0, 0.40);
+  --shadow-float:  0 1px 0 rgba(255,255,255,0.06) inset, 0 12px 36px rgba(0, 0, 0, 0.50);
+  --shadow-popover:0 1px 0 rgba(255,255,255,0.08) inset, 0 20px 56px rgba(0, 0, 0, 0.60);
+
+  --glass-bg:     rgba(19, 27, 46, 0.86);
+  --glass-blur:   blur(14px); /* @kind other */
+
+  color-scheme: dark;
+}
+
+/* ============================================================
+   4. SPACING / RADII / Z-INDEX
+   ============================================================ */
+:root {
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-7: 32px;
+  --space-8: 40px;
+  --space-9: 48px;
+  --space-10: 64px;
+  --space-11: 80px;
+  --space-12: 96px;
+
+  --radius-xs: 8px;
+  --radius-sm: 12px;
+  --radius-md: 16px;
+  --radius-lg: 20px;   /* default card */
+  --radius-xl: 28px;   /* hero card */
+  --radius-pill: 999px;
+
+  --container-max: 1200px;
+
+  --z-nav: 50;      /* @kind other */
+  --z-popover: 80;  /* @kind other */
+  --z-modal: 100;   /* @kind other */
+
+  --dur-fast: 120ms;                          /* @kind other */
+  --dur-base: 180ms;                          /* @kind other */
+  --dur-slow: 220ms;                          /* @kind other */
+  --ease-out: cubic-bezier(0.2, 0.8, 0.2, 1); /* @kind other */
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);/* @kind other */
+}
+
+/* ============================================================
+   5. TYPOGRAPHY — base & semantic roles
+   ============================================================ */
+:root {
+  --font-display: "Satoshi", "DM Sans", "Manrope", system-ui, -apple-system, sans-serif;
+  --font-body:    "DM Sans", "Inter", system-ui, -apple-system, sans-serif;
+  --font-money:   "Satoshi", "DM Sans", system-ui, sans-serif;   /* used with tabular-nums */
+}
+
+/* Base resets so semantic roles below "just work" when used as classes */
+html, body {
+  font-family: var(--font-body);
+  color: var(--fg-1);
+  background: var(--bg-canvas);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* --- Display / heading roles --- */
+.t-hero-amount {
+  font-family: var(--font-money);
+  font-weight: 700;
+  font-size: 56px;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+  color: var(--fg-1);
+}
+
+.t-amount-lg {
+  font-family: var(--font-money);
+  font-weight: 600;
+  font-size: 28px;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  font-variant-numeric: tabular-nums;
+  color: var(--fg-1);
+}
+
+.t-amount-md {
+  font-family: var(--font-money);
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 1.25;
+  font-variant-numeric: tabular-nums;
+  color: var(--fg-1);
+}
+
+.t-amount-sm {
+  font-family: var(--font-money);
+  font-weight: 500;
+  font-size: 15px;
+  line-height: 1.3;
+  font-variant-numeric: tabular-nums;
+}
+
+.t-h1 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 32px;
+  line-height: 1.2;
+  letter-spacing: -0.015em;
+  color: var(--fg-1);
+}
+
+.t-h2 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 22px;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  color: var(--fg-1);
+}
+
+.t-h3 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 17px;
+  line-height: 1.3;
+  color: var(--fg-1);
+}
+
+/* --- Body roles --- */
+.t-body {
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--fg-1);
+}
+
+.t-body-sm {
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: 13px;
+  line-height: 1.45;
+  color: var(--fg-2);
+}
+
+.t-label {
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: 13px;
+  line-height: 1.3;
+  color: var(--fg-2);
+}
+
+/* --- Eyebrow (tiny all-caps meta) --- */
+.t-eyebrow {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 11px;
+  line-height: 1;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--fg-2);
+}
+
+/* Tabular money utility */
+.tabular { font-variant-numeric: tabular-nums; }

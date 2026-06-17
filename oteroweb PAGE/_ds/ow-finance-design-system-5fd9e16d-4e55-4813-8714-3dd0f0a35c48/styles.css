@@ -1,0 +1,15 @@
+/* ============================================================
+   OW Finance Design System — Root entry
+   ------------------------------------------------------------
+   Single stylesheet for consumers. Link THIS file and you get
+   the full token + type foundation (and its remote font
+   imports) in one include:
+
+       <link rel="stylesheet" href="styles.css">
+
+   It re-exports the canonical foundation. Marketing-site
+   surface styles live in marketing.css and are linked only by
+   the marketing pages, not by product consumers.
+   ============================================================ */
+
+@import url("colors_and_type.css");
