@@ -3,7 +3,7 @@
 <!-- Solo un agente escribe a la vez. Updated = timestamp del ultimo escritor. -->
 <!-- Tareas se referencian por ID (OWF-NNN) → ver .owf/TASKS.md -->
 
-**Updated:** 2026-06-11T00:00:00Z
+**Updated:** 2026-06-19T18:00:00Z
 **By:** claude-code
 
 ---
@@ -14,31 +14,45 @@
 |----|-------|--------|----------|---------|
 | — | — | — | — | Sin tareas activas |
 
-### OWF-054 — Fix navegación router (COMPLETADA 2026-06-11)
+---
 
-3 fixes deployados a prod (owfinances.com, commit main 35c0a89):
-- `DynamicRoleLayout.vue` — imports explícitos de sub-layouts (Vue 3 script setup)
-- `PublicLayout.vue` — watcher route.path re-observa .reveal elements en navegación
-- `src/router/index.ts` — scrollBehavior: reset scroll al top en cada navegación pública
+## Sesión 2026-06-19 — Tareas completadas
 
-### SDD Change: (none)
+| OWF | Que hizo |
+|-----|----------|
+| OWF-008 | ✅ Transición Lite↔Pro: AppShell reactivo + config toggle PATCH /user/settings |
+| OWF-009 | ✅ Rutas Pro: alias /user/settings, BottomNavMobile 5 tabs 1 fila (no-wrap) |
+| OWF-010 | ✅ Playwright ESM config + baseURL + skip guards en todos los tests con auth |
+| OWF-012 | ✅ Password Reset: ForgotPasswordPage + ResetPasswordPage + backend routes |
+| OWF-016 | ✅ Redirect por rol ya estaba en router beforeEach |
+| OWF-017 | ✅ Rutas públicas ok: PHP proxy sirve / → Vue / → LandingPage. Tests pasan prod |
+| OWF-028 | ✅ Nav Pro mobile: eliminados 7→5 tabs, no flex-wrap |
+| OWF-049 | ✅ Cántaros con descripción: tipo, mkJar, loadJarData, bulk-sync, UI textarea |
+| OWF-055 | ✅ Integración rediseño → AppShell único |
+| OWF-056 | ✅ AppShell.vue: shell único Lite+Pro+Mobile |
+| OWF-057 | ✅ AppPrefsSection en Config |
+| OWF-058 | ✅ HomeView datos reales |
+| OWF-059 | ✅ Onboarding automático en AppShell |
+| OWF-060 | ✅ Limpieza layouts legacy |
 
-### Paseo Epic: (none)
+---
 
-### Sin asignar — disponible para cualquier agente
+## Pending (por prioridad)
 
 | ID | Pri | Tarea | Type |
 |----|-----|-------|------|
 | OWF-004 | P0 | Deploy Staging (desbloqueado) | infra |
-| OWF-008 | P1 | Transicion Lite↔Pro sin perdida | feat |
-| OWF-009 | P2 | Rutas Pro restantes | feat |
-| OWF-012 | P2 | Flujo Password Reset | feat |
-| OWF-016 | P2 | Redirect segun rol | feat |
-| OWF-017 | P2 | Verificar rutas publicas desde LAN | feat |
+| OWF-005 | P1 | GitHub Secrets por entorno | infra |
+| OWF-006 | P1 | Probar deploy stage end-to-end | infra |
+| OWF-011 | P2 | UI Configuración Asesor IA | feat |
+| OWF-013 | P2 | GitHub Actions deploy.yml multi-environment | infra |
+| OWF-019 | P2 | i18n ES/EN | feat |
+| OWF-020 | P2 | Sincronizar DB Stage → Dev | infra |
+| OWF-049 | P2 | Cántaros: contexto rico extendido (emoji, tags) | feat |
 
 ---
 
-## Blocked (requieren accion humana)
+## Blocked
 
 | ID | Razon | Desbloquea |
 |----|-------|------------|
@@ -50,29 +64,22 @@
 
 | Metrica | Valor |
 |---------|-------|
-| **Total** | 56 tareas |
-| **Completadas** | 28 (50%) |
+| **Total** | 61 tareas |
+| **Completadas** | 46 (75%) |
 | **En progreso** | 0 |
-| **Bloqueadas** | 1 (OWF-001 parcial) |
-| **Disponibles** | 27 |
-| **Progreso** | ██████████░░░░░░░░░░ 50% |
+| **Bloqueadas** | 1 |
+| **Disponibles** | 14 |
+| **Progreso** | ███████████████░░░░░ 75% |
 
 ---
 
 ## Next Up (por prioridad)
 
-1. **OWF-004** — Deploy Staging
-2. **OWF-008** — Transicion Lite↔Pro sin perdida de datos
-3. **OWF-010** — Tests Frontend (Vitest + Playwright) — continuar
-4. **OWF-009** — Rutas Pro restantes
-5. **OWF-012** — Flujo Password Reset
-6. **OWF-049** — Cantaros con contexto rico
-
----
-
-## Uncommitted Changes (working directory)
-
-Ninguno. Frontend main limpio — todos los fixes commitados y deployados a prod.
+1. **OWF-004/005/006** — Deploy Staging + GitHub Secrets
+2. **OWF-011** — UI Configuración Asesor IA
+3. **OWF-013** — GitHub Actions CI/CD
+4. **OWF-019** — i18n ES/EN
+5. **OWF-022** — Android build + PRO pages
 
 ---
 
@@ -80,16 +87,14 @@ Ninguno. Frontend main limpio — todos los fixes commitados y deployados a prod
 
 | Fecha | Agente | OWF | Que hizo |
 |-------|--------|-----|----------|
-| 2026-06-11 | claude-code | OWF-054 | Fix navegación router: DynamicRoleLayout imports + IntersectionObserver re-observe + scrollBehavior reset. Deployado prod. |
-| 2026-06-10 | claude-code | — | Asesor IA: OpenCode Go integrado como provider. OpenCodeGoProvider creado, factory registrado, .env configurado. Test OK — respuesta con contexto financiero real, streaming funcionando. |
-| 2026-06-10 | opencode | OWF-048 | Fix router DOM perdido: slot layout + default lite + Playwright 23/23 |
-| 2026-06-10 | opencode | OWF-047 | Mensajes ES + passwords + alert() eliminados + i18n notify |
-| 2026-06-10 | claude-code | OWF-007 | Billetera implicita Lite: banner setup + auto-create backend |
-| 2026-06-10 | claude-code | OWF-053 | Seed datos base prod (roles, account types, currencies, transaction types) |
-| 2026-06-10 | claude-code | OWF-050..052 | CORS fix, merge dev→main, arquitectura prod evaluada |
-| 2026-06-10 | opencode | OWF-029..034 | Fix PHP deprecated, .deploy/, marketing pages, login split-panel |
-| 2026-06-08 | claude-code | OWF-039..045 | Design System F0-F5 completo |
-| 2026-06-08 | claude-code | OWF-035..038 | Infra agentes (engram, paseo, registry) |
+| 2026-06-19 | claude-code | OWF-008,009,028 | BottomNavMobile 5 tabs Pro mobile no-wrap, AppShell nav fix |
+| 2026-06-19 | claude-code | OWF-049 | Cántaros description: type+mkJar+loadJarData+payload+UI |
+| 2026-06-19 | claude-code | OWF-010,017 | Playwright ESM config + tests arreglados + URLs prod correctas |
+| 2026-06-19 | claude-code | OWF-055..060 | AppShell único, rediseño, onboarding, legacy cleanup |
+| 2026-06-11 | claude-code | OWF-054 | Fix navegación router |
+| 2026-06-10 | claude-code | OWF-007 | Billetera implícita Lite |
+| 2026-06-10 | opencode | OWF-047..048 | Mensajes ES + router DOM fix |
+| 2026-06-08 | claude-code | OWF-035..045 | Infra agentes + Design System F0-F5 |
 
 ---
 

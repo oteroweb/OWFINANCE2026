@@ -11,6 +11,11 @@ logs/
 .env.local
 .env.*.local
 
+# Deploy credentials (local only)
+.deploy/dev.sh
+.deploy/stage.sh
+.deploy/prod.sh
+
 # Archivos temporales
 *.tmp
 *.temp
@@ -19,6 +24,8 @@ logs/
 # Archivos de build
 dist/
 build/
+test-serve/
+Oteroweb.zip
 
 # Backups de base de datos (sensible)
 backups/*.sql

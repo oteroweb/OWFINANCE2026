@@ -8,6 +8,29 @@ Este archivo define como debe operar un agente de IA en este workspace para:
 
 Fecha de referencia de esta guia: 2026-03-01.
 
+## Inicio de sesion obligatorio (workspace state)
+
+**TODO agente (OpenCode, Claude Code, Copilot, Paseo) DEBE leer estos archivos al iniciar sesion:**
+
+1. **`.owf/STATE.md`** — Estado actual: que esta activo (SDD change, Paseo epic, hotfix), que esta bloqueado, que sigue.
+2. **`.owf/TASKS.md`** — Task board unificado con prioridades.
+3. **`.owf/CONTEXT.md`** — Contexto rico: decisiones, archivos criticos, gotchas.
+
+**Trigger keywords (palabras clave del usuario):** Cuando el usuario diga "status", "estado", "continua", "resume", "en que quedamos", "what's the status", o "context" → el agente DEBE leer los 3 archivos `.owf/` y responder con el estado consolidado.
+
+Reglas:
+- Al **iniciar** sesion: leer los 3 archivos. Retomar donde el agente anterior dejo.
+- Al **terminar** sesion (o antes de entregar control): actualizar `.owf/STATE.md` con lo que se hizo y que sigue.
+- Al **completar/bloquear** una tarea: actualizar `.owf/TASKS.md`.
+- Al **descubrir** un gotcha, decision critica, o archivo sensible: agregar a `.owf/CONTEXT.md`.
+- Los archivos `.owf/` son git-tracked — viajan con el repo para que cualquier maquina/agente los lea.
+- **SDD changes** activos se referencian desde `.owf/STATE.md` con path a `openspec/changes/{name}/`.
+- **Paseo epics** activos se referencian desde `.owf/STATE.md` con path al plan file.
+- Cuando un SDD change o Paseo epic termina, marcarlo como completado en `.owf/STATE.md` y `.owf/TASKS.md`.
+- **IDs unicos**: toda tarea usa OWF-NNN. IDs legacy (DS-*, TECH-*, MANUAL-*, BUG-*) se mapean en `.owf/STATE.md`.
+- **Engram sync**: despues de actualizar `.owf/`, ejecutar `.owf/sync-engram.sh push` para que otros agentes locales vean el cambio. Al iniciar sesion, `.owf/sync-engram.sh pull` si no hay archivos `.owf/` locales.
+- **No crear task boards paralelos**: TASKS_LEDGER.md y otros archivos legacy son de solo lectura. Solo `.owf/TASKS.md` es la fuente de verdad activa.
+
 ## Alcance del workspace
 Este workspace contiene dos repositorios Git separados:
 - `OWFINANCEBackend2025` (Laravel API)

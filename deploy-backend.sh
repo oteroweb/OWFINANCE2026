@@ -1,6 +1,13 @@
 #!/usr/bin/env bash
+# =============================================================================
 # deploy-backend.sh — Deploy backend por rsync+SSH
-# Uso: ./deploy-backend.sh [stage|dev]   (default: stage)
+# =============================================================================
+# Uso: ./deploy-backend.sh <dev|stage|prod>   (default: stage)
+#
+# Configuracion:
+#   Local:   .deploy/<env>.sh   (gitignored)
+#   CI/CD:   Variables de entorno inyectadas por GitHub Actions desde Secrets
+# =============================================================================
 set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -9,23 +16,32 @@ source "$ROOT_DIR/deploy-notify-lib.sh"
 
 ENV="${1:-stage}"
 
-REMOTE_HOST="178.156.160.70"
-SSH_OPTS="-o StrictHostKeyChecking=accept-new -o ConnectTimeout=15 -o BatchMode=yes"
+# ── Cargar configuracion del entorno ─────────────────────────────────────────
+DEPLOY_CONFIG_FILE="$ROOT_DIR/.deploy/${ENV}.sh"
+if [ -f "$DEPLOY_CONFIG_FILE" ]; then
+  # shellcheck source=/dev/null
+  source "$ROOT_DIR/.deploy/config.sh"
+  owf_deploy_load_config "$ENV" || { echo "Error cargando config para '$ENV'" >&2; exit 1; }
+  owf_deploy_validate || exit 1
+else
+  if [ -z "${DEPLOY_HOST:-}" ] || [ -z "${DEPLOY_USER:-}" ]; then
+    echo "Error: no existe .deploy/${ENV}.sh y no hay variables DEPLOY_* en el entorno." >&2
+    echo "  Local:  copia .deploy/example.sh → .deploy/${ENV}.sh" >&2
+    echo "  CI/CD:  configura los Secrets DEPLOY_HOST, DEPLOY_USER, etc." >&2
+    exit 1
+  fi
+fi
+
+# ── Alias locales (compatibilidad con el resto del script) ───────────────────
+REMOTE_HOST="$DEPLOY_HOST"
+REMOTE_USER="$DEPLOY_USER"
+SSH_OPTS="${DEPLOY_SSH_OPTS:-}"
+BRANCH="$DEPLOY_BRANCH"
+SITE_URL="$DEPLOY_SITE_URL"
+REMOTE_DIR="$DEPLOY_BACKEND_DIR"
 BACKEND_DIR="$(cd "$(dirname "$0")/OWFINANCEBackend2025" && pwd)"
 
-if [ "$ENV" = "stage" ]; then
-  REMOTE_USER="appfinan1"
-  BRANCH="stage"
-  SITE_URL="https://appfinanzas.blockshift.website"
-elif [ "$ENV" = "dev" ]; then
-  REMOTE_USER="appfinan2"
-  BRANCH="dev"
-  SITE_URL="https://appfinanzasdev.blockshift.website"
-else
-  echo "Uso: $0 [stage|dev]"; exit 1
-fi
-REMOTE_DIR="OWFINANCEBACKEND2025"
-
+# ── Colores ──────────────────────────────────────────────────────────────────
 RED='\033[0;31m'; GREEN='\033[0;32m'; CYAN='\033[0;36m'; NC='\033[0m'
 info()    { echo -e "${CYAN}▶${NC} $*"; }
 success() { echo -e "${GREEN}✔${NC} $*"; }
@@ -38,12 +54,6 @@ OPS_STATUS_SUMMARY=""
 POST_DEPLOY_OPS_SUMMARY=""
 DEPLOY_VERIFY_SUMMARY=""
 DEPLOY_VERIFY_URL="${SITE_URL}/up"
-
-if [ "$ENV" = "stage" ]; then
-  export OWF_STAGE_FRONTEND_URL="${OWF_STAGE_FRONTEND_URL:-${SITE_URL}/app/}"
-  export OWF_STAGE_API_BASE_URL="${OWF_STAGE_API_BASE_URL:-${SITE_URL}/api/v1}"
-  export OWF_STAGE_HEALTH_URL="${OWF_STAGE_HEALTH_URL:-${SITE_URL}/up}"
-fi
 
 on_exit_notify() {
   local status=$?
@@ -89,7 +99,6 @@ owf_send_telegram_notification "$ROOT_DIR" "progress" "$TELEGRAM_NOTIFY_TITLE" "
 cd "$BACKEND_DIR"
 info "Directorio: $BACKEND_DIR"
 
-# Verificar que estamos en la rama correcta
 CURRENT_BRANCH=$(git branch --show-current)
 if [ "$CURRENT_BRANCH" != "$BRANCH" ]; then
   info "Cambiando de branch $CURRENT_BRANCH → $BRANCH"

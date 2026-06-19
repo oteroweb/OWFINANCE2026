@@ -61,6 +61,7 @@ NOTAS: INTEGRACIÓN DESIGN SYSTEM COMPLETA (Fases 0-5). Todas las tareas DS-01 a
 - BUG-007 (casing User/user/Admin/admin) resuelto renombrando directorios en Git
 - Lint: limpio. vue-tsc: sin errores nuevos.
 SERVIDOR: Backend http://localhost:8000 ✅ | Frontend http://localhost:3000/app/ ✅ | IP local 192.168.31.107 ✅
+ESTADO DE GUARDADO: Todos los cambios están en working directory (no se hizo push remoto).
 Próximo: QA en browser, deploy a dev, o continuar con tareas no-DS (MANUAL-001, TECH-001, etc.).
 
 ### TASK-EVAL-SISTEMA: Evaluación + reestructuración de infraestructura de agentes

@@ -1,3 +1,22 @@
+# CLAUDE.md — Claude Code Instructions for OWFINANCE2026
+
+## Session Start (ALWAYS READ FIRST)
+
+Before any work, read these 3 files to know the current project state:
+
+1. **`.owf/STATE.md`** — Active work, blockers, next steps
+2. **`.owf/TASKS.md`** — Unified task board (OWF-NNN IDs)
+3. **`.owf/CONTEXT.md`** — Decisions, critical files, gotchas
+
+Rules:
+- All tasks use OWF-NNN IDs. Legacy IDs (DS-*, TECH-*, BUG-*) mapped in STATE.md.
+- Before ending session: update `.owf/STATE.md` with what was done and what's next.
+- After updating `.owf/`: run `.owf/sync-engram.sh push` to sync to Engram.
+- On new machine or fresh session: run `.owf/sync-engram.sh pull` first.
+- `.owf/TASKS.md` is the ONLY active task board. `TASKS_LEDGER.md` is read-only legacy.
+
+---
+
 # Agent Teams Lite — Orchestrator Instructions
 
 Add this section to your existing `~/.claude/CLAUDE.md` or project-level `CLAUDE.md`.

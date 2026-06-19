@@ -42,14 +42,14 @@
 | **OWF-005** | [ ] | P1 | ⚪ | infra | adhoc | — | GitHub Secrets configurados por entorno | — | — |
 | **OWF-006** | [ ] | P1 | ⚪ | infra | adhoc | — | Probar deploy stage end-to-end | — | — |
 | **OWF-007** | [x] | P1 | ⚪ | feat | migrated | DS-32, TECH-LP-02 | Billetera implicita Lite (auto-crear/seleccionar account_id) | claude-code | 2026-06-10 |
-| **OWF-008** | [ ] | P1 | ⚪ | feat | migrated | DS-33, TECH-LP-04 | Transicion Lite↔Pro sin perdida de datos | — | — |
-| **OWF-009** | [ ] | P2 | ⚪ | feat | migrated | DS-34 | Rutas Pro restantes (super-grid, jars mgmt, settings, analisis) | — | — |
-| **OWF-010** | [~] | P1 | ⚪ | infra | migrated | DS-51, TECH-002 | Tests Frontend (Vitest + Playwright) | claude-code | — |
+| **OWF-008** | [x] | P1 | ⚪ | feat | migrated | DS-33, TECH-LP-04 | Transicion Lite↔Pro: AppShell recomputa mode reactivamente. Config toggle PATCH /user/settings. Sin pérdida de datos (backend persiste). | claude-code | 2026-06-19 |
+| **OWF-009** | [x] | P2 | ⚪ | feat | migrated | DS-34 | Rutas Pro: /user/settings alias→config. BottomNavMobile 5 tabs Pro mobile. Sidebar Pro desktop. Todas las rutas ya existentes (jars,analysis,debts,dreams). | claude-code | 2026-06-19 |
+| **OWF-010** | [x] | P1 | ⚪ | infra | migrated | DS-51, TECH-002 | Playwright ESM config + baseURL. 11 suites e2e. Auth/design/nav tests con skip guard (PLAYWRIGHT_TEST_EMAIL). 19/19 pasan sin creds, 1 skipped. | claude-code | 2026-06-19 |
 | **OWF-011** | [ ] | P2 | ⚪ | feat | migrated | TECH-001 | UI Configuracion Asesor IA (+ endpoints CRUD) | — | — |
-| **OWF-012** | [ ] | P2 | ⚪ | feat | migrated | TECH-003 | Flujo Password Reset | — | — |
+| **OWF-012** | [x] | P2 | ⚪ | feat | migrated | TECH-003 | Flujo Password Reset: ForgotPasswordPage + ResetPasswordPage (token+email desde URL). Backend: Password::sendResetLink + Password::reset. Rutas: throttle:5,1. LoginPage → router-link /forgot-password. MAIL_MAILER=log en prod (no SMTP aún). | claude-code | 2026-06-19 |
 | **OWF-013** | [ ] | P2 | ⚪ | infra | adhoc | — | GitHub Actions deploy.yml multi-environment | — | — |
-| **OWF-016** | [ ] | P2 | ⚪ | feat | adhoc | — | Redirect segun rol (logueados en `/` → `/user/home` o `/admin`) | — | — |
-| **OWF-017** | [ ] | P2 | ⚪ | feat | adhoc | — | Verificar rutas publicas desde LAN | — | — |
+| **OWF-016** | [x] | P2 | ⚪ | feat | adhoc | — | Redirect según rol ya implementado en router beforeEach: `/` y `/login` redirigen a `/user/home` o `/admin` según auth.role. | claude-code | 2026-06-19 |
+| **OWF-017** | [x] | P2 | ⚪ | feat | adhoc | — | Rutas públicas verificadas. PHP proxy en / sirve app/index.html para todo. Router base=/ → owfinances.com/ → LandingPage ✓. /funciones, /planes, /login ok. Tests clean-user pasan contra prod. | claude-code | 2026-06-19 |
 | **OWF-018** | [ ] | P3 | ⚪ | feat | adhoc | — | Responsive testing en mobile | — | — |
 | **OWF-019** | [ ] | P2 | ⚪ | feat | migrated | DS-52, BUG-006 | i18n ES/EN del copy nuevo | — | — |
 | **OWF-020** | [ ] | P2 | ⚪ | infra | migrated | OPS-001 | Sincronizar DB Stage → Dev | — | — |
@@ -60,9 +60,9 @@
 | **OWF-025** | [ ] | P3 | ⚪ | fix | migrated | BUG-003 | Saldo post-import no refleja movimientos | — | — |
 | **OWF-026** | [ ] | P3 | ⚪ | fix | migrated | BUG-004 | Falta suite pruebas mixtas bulk | — | — |
 | **OWF-027** | [ ] | P3 | ⚪ | fix | migrated | BUG-005 | "Records per page: All" ignora filtro | — | — |
-| **OWF-028** | [ ] | P3 | ⚪ | fix | migrated | BUG-007 | Menubar rutas duplicadas en dev | — | — |
+| **OWF-028** | [x] | P3 | ⚪ | fix | migrated | BUG-007 | Menubar rutas duplicadas: eliminados 6 liquid duplicados + 5 layouts legacy. AppShell único. Nav Pro mobile fix (7→5 tabs, no-wrap). | claude-code | 2026-06-19 |
 | **OWF-048** | [x] | P0 | 🔴 | fix | adhoc | — | Fix router DOM perdido al navegar — slot layout + default lite + Playwright 23/23 | opencode | 2026-06-10 |
-| **OWF-049** | [ ] | P2 | ⚪ | feat | adhoc | — | Cántaros con contexto rico: descripción, propósito, metadata ligada al perfil de usuario | — | — |
+| **OWF-049** | [x] | P2 | ⚪ | feat | adhoc | — | Campo description en Jar: tipo, mkJar, loadJarData (API→frontend), bulk-sync payload. UI: textarea 'Propósito' en card expandido (300 chars, autogrow). El asesor IA ya recibe description en su contexto de jars. | claude-code | 2026-06-19 |
 | **OWF-054** | [x] | P1 | 🔴 | fix | adhoc | — | Fix navegación router: pantalla en blanco (imports DynamicRoleLayout + IntersectionObserver re-observe + scrollBehavior reset) | 2026-06-11 |
 
 ## Completed
@@ -95,8 +95,15 @@
 | **OWF-051** | [x] | P1 | 🟡 | infra | adhoc | — | Merge dev→main + re-deploy: AI, health, user settings, 6 migraciones nuevas | claude-code | 2026-06-10 |
 | **OWF-052** | [x] | P2 | ⚪ | infra | adhoc | — | Arquitectura evaluada: proxy index.php funcional, symlink posible pero no urgente | claude-code | 2026-06-10 |
 
+| **OWF-055** | [x] | P1 | 🟡 | design | adhoc | — | Integración rediseño → layouts: LiteHeaderDesktop + LiteFloatingBottomNav + BottomNavMobile + ExpandedMenu canónicos. Borrados 6 duplicados liquid/. LiteDesktopLayout + LiteMobileLayout actualizados. TypeCheck limpio. | claude-code | 2026-06-19 |
+| **OWF-056** | [x] | P1 | 🟡 | design | adhoc | — | AppShell.vue: shell único Lite+Pro+Mobile. Reemplaza 4 layouts. q-layout wrapper + sidebar fixed + q-page-container. Router actualizado. TypeCheck limpio. Preview OK. | claude-code | 2026-06-19 |
+| **OWF-057** | [x] | P1 | ⚪ | feat | adhoc | — | AppPrefsSection en Config: modo Lite/Pro + tema + ocultar saldos. auth.updateSettings() (PATCH /user/settings, optimista). Plain CSS (sin SCSS). | claude-code | 2026-06-19 |
+| **OWF-058** | [x] | P1 | ⚪ | feat | adhoc | — | HomeView datos reales verificados: LiteHomeView ya usa GET /accounts/summary/global-balance + GET /transactions + GET /jars. HomeView.vue prioriza settings.layout_mode. | claude-code | 2026-06-19 |
+| **OWF-060** | [x] | P2 | ⚪ | refactor | adhoc | — | Limpieza layouts legacy: borrados DynamicRoleLayout, LiteDesktopLayout, LiteMobileLayout, ProLayout, LegacyLayout, DynamicHomePage, user_dashboard, components/views/LiteHomeView. MainLayout simplificado. 3 deploys prod OK. | claude-code | 2026-06-19 |
+| **OWF-059** | [x] | P1 | ⚪ | feat | adhoc | — | Onboarding automático: AppShell watch has_seen_onboarding → OnboardingFlow. onOnboardingDone → updateSettings({has_seen_onboarding:true}). | claude-code | 2026-06-19 |
+
 <!--
-  NEXT_ID: OWF-056
-  Proximo agente: usar OWF-055 para la primera tarea nueva.
+  NEXT_ID: OWF-061
+  Proximo agente: usar OWF-061 para la primera tarea nueva.
   Incrementar NEXT_ID al final.
 -->
