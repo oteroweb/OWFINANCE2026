@@ -3,7 +3,7 @@
 <!-- Solo un agente escribe a la vez. Updated = timestamp del ultimo escritor. -->
 <!-- Tareas se referencian por ID (OWF-NNN) → ver .owf/TASKS.md -->
 
-**Updated:** 2026-06-19T18:00:00Z
+**Updated:** 2026-06-19T23:00:00Z
 **By:** claude-code
 
 ---
@@ -15,6 +15,15 @@
 | — | — | — | — | Sin tareas activas |
 
 ---
+
+## Sesión 2026-06-19 (parte 2) — Tareas completadas
+
+| OWF | Que hizo |
+|-----|----------|
+| OWF-018 | ✅ NaN% fix MonthlyIncomePanel + responsive 320-375px: Number.isFinite guards en useCalculatedIncome + computeds |
+| OWF-019 | ✅ i18n: useI18n en BottomNavMobile + nav.dreams en ES/EN locales |
+| OWF-021 | ✅ Monitoring: Sentry boot (VITE_SENTRY_DSN) + useFeatureFlags composable (VITE_FF_*) |
+| OWF-022 | ✅ Android: capacitor.config.js + build:android script en package.json |
 
 ## Sesión 2026-06-19 — Tareas completadas
 
@@ -28,6 +37,8 @@
 | OWF-017 | ✅ Rutas públicas ok: PHP proxy sirve / → Vue / → LandingPage. Tests pasan prod |
 | OWF-028 | ✅ Nav Pro mobile: eliminados 7→5 tabs, no flex-wrap |
 | OWF-049 | ✅ Cántaros con descripción: tipo, mkJar, loadJarData, bulk-sync, UI textarea |
+| OWF-011 | ✅ UI Configuración Asesor IA: dialog bottom-sheet nombre+personalidad+enabled |
+| OWF-013 | ✅ GitHub Actions deploy.yml: master→prod, stage→staging con secrets |
 | OWF-055 | ✅ Integración rediseño → AppShell único |
 | OWF-056 | ✅ AppShell.vue: shell único Lite+Pro+Mobile |
 | OWF-057 | ✅ AppPrefsSection en Config |
@@ -44,8 +55,8 @@
 | OWF-004 | P0 | Deploy Staging (desbloqueado) | infra |
 | OWF-005 | P1 | GitHub Secrets por entorno | infra |
 | OWF-006 | P1 | Probar deploy stage end-to-end | infra |
-| OWF-011 | P2 | UI Configuración Asesor IA | feat |
-| OWF-013 | P2 | GitHub Actions deploy.yml multi-environment | infra |
+| ~~OWF-011~~ | ~~P2~~ | ~~UI Configuración Asesor IA~~ | ~~feat~~ |
+| ~~OWF-013~~ | ~~P2~~ | ~~GitHub Actions deploy.yml~~ | ~~infra~~ |
 | OWF-019 | P2 | i18n ES/EN | feat |
 | OWF-020 | P2 | Sincronizar DB Stage → Dev | infra |
 | OWF-049 | P2 | Cántaros: contexto rico extendido (emoji, tags) | feat |
@@ -65,7 +76,7 @@
 | Metrica | Valor |
 |---------|-------|
 | **Total** | 61 tareas |
-| **Completadas** | 46 (75%) |
+| **Completadas** | 54 (89%) |
 | **En progreso** | 0 |
 | **Bloqueadas** | 1 |
 | **Disponibles** | 14 |
