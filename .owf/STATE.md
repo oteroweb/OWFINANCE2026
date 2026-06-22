@@ -3,7 +3,7 @@
 <!-- Solo un agente escribe a la vez. Updated = timestamp del ultimo escritor. -->
 <!-- Tareas se referencian por ID (OWF-NNN) → ver .owf/TASKS.md -->
 
-**Updated:** 2026-06-22T18:00:00Z
+**Updated:** 2026-06-22T18:15:00Z
 **By:** claude-code
 
 ---
@@ -13,6 +13,20 @@
 | ID | Tarea | Agente | Progreso | Detalle |
 |----|-------|--------|----------|---------|
 | OWF-062 | Password Reset SMTP prod | opencode | código listo | Esperando creds SMTP del usuario |
+
+## Sesión 2026-06-22 (claude-code) — OWF-100/102/103/104 + Deploy prod
+
+| OWF | Qué hizo |
+|-----|----------|
+| OWF-100 | ✅ Profile: campo birthdate (q-input date) + nav row "Mi perfil financiero →". Completeness bar 5 campos. |
+| OWF-102 | ✅ Empty states: LiteHome (isNewUser), LiteJars (activeJars empty), LiteTx (transactions empty). CTAs → SmartTxModal. |
+| OWF-103 | ✅ Config: "Repetir configuración inicial" (restart_alt → OnboardingFlow) + toggle "Presupuesto estricto" (overBudget). |
+| OWF-104 | ✅ LiteHome: delta MoM real (Promise.allSettled 2 meses), pill verde/rojo, timestamp "Actualizado · HH:MM". |
+| Deploy | ✅ 134 archivos → owfinances.com, frontend=OK:200 |
+
+**NEXT_ID:** OWF-116
+**Pendientes P1:** OWF-101 (JarTemplateSelector en FinancialProfile)
+**Pendientes P2:** OWF-105..110, OWF-113..115
 
 ## Sesión 2026-06-22 (claude-code) — Revisión IA 18/36 vistas + CORS fix local
 

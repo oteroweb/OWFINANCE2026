@@ -96,11 +96,11 @@
 | **OWF-098** | [x] | P2 | ⚪ | feat | adhoc | — | PeriodNavigator.vue (nuevo): grain dropdown agrupado (Cortos/Estándar/Largos/Especiales), prev/next, label pill con date picker adaptativo (mes/quarter/semester/year/day grids), "Hoy" button. + setAnchor() en period.ts store. | claude-code | 2026-06-22 |
 | **OWF-099** | [x] | P2 | ⚪ | feat | adhoc | — | LiteTransactionsView: reemplaza MonthBar+TypeChips por PeriodNavigator. Tipo movido al interior del panel (segmented). loadTransactions usa period store (watch signature). Eliminado tipo "Cántaros". | claude-code | 2026-06-22 |
 
-| **OWF-100** | [ ] | P1 | ⚪ | feat | adhoc | — | ProfileRoute (V-07): añadir phone + birthdate fields, link "Ir a mi perfil financiero" al fondo | — | — |
+| **OWF-100** | [x] | P1 | ⚪ | feat | adhoc | — | ProfileRoute (V-07): campo birthdate (q-input type=date) + link "Mi perfil financiero →" nav row. Completeness bar ahora cuenta 5 campos. Deploy prod OK. | claude-code | 2026-06-22 |
 | **OWF-101** | [ ] | P1 | ⚪ | feat | adhoc | — | FinancialProfileRoute (V-08): JarTemplateSelector dentro de Card "Mis cántaros", sticky save button, JarsTable editable in-page | — | — |
-| **OWF-102** | [ ] | P1 | ⚪ | feat | adhoc | — | EntryGate / Empty States: pantalla vacía con CTA para usuario sin datos (zero balance, sin jars, sin movimientos) | — | — |
-| **OWF-103** | [ ] | P2 | ⚪ | feat | adhoc | — | Config: row "Repetir configuración inicial" → re-trigger OnboardingFlow + toggle overBudget en Notificaciones | — | — |
-| **OWF-104** | [ ] | P2 | ⚪ | feat | adhoc | — | LiteHomeView: delta MoM en HeroBalance ("vs mes ant."), timestamp "asOf" en balance hero | — | — |
+| **OWF-102** | [x] | P1 | ⚪ | feat | adhoc | — | EntryGate: LiteHomeView (isNewUser computed), LiteJarsView (activeJars empty), LiteTransactionsView (transactions empty). CTAs abren SmartTxModal. Jars CTA pre-selecciona tab Ingreso. Deploy prod OK. | claude-code | 2026-06-22 |
+| **OWF-103** | [x] | P2 | ⚪ | feat | adhoc | — | Config: row "Repetir configuración inicial" (restart_alt icon → showOnboarding=true) + toggle "Presupuesto estricto" (overBudget en prefs section). Eliminado duplicado en notificaciones. Deploy prod OK. | claude-code | 2026-06-22 |
+| **OWF-104** | [x] | P2 | ⚪ | feat | adhoc | — | LiteHomeView: delta MoM real con Promise.allSettled (mes actual vs anterior), pill verde/rojo con arrow icon. Timestamp "Actualizado · HH:MM" bajo hero. Deploy prod OK. | claude-code | 2026-06-22 |
 | **OWF-105** | [ ] | P2 | ⚪ | feat | adhoc | — | LiteJarsView: JarsFullGrid layout (2-3 col card grid) reemplaza lista vertical — alineación con spec JarsRoute.jsx | — | — |
 | **OWF-106** | [ ] | P2 | ⚪ | feat | adhoc | — | ProHome: AccountsPanel lateral derecho plegable con lista de cuentas y balances | — | — |
 | **OWF-107** | [ ] | P2 | ⚪ | feat | adhoc | — | Onboarding "recommend" stage: muestra plan IA sugerido por main_goal, selector de alternativas de template | — | — |

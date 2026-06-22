@@ -84,9 +84,9 @@ Cada vista tiene **tres niveles de verificación independientes**:
 
 | ID | Pantalla | Ruta URL | Estado impl. | 🤖 PW | 🔍 IA | 👤 VB | Notas / Gaps |
 |----|----------|----------|--------------|-------|-------|-------|--------------|
-| V-28 | Landing | `/` | 🔶 | ✅ | ⏳ | ⏳ | Funcional. Hero sin mockup de la app (OWF-109) |
-| V-29 | Planes/Pricing | `/planes` | 🔶 | ⏳ | ⏳ | ⏳ | Tabla básica. Spec tiene comparativa detallada (OWF-110) |
-| V-30 | Matriz Lite/Pro | `/matrix` | 🔶 | ⏳ | ⏳ | ⏳ | Fidelidad baja vs spec |
+| V-28 | Landing | `/` | ✅ | ✅ | ✅ | ⏳ | Hero con mockup de app ✓, nav ✓, CTA ✓ — mejor de lo esperado |
+| V-29 | Planes/Pricing | `/planes` | ✅ | ✅ | ✅ | ⏳ | 3 cards Gratis/Plus/Familiar ✓, toggle mensual/anual ✓, "Recomendado" badge ✓ |
+| V-26 | Registro | `/register` (tab) | 🔶 | ✅ | ✅ | ⏳ | Split panel ✓, campos nombre/correo/pass ✓. Falta strength meter |
 
 ---
 
@@ -130,6 +130,9 @@ Pendientes IA: V-11..13 (Pro), V-15 (Pro), V-23..24 (Onboarding modal),
 | 2026-06-22 | V-14,16..22 Mobile | 🔍 IA | ✅ Pass | Claude | preview screenshots mobile viewport |
 | 2026-06-22 | V-25 Login | 🔍 IA | ✅ Pass | Claude | Split hero + form verificado en preview |
 | 2026-06-22 | C-05 PeriodNavigator | 🔍 IA | ✅ Pass | Claude | Wired en LiteTxView, grain dropdown funcional |
+| 2026-06-22 | V-28 Landing | 🔍 IA | ✅ Pass | Claude | prod owfinances.com — hero mockup app ✓ |
+| 2026-06-22 | V-29 Planes | 🔍 IA | ✅ Pass | Claude | prod owfinances.com — 3 cards ✓, toggle mensual/anual ✓ |
+| 2026-06-22 | V-26 Register | 🔍 IA | ✅ Pass | Claude | prod owfinances.com — split panel ✓, campos ✓ |
 
 ---
 
