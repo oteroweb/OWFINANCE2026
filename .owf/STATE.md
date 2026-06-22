@@ -3,7 +3,7 @@
 <!-- Solo un agente escribe a la vez. Updated = timestamp del ultimo escritor. -->
 <!-- Tareas se referencian por ID (OWF-NNN) → ver .owf/TASKS.md -->
 
-**Updated:** 2026-06-22T00:00:00Z
+**Updated:** 2026-06-22T18:00:00Z
 **By:** claude-code
 
 ---
@@ -13,6 +13,17 @@
 | ID | Tarea | Agente | Progreso | Detalle |
 |----|-------|--------|----------|---------|
 | OWF-062 | Password Reset SMTP prod | opencode | código listo | Esperando creds SMTP del usuario |
+
+## Sesión 2026-06-22 (claude-code) — Revisión IA 18/36 vistas + CORS fix local
+
+**EPIC_VIEWS.md:** `.owf/EPIC_VIEWS.md` creado — tabla viva con 3 cols de verificación (🤖 PW / 🔍 IA / 👤 VB).
+- 🔍 IA: 18/36 vistas verificadas en preview (V-01..10, V-14, V-16..22, V-25, C-05)
+- CORS backend: añadidos localhost:3000/3000 a `config/cors.php` para dev local
+- Pendiente IA: V-11..13 Pro, V-23..24 Onboarding modal, V-26..30 públicas, C-01..C-04
+
+**Sistema dual-check activo:**
+- Para marcar VB usuario: escribir "✅ VB V-XX" en el chat
+- Para revisar IA las vistas Pro: necesita usuario con plan='pro' en DB local
 
 ## Sesión 2026-06-22 (claude-code) — Épica completa + OWF-100..115 registradas
 
