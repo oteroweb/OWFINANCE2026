@@ -96,9 +96,23 @@
 | **OWF-098** | [x] | P2 | ⚪ | feat | adhoc | — | PeriodNavigator.vue (nuevo): grain dropdown agrupado (Cortos/Estándar/Largos/Especiales), prev/next, label pill con date picker adaptativo (mes/quarter/semester/year/day grids), "Hoy" button. + setAnchor() en period.ts store. | claude-code | 2026-06-22 |
 | **OWF-099** | [x] | P2 | ⚪ | feat | adhoc | — | LiteTransactionsView: reemplaza MonthBar+TypeChips por PeriodNavigator. Tipo movido al interior del panel (segmented). loadTransactions usa period store (watch signature). Eliminado tipo "Cántaros". | claude-code | 2026-06-22 |
 
+| **OWF-100** | [ ] | P1 | ⚪ | feat | adhoc | — | ProfileRoute (V-07): añadir phone + birthdate fields, link "Ir a mi perfil financiero" al fondo | — | — |
+| **OWF-101** | [ ] | P1 | ⚪ | feat | adhoc | — | FinancialProfileRoute (V-08): JarTemplateSelector dentro de Card "Mis cántaros", sticky save button, JarsTable editable in-page | — | — |
+| **OWF-102** | [ ] | P1 | ⚪ | feat | adhoc | — | EntryGate / Empty States: pantalla vacía con CTA para usuario sin datos (zero balance, sin jars, sin movimientos) | — | — |
+| **OWF-103** | [ ] | P2 | ⚪ | feat | adhoc | — | Config: row "Repetir configuración inicial" → re-trigger OnboardingFlow + toggle overBudget en Notificaciones | — | — |
+| **OWF-104** | [ ] | P2 | ⚪ | feat | adhoc | — | LiteHomeView: delta MoM en HeroBalance ("vs mes ant."), timestamp "asOf" en balance hero | — | — |
+| **OWF-105** | [ ] | P2 | ⚪ | feat | adhoc | — | LiteJarsView: JarsFullGrid layout (2-3 col card grid) reemplaza lista vertical — alineación con spec JarsRoute.jsx | — | — |
+| **OWF-106** | [ ] | P2 | ⚪ | feat | adhoc | — | ProHome: AccountsPanel lateral derecho plegable con lista de cuentas y balances | — | — |
+| **OWF-107** | [ ] | P2 | ⚪ | feat | adhoc | — | Onboarding "recommend" stage: muestra plan IA sugerido por main_goal, selector de alternativas de template | — | — |
+| **OWF-108** | [ ] | P3 | ⚪ | feat | adhoc | — | Tx Mobile: MonthNavigatorMobile compacto, TransactionFilters como bottom-sheet en viewport mobile | — | — |
+| **OWF-109** | [ ] | P3 | ⚪ | feat | adhoc | — | Landing page: hero actualizado con mockup real de la app (screenshot embed) | — | — |
+| **OWF-110** | [ ] | P3 | ⚪ | feat | adhoc | — | Pricing: tabla comparativa Lite vs Pro fiel al spec OW Finance - Planes.html | — | — |
+| **OWF-113** | [ ] | P2 | ⚪ | test | adhoc | — | Playwright: smoke tests profile (V-07), financial-profile (V-08), onboarding flow (V-23) | — | — |
+| **OWF-114** | [ ] | P2 | ⚪ | test | adhoc | — | Playwright: interaction tests PeriodNavigator (grain change, step, picker), FilterPanel, SmartTxModal 4 modos | — | — |
+| **OWF-115** | [ ] | P3 | ⚪ | test | adhoc | — | Playwright: mobile viewport 390px tests para Home/Tx/Jars con Mobile Chrome project | — | — |
+
 <!--
-  NEXT_ID: OWF-100
-  Incrementar NEXT_ID al final.
+  NEXT_ID: OWF-116
 -->
 
 ## Completed

@@ -14,6 +14,15 @@
 |----|-------|--------|----------|---------|
 | OWF-062 | Password Reset SMTP prod | opencode | código listo | Esperando creds SMTP del usuario |
 
+## Sesión 2026-06-22 (claude-code) — Épica completa + OWF-100..115 registradas
+
+**Épica de vistas:** 30 pantallas inventariadas (V-01..V-30) + 6 componentes globales (C-01..C-06).
+- ✅ Cercanas al spec: V-05 Sueños, V-06 Deudas, V-12 Análisis Pro, V-18 Deudas Mobile, V-19 Sueños Mobile, V-25 Login
+- 🔶 Implementadas con gaps: V-01..V-04, V-07..V-11, V-13..V-17, V-20..V-24, V-26..V-30
+- 🔴 No implementadas: C-03 AccountsPanel Pro, C-06 EntryGate/Empty States
+- OWF-100..115: tareas nuevas registradas en TASKS.md (P1: 100-102; P2: 103-107,113-114; P3: 108-110,115)
+- NEXT_ID = OWF-116
+
 ## Sesión 2026-06-22 (claude-code) — Continuación: OWF-097/098/099
 
 | OWF | Que hizo |
