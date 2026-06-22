@@ -3,7 +3,7 @@
 <!-- Solo un agente escribe a la vez. Updated = timestamp del ultimo escritor. -->
 <!-- Tareas se referencian por ID (OWF-NNN) → ver .owf/TASKS.md -->
 
-**Updated:** 2026-06-19T23:00:00Z
+**Updated:** 2026-06-22T00:00:00Z
 **By:** claude-code
 
 ---
@@ -12,7 +12,105 @@
 
 | ID | Tarea | Agente | Progreso | Detalle |
 |----|-------|--------|----------|---------|
-| — | — | — | — | Sin tareas activas |
+| OWF-062 | Password Reset SMTP prod | opencode | código listo | Esperando creds SMTP del usuario |
+
+## Sesión 2026-06-22 (claude-code) — Continuación: OWF-097/098/099
+
+| OWF | Que hizo |
+|-----|----------|
+| OWF-097 | ✅ OnboardingFlow.vue: modal centrado 540px (no maximized), stage "intro" con avatar IA animado + fases preview + badges, auto-advance chips 280ms, done con completeness ring (SVG %) + level badge (Semilla/Brote/Árbol). TypeScript clean. |
+| OWF-098 | ✅ PeriodNavigator.vue (nuevo): grain dropdown agrupado (Cortos/Estándar/Largos/Especiales), prev/next steps, label pill con picker adaptativo por grain (mes grid / quarter grid / semester grid / year grid / date input), "Hoy" button solo cuando no es current. + setAnchor() en period.ts. |
+| OWF-099 | ✅ LiteTransactionsView: reemplaza MonthBar+TypeChipsRow con PeriodNavigator. Tipo (Todas/Ingresos/Gastos) ahora dentro del panel como segmented control. loadTransactions usa buildPeriodParams() derivado del period store. watch(period.signature) reactivo. Eliminado tipo "Cántaros" (no está en spec). |
+| NEXT_ID | OWF-100 |
+
+## Sesión 2026-06-22 (claude-code) — Completadas
+
+| OWF | Que hizo |
+|-----|----------|
+| OWF-087 | ✅ LiteHomeView: greeting header "Hola, {nombre}" + toggle ocultar saldos + botón notificaciones. CSS icon-btn. |
+| OWF-088 | ✅ Config: "Cuentas vinculadas" rota a /user/accounts. "Divisa predeterminada" en sección Visualización con chevron a Cuentas. |
+| OWF-089 | ✅ Profile: avatar cam button (UI), badge Verificado (email_verified_at), secciones separadas (Datos / Contacto+Ubicación / Seguridad), campos city/country/occupation añadidos. |
+| OWF-090 | ✅ LiteJarsView: indicador ⚠️ en jar-row cuando balance<0 o progress>100. Edit sheet (nombre/%, color). Delete con confirm dialog. |
+| OWF-091 | ✅ Dreams: gradient ya estaba implementado (rgba purple/pink). Verificado sin cambio. |
+| OWF-092 | ✅ Debts: status badge con ícono (warning/check_circle) en summary card hero. CSS debts-status-badge. |
+| OWF-093 | ✅ Financial Profile: timestamp "Actualizado hace X días" visible bajo subtitle. |
+| OWF-094 | ✅ Expense Analysis Pro: hero narrativo "En {mes} registraste X movimientos. Gastaste $Y". Eliminados heroTitle/heroCopy. |
+| NEXT_ID | OWF-095 |
+
+## Sesión 2026-06-21 (claude-code) — Completadas
+
+| OWF | Que hizo |
+|-----|----------|
+| OWF-086 | ✅ ProAnalisis: 3-col grid (280px Vista sidebar | 1fr donut+toplist | 340px budget+insight). budgetRows + insightJar computeds. CSS pro-nav-grid, pro-card, budget-list, top-list, pro-insight. Deploy prod OK. |
+
+## Sesión 2026-06-20 (claude-code — continuación 2) — Completadas
+
+| OWF | Que hizo |
+|-----|----------|
+| OWF-080 | ✅ Config Pro: heading reemplazado (t-eyebrow + h1 "Preferencias"), q-tabs restaurados. Stitch pill tabs revertidos. Deploy prod OK. |
+| OWF-081 | ✅ LiteTransactionsView: type chips (Todas/Ingresos/Gastos/Cántaros) movidos a fila inline siempre visible. MonthBar prev/next navigation. Tipo "Cántaros" nuevo (category=Jar). Deploy prod OK. |
+| OWF-082 | ✅ Análisis: Pro heading "Navegador financiero" (t-eyebrow+h1). Lite donut CSS conic-gradient de distribución por cántaro con leyenda. Deploy prod OK. |
+| OWF-083 | ✅ Stitch archivado: todo en _archive/stitch-NO-USAR/ (carpeta + zip + skill + docs + html-exports). _archive/ en .gitignore. |
+
+## Sesión 2026-06-20 (claude-code — continuación) — Completadas
+
+| OWF | Que hizo |
+|-----|----------|
+| OWF-070 backend | ✅ DreamController + DebtController: soporte `per_page`, `sort_by`, `descending` query params. Meta siempre calculado sobre ALL (no el subset paginado). 92 tests pasan. Deploy prod OK. |
+| CHECK | ✅ Auditoría completa Dreams+Debts: DebtCard.vue verifica todos los campos (provider icon, status chip, installments, next_due). Nav (BottomNavMobile + LiteNavPill) tiene `/user/dreams` y `/user/debts`. |
+
+## Sesión 2026-06-20 (claude-code) — Completadas
+
+| OWF | Que hizo |
+|-----|----------|
+| OWF-077 | ✅ LiteHomeView: Dreams+Debts previews con datos reales del API (preview cards, progress bars, status chips). Deploy prod OK. |
+| OWF-078 | ✅ Dreams page: redesign completo (hero violeta gradiente, grid cards BEM, progress bars, token-driven). Deploy prod OK. |
+| OWF-079 | ✅ AsesorPage: redesign completo (header custom, chat bubbles BEM, typing dots, CTA pills, input bar token-driven, settings sheet). Deploy prod OK. |
+| OWF-064 | ✅ Bulk Import: account_name → account_id resuelto en TransactionBulkService antes de validación. 92 tests pasan. Deploy prod OK. |
+| OWF-069 | ✅ SmartTransactionModal global: modal Escribir/Voz/Foto/AutoIA montado en AppShell. QuickActionSheet ya no navega a /transactions. Fix P0 raíz. |
+| OWF-070 | ✅ Página Deudas completa: backend (migración debts, Debt model, DebtController CRUD+pay, rutas API) + frontend (DebtCard, index.vue con summary card roja, grupos Cashea/Otras, dialogs add/edit/pago/delete). Deploy prod OK. |
+| OWF-071 | ✅ Transacciones Lite: goToDetail() corregida → openDetail(tx) + TxDetailSheet (hero amount, tipo, categoría, cántaro, fecha, editar/eliminar). Auto-reload en owf:transaction-saved. Deploy prod OK. |
+| OWF-072 | ✅ Cántaros Lite: grid → lista vertical (spec), distribution strip, jar detail sheet (stats 2x2: %, asignado, disponible, uso), "Nuevo cántaro" inline form. Deploy prod OK. |
+| OWF-073 | ✅ Configuración: secciones Notificaciones (3 toggles → preferences.notifications), Seguridad (→ /user/profile), Cerrar sesión (destructivo), Exportar datos, section-labels agrupadores. Deploy prod OK. |
+| OWF-074 | ✅ Análisis Pro: jar strip (scroll horizontal gasto por cántaro, seleccionable), metric-grid 4-col en Pro mode. Deploy prod OK. |
+| OWF-075 | ✅ Exchange Rates widget en ProHomeView: carga /user_currencies → filas editables (rate update vía PUT). Solo visible si hay tasas configuradas. Deploy prod OK. |
+| OWF-076 | ✅ Notifications panel: bell → popover desktop (380px anclado) / bottom-sheet mobile. Items con tono (expense/income/warning/info), unread dot, mark-all-read. Montado en AppShell. Deploy prod OK. |
+
+---
+
+## Sesión 2026-06-20 — Auditoría funcional + de-drift board
+
+**Agente:** opencode. **Qué hizo:**
+- De-drift TASKS.md: OWF-019 (i18n), OWF-021 (Sentry+FF), OWF-022 (Android) confirmados en código y marcados `[x]`.
+- Auditoría funcional profunda (6 áreas) vía subagente. Hallazgos registrados como OWF-061..068.
+- **Resueltos y verificados esta sesión** (92 backend tests + vue-tsc + eslint limpios):
+  - OWF-061 (CRÍTICA) JARS race → `JarPercentLock` service + 8 sitios + 2 tests regresión
+  - OWF-063 (ALTA) Asesor IA → system prompt ahora inyecta jars+perfil (corrige OWF-049)
+  - OWF-065 Auth → ensureDefaultAccount idempotente en login
+  - OWF-066 JARS updateJar → guard willBeActive restaurado + test
+  - OWF-067 MonthlyIncomePanel/useCalculatedIncome → guards NaN
+  - OWF-062 (CRÍTICA) Password Reset → ResetPasswordNotification (URL→SPA) + config. **Código listo; falta creds SMTP en prod .env**
+- **Rediseño Stitch:** ya sustancialmente integrado (AppShell.vue + design-system.css tokens navy/cyan/Satoshi + Lite*View + LiteHeaderDesktop/NavPill). NO está pendiente desde cero. Lo que falta es fidelidad visual pixel-perfect + de-drift de docs (OWF-068).
+- **OWF-018 responsive:** infra confirmada (Playwright proyecto "Mobile Chrome"/Pixel 5 393px + e2e/lite-shell.spec.ts). NaN guard (OWF-067) ya aplicado.
+
+### Hallazgos auditoría (severidad)
+
+| OWF | Sev | Área | Hallazgo | Estado |
+|-----|-----|------|----------|--------|
+| OWF-061 | 🔴 CRÍTICA | Jars | Race condition suma %: 0 lockForUpdate → concurrent requests persisten >100% | ✅ resuelto |
+| OWF-062 | 🔴 CRÍTICA | Auth | Password reset: MAIL_MAILER=log → email nunca llega en prod | 🟡 código listo, falta creds SMTP |
+| OWF-063 | 🟡 ALTA | Asesor IA | Contexto rico (jars+perfil) en cache pero NO en system prompt | ✅ resuelto |
+| OWF-064 | ⚪ MEDIA | Bulk import | account_name ignorado en income/expense | ✅ resuelto |
+| OWF-065 | ⚪ MEDIA | Auth | createDefaultAccount solo en register, no en login | ✅ resuelto |
+| OWF-066 | ⚪ MEDIA | Jars | updateJar validación willBeActive comentada | ✅ resuelto |
+| OWF-067 | ⚪ BAJA | UI | formatCurrency sin guard NaN | ✅ resuelto |
+| OWF-068 | ⚪ BAJA | Docs | docs ui-ux referencian archivos borrados | pendiente |
+
+### Rediseño Stitch — estado real
+
+- **Integrado:** AppShell.vue (shell único), tokens navy `#1E3A8A`/cyan `#0EA5E9`/Satoshi/DM Sans en `src/css/design-system.css`+`theme.scss`, vistas Lite (`LiteHomeView`, `LiteJarsView`, `LiteTransactionsView`), `LiteHeaderDesktop`, `LiteNavPill`, `ExpandedMenu`.
+- **Pendiente/incierto:** fidelidad pixel-perfect vs kit (requiere correr app), vistas Pro, mobile kit parity.
+- **Stale:** docs `08-11` citan `UserLayout.vue`/`user_dashboard.vue`/`DynamicRoleLayout.vue` (borrados en OWF-056/060).
 
 ---
 
@@ -50,16 +148,19 @@
 
 ## Pending (por prioridad)
 
+> 061/063/065/066/067 ya resueltos — ver "Sesión 2026-06-20 — Auditoría" arriba.
+> 069–076 resueltos por claude-code (verificados contra git commits 58222f3→c00a02f).
+
 | ID | Pri | Tarea | Type |
 |----|-----|-------|------|
-| OWF-004 | P0 | Deploy Staging (desbloqueado) | infra |
+| OWF-062 | P0 | Password Reset SMTP prod (código listo, falta creds) | fix |
+| OWF-004 | P0 | Deploy Staging (bloqueado SSH dev/stage) | infra |
 | OWF-005 | P1 | GitHub Secrets por entorno | infra |
 | OWF-006 | P1 | Probar deploy stage end-to-end | infra |
-| ~~OWF-011~~ | ~~P2~~ | ~~UI Configuración Asesor IA~~ | ~~feat~~ |
-| ~~OWF-013~~ | ~~P2~~ | ~~GitHub Actions deploy.yml~~ | ~~infra~~ |
-| OWF-019 | P2 | i18n ES/EN | feat |
 | OWF-020 | P2 | Sincronizar DB Stage → Dev | infra |
-| OWF-049 | P2 | Cántaros: contexto rico extendido (emoji, tags) | feat |
+| OWF-068 | P3 | De-drift docs ui-ux | docs |
+| OWF-068 | P3 | De-drift docs ui-ux | docs |
+| OWF-018 | P3 | Responsive testing mobile (infra confirmada) | feat |
 
 ---
 
@@ -73,24 +174,25 @@
 
 ## Stats
 
-| Metrica | Valor |
+| Métrica | Valor |
 |---------|-------|
-| **Total** | 61 tareas |
-| **Completadas** | 54 (89%) |
-| **En progreso** | 0 |
-| **Bloqueadas** | 1 |
-| **Disponibles** | 14 |
-| **Progreso** | ███████████████░░░░░ 75% |
+| **Total** | 82 tareas (excluye 7 sub-tareas de OWF-002) |
+| **Completadas** | 75 (91%) |
+| **En progreso** | 1 (OWF-062 espera creds SMTP) |
+| **Bloqueadas** | 3 (OWF-004/005/006 — SSH dev/stage) |
+| **Disponibles** | 3 (OWF-020/095: AccountFilter multi-select + gaps restantes) |
+| **Progreso** | ██████████████████░░ 91% |
 
 ---
 
 ## Next Up (por prioridad)
 
-1. **OWF-004/005/006** — Deploy Staging + GitHub Secrets
-2. **OWF-011** — UI Configuración Asesor IA
-3. **OWF-013** — GitHub Actions CI/CD
-4. **OWF-019** — i18n ES/EN
-5. **OWF-022** — Android build + PRO pages
+1. **OWF-062** — Password Reset: proveer creds SMTP/Resend → set MAIL_MAILER≠log en prod .env (1 línea)
+2. **OWF-068** — De-drift docs ui-ux (08-11) a estructura AppShell actual
+3. **OWF-064** — Bulk Import: account_name por fila (o documentar UX)
+4. **OWF-004/005/006** — Deploy Staging (bloqueado por SSH dev/stage)
+5. **Fidelidad visual Stitch** — comparar AppShell+Lite*View pixel-perfect vs kit (correr app)
+6. **OWF-018** — correr `npx playwright test --project="Mobile Chrome"` con dev server
 
 ---
 
@@ -98,6 +200,9 @@
 
 | Fecha | Agente | OWF | Que hizo |
 |-------|--------|-----|----------|
+| 2026-06-20 | opencode | reconciliación | Verificó 069-076 contra git (commits 58222f3→c00a02f): todos ✅. Reconcilió TASKS+STATE (071-076 [~]/[ ]→[x]), Stats 60→66 (89%). Sync engram. |
+| 2026-06-20 | claude-code | OWF-069..076 | SmartTransactionModal, Deudas, Transacciones Lite detail, Cántaros Lite, Config secciones, Análisis Pro, Exchange Rates, Notifications — todos deployados prod |
+| 2026-06-20 | opencode | OWF-061..067 | Auditoría funcional: JARS race (JarPercentLock), Asesor IA contexto, Auth idempotente, NaN guards, Password Reset (código listo, falta creds) |
 | 2026-06-19 | claude-code | OWF-008,009,028 | BottomNavMobile 5 tabs Pro mobile no-wrap, AppShell nav fix |
 | 2026-06-19 | claude-code | OWF-049 | Cántaros description: type+mkJar+loadJarData+payload+UI |
 | 2026-06-19 | claude-code | OWF-010,017 | Playwright ESM config + tests arreglados + URLs prod correctas |
