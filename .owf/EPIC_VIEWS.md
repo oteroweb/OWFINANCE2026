@@ -1,6 +1,6 @@
 # ÉPICA DE VISTAS — OWFinance 2026
 <!-- Documento vivo. Actualizar tras cada sesión de QA. -->
-<!-- Updated: 2026-06-22 -->
+<!-- Updated: 2026-06-22 — PW col actualizado tras run final 187/202 passing -->
 
 ## Cómo funciona
 
@@ -29,16 +29,16 @@ Cada vista tiene **tres niveles de verificación independientes**:
 
 | ID | Pantalla | Ruta URL | Estado impl. | 🤖 PW | 🔍 IA | 👤 VB | Notas / Gaps |
 |----|----------|----------|--------------|-------|-------|-------|--------------|
-| V-01 | Inicio Lite | `/user/home` | 🔶 | ⏳ | ✅ | ⏳ | KPI 2x2 ✓, categorías ✓, cántaros list ✓. Falta delta MoM (OWF-104) |
-| V-02 | Cántaros | `/user/jars` | 🔶 | ⏳ | ✅ | ⏳ | Rainbow bar ✓, lista con % ✓. Spec pide grid 2-3 col (OWF-105) |
-| V-03 | Transacciones | `/user/transactions` | ✅ | ⏳ | ✅ | ⏳ | PeriodNavigator ✓, eyebrow ✓, filter panel ✓, 32 movs listados ✓ |
-| V-04 | Análisis Lite | `/user/expense-analysis` | 🔶 | ⏳ | ✅ | ⏳ | Controles compactos ✓, KPI 3-col ✓. Falta donut visual + insight IA |
-| V-05 | Sueños | `/user/dreams` | ✅ | ⏳ | ✅ | ⏳ | Empty state con sparkles ✓, CTA ✓, hero morado ✓ |
-| V-06 | Deudas | `/user/debts` | ✅ | ⏳ | ✅ | ⏳ | Empty state ✓, CTA ✓, header correcto ✓ |
-| V-07 | Perfil personal | `/user/profile` | 🔶 | ⏳ | ✅ | ⏳ | Completado 50% bar ✓, campos nombre/ocupación/ingreso ✓. Teléfono presente ✓. Falta birthdate + link → perfil financiero (OWF-100) |
-| V-08 | Perfil financiero | `/user/financial-profile` | 🔶 | ⏳ | ✅ | ⏳ | Chips seleccionables ✓, secciones Quién soy + Situación ✓. Falta JarTemplateSelector (OWF-101) |
-| V-09 | Configuración | `/user/config` | 🔶 | ⏳ | ✅ | ⏳ | Modo Lite/Pro ✓, Tema toggle ✓, Ocultar saldos ✓, links a sub-páginas ✓. Falta re-trigger onboarding (OWF-103) |
-| V-10 | Asesor IA | `/user/asesor` | ✅ | ⏳ | ✅ | ⏳ | Avatar robot ✓, "en línea" ✓, quick-chips preguntas ✓, header con botones config ✓ |
+| V-01 | Inicio Lite | `/user/home` | ✅ | ✅ | ✅ | ⏳ | KPI 2x2 ✓, delta MoM real ✓ (OWF-104), greeting ✓, toggle saldos ✓ |
+| V-02 | Cántaros | `/user/jars` | ✅ | ✅ | ✅ | ⏳ | Grid 3-col → 2-col → 1-col ✓, jar-tile cards ✓ (OWF-105) |
+| V-03 | Transacciones | `/user/transactions` | ✅ | ✅ | ✅ | ⏳ | PeriodNavigator ✓, filter panel ✓, 32 movs ✓ |
+| V-04 | Análisis Lite | `/user/expense-analysis` | ✅ | ✅ | ✅ | ⏳ | Budget pulse conic-gradient ✓ (OWF-128), AnInsight violet card ✓, delta MoM gastos ✓ — todos los gaps cerrados |
+| V-05 | Sueños | `/user/dreams` | ✅ | ✅ | ✅ | ⏳ | Empty state con sparkles ✓, CTA ✓, hero morado ✓ |
+| V-06 | Deudas | `/user/debts` | ✅ | ✅ | ✅ | ⏳ | Empty state ✓, CTA ✓, header correcto ✓ |
+| V-07 | Perfil personal | `/user/profile` | ✅ | ✅ | ✅ | ⏳ | birthdate ✓ (OWF-100), link → perfil financiero ✓, avatar cam ✓, completeness bar ✓ |
+| V-08 | Perfil financiero | `/user/financial-profile` | ✅ | ✅ | ✅ | ⏳ | 4 cards ✓, JarTemplateSelector ✓, bulk-sync ✓ (OWF-101) |
+| V-09 | Configuración | `/user/config` | ✅ | ✅ | ✅ | ⏳ | Modo Lite/Pro ✓, re-trigger onboarding ✓ (OWF-103), toggle saldos ✓ |
+| V-10 | Asesor IA | `/user/asesor` | ✅ | ✅ | ✅ | ⏳ | Avatar robot ✓, "en línea" ✓, quick-chips preguntas ✓, header con botones config ✓ |
 
 ---
 
@@ -46,9 +46,9 @@ Cada vista tiene **tres niveles de verificación independientes**:
 
 | ID | Pantalla | Ruta URL | Estado impl. | 🤖 PW | 🔍 IA | 👤 VB | Notas / Gaps |
 |----|----------|----------|--------------|-------|-------|-------|--------------|
-| V-11 | Inicio Pro | `/user/home` (Pro) | 🔶 | ⏳ | ⏳ | ⏳ | KPI grid OK. Falta: AccountsPanel lateral (OWF-106) |
-| V-12 | Análisis Pro | `/user/expense-analysis` (Pro) | ✅ | ⏳ | ⏳ | ⏳ | 3-col grid rail+donut+budget OK. Deploy prod ✓ |
-| V-13 | Transacciones Pro | `/user/transactions` (Pro) | 🔶 | ⏳ | ⏳ | ⏳ | AccountFilter multi-select ✓. Panel derecho AccountsPanel falta |
+| V-11 | Inicio Pro | `/user/home` (Pro) | ✅ | ✅ | ✅ | ⏳ | AI advisor strip ✓ (OWF-128): gradiente morado, CTA "Hablar con mi asesor". Gap menor: mobile 2-col KPI (spec) vs 1-col (impl) |
+| V-12 | Análisis Pro | `/user/expense-analysis` (Pro) | ✅ | ✅ | ✅ | ⏳ | "Navegador financiero" ✓, 3-col grid (rail+donut+budget) ✓. layout_mode fix ✓ |
+| V-13 | Transacciones Pro | `/user/transactions` (Pro) | 🔶 | ✅ | ✅ | ⏳ | Gaps vs spec: no amount-presets filter (<$50/$50-200/>$200); no neto en tiempo real en filter bar; filter usa q-expansion-item vs pill dropdowns del spec |
 
 ---
 
@@ -56,15 +56,15 @@ Cada vista tiene **tres niveles de verificación independientes**:
 
 | ID | Pantalla | Viewport | Estado impl. | 🤖 PW | 🔍 IA | 👤 VB | Notas / Gaps |
 |----|----------|----------|--------------|-------|-------|-------|--------------|
-| V-14 | Home Mobile Lite | 390px | 🔶 | ⏳ | ✅ | ⏳ | KPI 2x2 correcto en mobile ✓. Categorías y cántaros list ✓. Falta delta MoM (OWF-104) |
-| V-15 | Home Mobile Pro | 390px | 🔶 | ⏳ | ⏳ | ⏳ | Sin verificar — requiere usuario Pro |
-| V-16 | Tx Mobile | 390px | ✅ | ⏳ | ✅ | ⏳ | PeriodNavigator compact ✓, lista 32 movs ✓, botón Filtros ✓. Filter como overlay (OWF-108 bottom-sheet pendiente) |
-| V-17 | Cántaros Mobile | 390px | 🔶 | ⏳ | ✅ | ⏳ | Rainbow bar ✓, lista con % ✓. Grid spec pendiente (OWF-105) |
-| V-18 | Deudas Mobile | 390px | ✅ | ⏳ | ✅ | ⏳ | Empty state correcto, CTA funcional ✓ |
-| V-19 | Sueños Mobile | 390px | ✅ | ⏳ | ✅ | ⏳ | Empty state morado + sparkles ✓, CTA ✓ |
-| V-20 | Asesor Mobile | 390px | ✅ | ⏳ | ✅ | ⏳ | Chat centrado, quick-chips ✓, header compact ✓ |
-| V-21 | Config Mobile | 390px | 🔶 | ⏳ | ✅ | ⏳ | Grupos ✓, Lite/Pro toggle ✓. Falta re-trigger onboarding (OWF-103) |
-| V-22 | Perfil Financiero Mobile | 390px | 🔶 | ⏳ | ✅ | ⏳ | Chips ✓, scroll vertical ✓. Falta JarTemplateSelector (OWF-101) |
+| V-14 | Home Mobile Lite | 390px | ✅ | ✅ | ✅ | ⏳ | KPI 2x2 ✓, delta MoM real ✓ (OWF-104), greeting ✓ |
+| V-15 | Home Mobile Pro | 390px | 🔶 | ⏳ | ✅ | ⏳ | Gaps: KPI cae a 1-col en ≤640px (spec dice 2×2); AccountsPanel sin overlay mobile |
+| V-16 | Tx Mobile | 390px | ✅ | ✅ | ✅ | ⏳ | PeriodNavigator ✓, filter como bottom-sheet ✓ (OWF-108) |
+| V-17 | Cántaros Mobile | 390px | ✅ | ✅ | ✅ | ⏳ | Grid 1-col en mobile ✓, jar-tile cards ✓ (OWF-105) |
+| V-18 | Deudas Mobile | 390px | 🔶 | ✅ | ✅ | ⏳ | Gaps: form `.df-row-2` sin breakpoint 390px (2-col cramped); sin grid 3-col→1-col desktop→mobile; DebtCard ribbon/progress bar necesita VB |
+| V-19 | Sueños Mobile | 390px | ✅ | ✅ | ✅ | ⏳ | Empty state morado + sparkles ✓, CTA ✓ |
+| V-20 | Asesor Mobile | 390px | ✅ | ✅ | ✅ | ⏳ | Chat centrado, quick-chips ✓, header compact ✓ |
+| V-21 | Config Mobile | 390px | ✅ | ✅ | ✅ | ⏳ | Grupos ✓, Lite/Pro toggle ✓, re-trigger onboarding ✓ (OWF-103) |
+| V-22 | Perfil Financiero Mobile | 390px | ✅ | ✅ | ✅ | ⏳ | Chips ✓, JarTemplateSelector ✓ (OWF-101), scroll vertical ✓ |
 
 ---
 
@@ -72,11 +72,11 @@ Cada vista tiene **tres niveles de verificación independientes**:
 
 | ID | Pantalla | Ruta URL | Estado impl. | 🤖 PW | 🔍 IA | 👤 VB | Notas / Gaps |
 |----|----------|----------|--------------|-------|-------|-------|--------------|
-| V-23 | Onboarding Modal | (modal global) | 🔶 | ⏳ | ⏳ | ⏳ | Intro stage ✓ (OWF-097). Falta: recommend stage con plan IA (OWF-107) |
-| V-24 | Onboarding Desktop 2-col | (modal desktop) | 🔶 | ⏳ | ⏳ | ⏳ | Spec tiene layout 2-col (form\|preview). Tenemos 1-col centrado |
+| V-23 | Onboarding Modal | (modal global) | ✅ | ✅ | ✅ | ⏳ | Todos los stages ✓ (intro/about/situation/goals/recommend/jars/done). Sin spec JSX — impl sólida |
+| V-24 | Onboarding Desktop | (modal desktop) | 🔶 | ⏳ | ✅ | ⏳ | Modal 540px mismo en todos los tamaños — sin layout 2-col desktop específico |
 | V-25 | Login | `/login` | ✅ | ✅ | ✅ | ⏳ | Split hero + form ✓, tabs Login/Registro ✓, Google/Apple ✓, dark mode ✓ |
-| V-26 | Registro | `/register` | 🔶 | ✅ | ⏳ | ⏳ | Funcional. Falta: password strength meter visual |
-| V-27 | Forgot / Reset PW | `/forgot-password` | 🔶 | ⏳ | ⏳ | ⏳ | Código listo. SMTP prod bloqueado (OWF-062) |
+| V-26 | Registro | `/register` | 🔴 | ✅ | ✅ | ⏳ | RegisterPage.vue es redirect stub → /login?tab=register (diseño intencional). UI real en LoginPage tab "Registro" con password strength meter ✓ |
+| V-27 | Forgot / Reset PW | `/forgot-password` | 🔶 | ✅ | ✅ | ⏳ | Sin spec canonical — impl usa auth-split correcto ✓. Gaps: emoji ✉️ en lugar de Material Icon; sin strength indicator en reset PW. SMTP bloqueado (OWF-062) |
 
 ---
 
@@ -86,7 +86,7 @@ Cada vista tiene **tres niveles de verificación independientes**:
 |----|----------|----------|--------------|-------|-------|-------|--------------|
 | V-28 | Landing | `/` | ✅ | ✅ | ✅ | ⏳ | Hero con mockup de app ✓, nav ✓, CTA ✓ — mejor de lo esperado |
 | V-29 | Planes/Pricing | `/planes` | ✅ | ✅ | ✅ | ⏳ | 3 cards Gratis/Plus/Familiar ✓, toggle mensual/anual ✓, "Recomendado" badge ✓ |
-| V-26 | Registro | `/register` (tab) | 🔶 | ✅ | ✅ | ⏳ | Split panel ✓, campos nombre/correo/pass ✓. Falta strength meter |
+| V-30 | Funciones | `/funciones` | ✅ | ✅ | ✅ | ⏳ | 4 grupos Cántaros/Cuentas/Tx/Analítica ✓, check/remove icons ✓ (OWF-110) |
 
 ---
 
@@ -94,12 +94,12 @@ Cada vista tiene **tres niveles de verificación independientes**:
 
 | ID | Componente | Vue File | Estado impl. | 🤖 PW | 🔍 IA | 👤 VB | Notas / Gaps |
 |----|-----------|----------|--------------|-------|-------|-------|--------------|
-| C-01 | SmartTransactionModal | `SmartTransactionModal.vue` | 🔶 | ⏳ | ⏳ | ⏳ | 4 modos (Escribir/Voz/Foto/AutoIA). Foto OCR básico |
-| C-02 | NotificationsPanel | `NotificationsPanel.vue` | ✅ | ⏳ | ⏳ | ⏳ | Popover desktop + bottom-sheet mobile |
-| C-03 | AccountsPanel Pro | — | 🔴 | — | — | — | No implementado. Panel derecho ProShell (OWF-106) |
-| C-04 | BulkImportPanel | `TransactionBulkImportDialog.vue` | 🔶 | ⏳ | ⏳ | ⏳ | Funcional. Spec tiene drag-and-drop más elaborado |
-| C-05 | PeriodNavigator | `PeriodNavigator.vue` | ✅ | ⏳ | ✅ | ⏳ | Grain dropdown ✓, prev/next ✓, label dinámico ✓, "Hoy" btn ✓. Wired a LiteTxView ✓ |
-| C-06 | EntryGate / Empty States | — | 🔴 | — | — | — | No implementado. Pantalla usuario sin datos (OWF-102) |
+| C-01 | SmartTransactionModal | `SmartTransactionModal.vue` | ✅ | ✅ | ✅ | ⏳ | 4 modos ✓, AI prefill ✓. Gap menor: sin campo jar en quick form |
+| C-02 | NotificationsPanel | `NotificationsPanel.vue` | ✅ | ⏳ | ✅ | ⏳ | Popover+bottom-sheet ✓, mark-all ✓. Gap: datos hardcoded (SEED), "Ver todas" no navega |
+| C-03 | AccountsPanel Pro | `ProHomeView.vue` aside | ✅ | ⏳ | ✅ | ⏳ | Implementado en OWF-106: 280px aside, tabs Cuentas/Deudas, slide-in ✓ |
+| C-04 | BulkImportPanel | `TransactionBulkImportDialog.vue` | 🔶 | ⏳ | ✅ | ⏳ | Funcional (3 tabs, column mapping, dry-run). Gaps: rate heuristic frágil (solo excluye USD/ARS); fullscreen en desktop |
+| C-05 | PeriodNavigator | `PeriodNavigator.vue` | ✅ | ✅ | ✅ | ⏳ | Grain dropdown ✓, prev/next ✓, label dinámico ✓, "Hoy" btn ✓. Wired a LiteTxView ✓ |
+| C-06 | EntryGate / Empty States | varios | ✅ | ✅ | ✅ | ⏳ | Implementado OWF-102: LiteHome/LiteJars/LiteTx empty states con CTA → SmartTxModal |
 
 ---
 
@@ -107,12 +107,11 @@ Cada vista tiene **tres niveles de verificación independientes**:
 
 ```
                     🤖 PW    🔍 IA    👤 VB
-Total vistas (36)    3/36    18/36     0/36
-Completadas           8%      50%       0%
+Total vistas (36)   26/36   36/36     0/36
+Completadas          72%    100%       0%
 
-IA revisadas: V-01..10, V-14, V-16..22, V-25, C-05
-Pendientes IA: V-11..13 (Pro), V-15 (Pro), V-23..24 (Onboarding modal),
-               V-26..30, C-01..C-04, C-06
+IA revisadas: TODAS ✅ (V-01..30, C-01..C-06)
+Pendientes VB: todas (0/36) — Jose Luis necesita hacer recorrido en owfinances.com
 ```
 
 > Actualizar este bloque tras cada ronda de QA.

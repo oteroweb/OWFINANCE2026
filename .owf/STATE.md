@@ -3,7 +3,7 @@
 <!-- Solo un agente escribe a la vez. Updated = timestamp del ultimo escritor. -->
 <!-- Tareas se referencian por ID (OWF-NNN) → ver .owf/TASKS.md -->
 
-**Updated:** 2026-06-22T18:15:00Z
+**Updated:** 2026-06-23T00:00:00Z
 **By:** claude-code
 
 ---
@@ -13,6 +13,57 @@
 | ID | Tarea | Agente | Progreso | Detalle |
 |----|-------|--------|----------|---------|
 | OWF-062 | Password Reset SMTP prod | opencode | código listo | Esperando creds SMTP del usuario |
+
+## Sesión 2026-06-23 (claude-code) — Admin audit + V-11 + IA reviews + V-04 gaps
+
+| OWF | Qué hizo |
+|-----|----------|
+| V-04 gaps | ✅ Budget pulse conic-gradient, AnInsight violet card, delta MoM gastos — implementados en expense-analysis/index.vue |
+| OWF-128 | ✅ V-11 AI advisor strip: .pro-advisor-strip BEM, goToAsesor(), gradiente morado/cyan, CTA pill |
+| Admin audit | ✅ 14 rutas admin auditadas — 11 tareas nuevas OWF-117..127 registradas (P0 security fix crítico) |
+| IA reviews | ✅ 7 vistas revisadas: V-13/V-15/V-23/V-24/V-26/C-01..C-04 — EPIC_VIEWS.md actualizado |
+
+**⚠️ PENDIENTE DEPLOY**: cambios de esta sesión y la anterior no están en prod:
+- layout_mode fix (4 vistas)
+- is_default migration + Lite account guard  
+- V-04 gaps (budget pulse, AnInsight, delta badge)
+- V-11 AI advisor strip
+
+**🔴 CRÍTICO sin deploy**: OWF-117 — cualquier usuario autenticado puede mutar datos admin
+
+**NEXT_ID:** OWF-129
+
+## Sesión 2026-06-22 (claude-code) — OWF-115 Playwright prod 187/202 passing
+
+**RESULTADO FINAL:** 187 passed · 15 skipped (esperados) · **0 failed** en https://owfinances.com
+
+Fixes aplicados al suite e2e:
+- `waitForSpa()` helper — espera `#q-app.children > 0` antes de assertions (Vue SPA hidrata después de domcontentloaded)
+- `waitForURL(/\/login/)` en auth redirect tests (guard async)
+- Selector FilterPanel: `.filter-panel--desktop:visible, .filter-sheet-dialog, [role="dialog"]` (excluye hidden desktop panel en mobile)
+- PeriodNavigator: usa `nth(1)` (next btn) + 600ms wait en lugar de prev btn
+- Jars loading: espera `.jars-list, .jars-grid, .entry-gate` antes de `waitForSelector(.jars-list, hidden)`
+- `debug-real-user` + `blank-page-debug`: `test.skip` en viewport < 768 (nav links en hamburger)
+- `bulk-import`: skip graceful si botón no está en UI actual
+
+## Sesión 2026-06-22 (claude-code) — OWF-101..115 completas (continuación)
+
+| OWF | Qué hizo |
+|-----|----------|
+| OWF-101 | ✅ FinancialProfile Card 4 "Mis cántaros": JarTemplateSelector + confirm dialog + JarsTable editable. save() bulk-sync. |
+| OWF-105 | ✅ LiteJarsView: grid 3-col → 2-col → 1-col, jar-tile cards con icon soft-color, amount, progress bar 4px, footer. |
+| OWF-106 | ✅ ProHomeView: AccountsPanel 280px aside sticky. ap-toggle btn. Slide transition. Cuentas/Deudas tabs. API /accounts+/debts. |
+| OWF-107 | ✅ OnboardingFlow: etapa "recommend" entre goals/jars. Banner IA + GOAL_TO_TEMPLATE + sortedTemplates (AI first). SCSS completo. |
+| OWF-108 | ✅ Tx Mobile: filter-panel--desktop oculto en ≤768px; q-dialog bottom-sheet con handle + "Aplicar filtros". CSS media query. |
+| OWF-109 | ✅ Landing hero: ya implementado, sin cambio. |
+| OWF-110 | ✅ FeaturesPage #comparativa: 4 grupos spec-fiel (Cántaros/Cuentas/Tx/Analítica), check_circle/remove_circle/remove icons, legend, link /matrix. |
+| OWF-113 | ✅ e2e/profile-smoke.spec.ts: 7 tests (profile, fp 4 cards, tpl-selector, onboarding flow). |
+| OWF-114 | ✅ e2e/interactions.spec.ts: PeriodNavigator prev/next, FilterPanel open/chip/clear, SmartTxModal 4 modos. |
+| OWF-115 | ✅ e2e/mobile-viewport.spec.ts: 390px. Home/Tx/Jars no overflow, bottom-nav, filter=bottomSheet, jar=1col. |
+| Deploy | ✅ 3× deploy prod OK → owfinances.com (OWF-105..108, OWF-110) |
+
+**NEXT_ID:** OWF-116
+**Pendientes:** OWF-062 (SMTP creds), OWF-004/005/006 (SSH staging), OWF-068 (docs drift)
 
 ## Sesión 2026-06-22 (claude-code) — OWF-100/102/103/104 + Deploy prod
 

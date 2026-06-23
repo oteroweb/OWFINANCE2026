@@ -97,22 +97,36 @@
 | **OWF-099** | [x] | P2 | ⚪ | feat | adhoc | — | LiteTransactionsView: reemplaza MonthBar+TypeChips por PeriodNavigator. Tipo movido al interior del panel (segmented). loadTransactions usa period store (watch signature). Eliminado tipo "Cántaros". | claude-code | 2026-06-22 |
 
 | **OWF-100** | [x] | P1 | ⚪ | feat | adhoc | — | ProfileRoute (V-07): campo birthdate (q-input type=date) + link "Mi perfil financiero →" nav row. Completeness bar ahora cuenta 5 campos. Deploy prod OK. | claude-code | 2026-06-22 |
-| **OWF-101** | [ ] | P1 | ⚪ | feat | adhoc | — | FinancialProfileRoute (V-08): JarTemplateSelector dentro de Card "Mis cántaros", sticky save button, JarsTable editable in-page | — | — |
+| **OWF-101** | [x] | P1 | ⚪ | feat | adhoc | — | FinancialProfileRoute (V-08): Card 4 "Mis cántaros" con JarTemplateSelector (scroll horizontal, mini barra coloreada, confirm dialog) + JarsTable editable (nombre/%, propósito, add/remove, suma%). Deploy prod OK. | claude-code | 2026-06-22 |
 | **OWF-102** | [x] | P1 | ⚪ | feat | adhoc | — | EntryGate: LiteHomeView (isNewUser computed), LiteJarsView (activeJars empty), LiteTransactionsView (transactions empty). CTAs abren SmartTxModal. Jars CTA pre-selecciona tab Ingreso. Deploy prod OK. | claude-code | 2026-06-22 |
 | **OWF-103** | [x] | P2 | ⚪ | feat | adhoc | — | Config: row "Repetir configuración inicial" (restart_alt icon → showOnboarding=true) + toggle "Presupuesto estricto" (overBudget en prefs section). Eliminado duplicado en notificaciones. Deploy prod OK. | claude-code | 2026-06-22 |
 | **OWF-104** | [x] | P2 | ⚪ | feat | adhoc | — | LiteHomeView: delta MoM real con Promise.allSettled (mes actual vs anterior), pill verde/rojo con arrow icon. Timestamp "Actualizado · HH:MM" bajo hero. Deploy prod OK. | claude-code | 2026-06-22 |
-| **OWF-105** | [ ] | P2 | ⚪ | feat | adhoc | — | LiteJarsView: JarsFullGrid layout (2-3 col card grid) reemplaza lista vertical — alineación con spec JarsRoute.jsx | — | — |
-| **OWF-106** | [ ] | P2 | ⚪ | feat | adhoc | — | ProHome: AccountsPanel lateral derecho plegable con lista de cuentas y balances | — | — |
-| **OWF-107** | [ ] | P2 | ⚪ | feat | adhoc | — | Onboarding "recommend" stage: muestra plan IA sugerido por main_goal, selector de alternativas de template | — | — |
-| **OWF-108** | [ ] | P3 | ⚪ | feat | adhoc | — | Tx Mobile: MonthNavigatorMobile compacto, TransactionFilters como bottom-sheet en viewport mobile | — | — |
-| **OWF-109** | [ ] | P3 | ⚪ | feat | adhoc | — | Landing page: hero actualizado con mockup real de la app (screenshot embed) | — | — |
-| **OWF-110** | [ ] | P3 | ⚪ | feat | adhoc | — | Pricing: tabla comparativa Lite vs Pro fiel al spec OW Finance - Planes.html | — | — |
-| **OWF-113** | [ ] | P2 | ⚪ | test | adhoc | — | Playwright: smoke tests profile (V-07), financial-profile (V-08), onboarding flow (V-23) | — | — |
-| **OWF-114** | [ ] | P2 | ⚪ | test | adhoc | — | Playwright: interaction tests PeriodNavigator (grain change, step, picker), FilterPanel, SmartTxModal 4 modos | — | — |
-| **OWF-115** | [ ] | P3 | ⚪ | test | adhoc | — | Playwright: mobile viewport 390px tests para Home/Tx/Jars con Mobile Chrome project | — | — |
+| **OWF-105** | [x] | P2 | ⚪ | feat | adhoc | — | LiteJarsView: JarsFullGrid 3-col card tiles (icon soft-color, nombre, balance grande, barra %, footer En uso/Lleno/Sobrepasado). Grid responsive 3→2→1 cols. Deploy prod OK. | claude-code | 2026-06-22 |
+| **OWF-106** | [x] | P2 | ⚪ | feat | adhoc | — | ProHome: AccountsPanel 280px lateral plegable — toggle btn fijo top-right, tabs Cuentas/Deudas, lista con badge color/nombre/balance, total neto. Slide-in animation. Deploy prod OK. | claude-code | 2026-06-22 |
+| **OWF-107** | [x] | P2 | ⚪ | feat | adhoc | — | Onboarding: etapa "recommend" entre goals y jars — banner IA "plan recomendado" + reason, template cards ordenados (AI first + badge), mini barra coloreada. GOAL_TO_TEMPLATE map. Deploy prod OK. | claude-code | 2026-06-22 |
+| **OWF-108** | [x] | P3 | ⚪ | feat | adhoc | — | Tx Mobile: filter-panel--desktop (dropdown) oculto en ≤768px; q-dialog position=bottom (bottom-sheet) con mismo contenido + "Aplicar filtros" btn. Desktop bottom-sheet oculto vía CSS. Deploy prod OK. | claude-code | 2026-06-22 |
+| **OWF-109** | [x] | P3 | ⚪ | chore | adhoc | — | Landing page: hero mockup ya estaba implementado en prod (verificado 2026-06-22). Sin cambio necesario. | claude-code | 2026-06-22 |
+| **OWF-110** | [x] | P3 | ⚪ | feat | adhoc | — | FeaturesPage.vue #comparativa: tabla Lite vs Pro reescrita fiel al spec (Funciones.html). 4 grupos: Cántaros/Cuentas/Transacciones/Analítica, iconos check_circle/remove_circle/remove, leyenda correcta, link a /matrix. Deploy prod OK. | claude-code | 2026-06-22 |
+| **OWF-113** | [x] | P2 | ⚪ | test | adhoc | — | Playwright: e2e/profile-smoke.spec.ts — 7 tests: profile loads, fp tiene 4 cards, tpl-selector visible, onboarding renders intro/navega steps/recommend step. | claude-code | 2026-06-22 |
+| **OWF-114** | [x] | P2 | ⚪ | test | adhoc | — | Playwright: e2e/interactions.spec.ts — PeriodNavigator prev/next, FilterPanel open/chip/clear, SmartTxModal open/expense fill/income toggle/transfer. | claude-code | 2026-06-22 |
+| **OWF-115** | [x] | P3 | ⚪ | test | adhoc | — | Playwright: e2e/mobile-viewport.spec.ts — 390px viewport. Home/Tx/Jars sin overflow, bottom-nav visible, filter abre bottom-sheet (no desktop-dropdown), jar grid colapsa a 1-col. | claude-code | 2026-06-22 |
+| **OWF-116** | [x] | P2 | ⚪ | feat | adhoc | — | LoginPage.vue (modo register): password strength meter — 4 segmentos color-coded (rojo/naranja/amarillo/verde), label reactivo (Muy débil/Débil/Aceptable/Fuerte), visible solo cuando password.length>0. pwStrength computed. Deploy prod OK. | claude-code | 2026-06-22 |
+
+| **OWF-117** | [ ] | P0 | 🔴 | fix | adhoc | — | **Security: Add CheckRole:admin middleware to all admin CRUD routes** — cualquier usuario autenticado puede mutar datos catálogo (currencies, users, accounts, etc.). Envolver todas las rutas admin con `['auth:sanctum', CheckRole:admin]`. | — | — |
+| **OWF-118** | [ ] | P1 | 🟡 | feat | adhoc | — | Admin: CRUD page Transaction Types — `/pages/admin/transaction_types/` + route + sidebar link. Sin esto el select de Tipos en Transacciones queda vacío/roto. Backend API `/api/transaction_types` ya existe. | — | — |
+| **OWF-119** | [ ] | P1 | 🟡 | feat | adhoc | — | Admin Dashboard: reemplazar stub con métricas reales — DashboardController devuelve static OK; `admin_dashboard.vue` es párrafo estático. Implementar endpoint (total users, active accounts, tx este mes, top categories) + stat cards en Vue. | — | — |
+| **OWF-120** | [ ] | P1 | ⚪ | feat | adhoc | — | Admin Users: añadir campo password + role_id en forms_save/forms_update — admin no puede setear password inicial ni asignar rol al crear usuario. | — | — |
+| **OWF-121** | [ ] | P2 | ⚪ | fix | adhoc | — | Fix Currencies dictionary: `vmodel_api: ''` en campo align → nunca se envía al API en create. Fix a `vmodel_api: 'align'`. También fix duplicate `id: 3` en `forms_save`. | — | — |
+| **OWF-122** | [ ] | P2 | ⚪ | fix | adhoc | — | Fix Jars admin: duplicación `active` vs `is_active` en columns/forms. Auditar modelo Jar, eliminar campo no canónico del dictionary. | — | — |
+| **OWF-123** | [ ] | P2 | ⚪ | fix | adhoc | — | Fix AdminLayout sidebar: item "Usuarios" duplicado (líneas 16–17 y 34–35). Eliminar duplicado. | — | — |
+| **OWF-124** | [ ] | P2 | ⚪ | feat | adhoc | — | Admin Accounts: añadir `user_id` a forms_save/forms_update — sin esto no se puede crear cuenta asignada a usuario desde admin. | — | — |
+| **OWF-125** | [ ] | P2 | ⚪ | feat | adhoc | — | Admin: página Roles management — sin UI para ver/asignar roles. CRUD mínimo (list + assign role to user). Requiere RoleController + routes backend. | — | — |
+| **OWF-126** | [ ] | P3 | ⚪ | chore | adhoc | — | Admin: eliminar archivo huérfano `transactionsDictionary.ts` (nunca importado, la versión activa es `transactions/dictionary.ts`). | — | — |
+| **OWF-127** | [ ] | P3 | ⚪ | feat | adhoc | — | Admin: página System health — `/admin/system` con record counts por tabla, últimos logins, info último deploy. Extender DashboardController o nuevo SystemController. | — | — |
+| **OWF-128** | [x] | P2 | ⚪ | feat | adhoc | — | V-11 ProHomeView: AI advisor strip — renombrado `.ai-strip` → `.pro-advisor-strip` BEM, `goToAsesor()` router.push, gradiente morado/cyan spec-fiel, CTA pill "Hablar con mi asesor". vue-tsc limpio. | claude-code | 2026-06-23 |
 
 <!--
-  NEXT_ID: OWF-116
+  NEXT_ID: OWF-129
 -->
 
 ## Completed
