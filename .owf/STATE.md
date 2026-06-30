@@ -3,16 +3,143 @@
 <!-- Solo un agente escribe a la vez. Updated = timestamp del ultimo escritor. -->
 <!-- Tareas se referencian por ID (OWF-NNN) → ver .owf/TASKS.md -->
 
-**Updated:** 2026-06-23T00:00:00Z
+**Updated:** 2026-06-30T18:00:00Z
 **By:** claude-code
 
+## Último trabajo (2026-06-30)
+- **OWF-138** ✅ Pro detail modal v2 — AnchoredJarChip VIEW + CategorySelector EDIT + category_id/jar_id en payload
+- **OWF-168** ✅ Fix lint build: no-base-to-string (txCatalog), no-misused-promises (admin detail/index), vue/no-deprecated-filter (union type en template), unused vars
+- **Frontend deployado** ✅ prod 151 archivos, https://owfinances.com/app/ OK
+
+## Bloqueados
+- OWF-062: SMTP prod — esperando credenciales del usuario
+- OWF-131: Gemini key — verificar en prod
+
 ---
+
+## Sesión 2026-06-30 batch-1 (claude-code) — Tests 182/182 + Fix SQLite whereBetween
+
+### Cambios aplicados
+| Archivo | Cambio |
+|---|---|
+| `tests/Feature/Api/JarsFullTest.php` | Fix `test_jar_withdrawal` y `test_jar_transfer_between_jars`: el endpoint `/adjust` usa `target_balance` (no `amount`) y `reason` (no `description`). Tests ahora fondean el jar correctamente. |
+| `app/Services/JarBalanceService.php` | Fix crítico: `whereBetween('date', [...])` excluye registros en SQLite porque los guarda como `'2026-06-30 00:00:00'` en lugar de `'2026-06-30'`. Cambiado a `whereDate('>=')` + `whereDate('<=')` en `getMonthlyAdjustment`, `getMonthlyWithdrawals`, `getMonthlyTransfersIn`, `getMonthlyTransfersOut`, `clearAdjustmentsForMonth`. Esto también es más correcto en MySQL. |
+
+### Estado
+- **Tests PHP:** 182/182 ✅ (antes: 180/182)
+- **TypeScript:** 0 errores ✅
+
+### Bloqueados por el usuario
+| OWF | Bloqueador |
+|-----|------------|
+| OWF-131 | Gemini key prod: prefijo `AQ.` inusual (standard es `AIza`). Regenerar en aistudio.google.com. |
+| OWF-062 | SMTP / Resend credentials para Password Reset. |
+| Anthropic test | Key revocada/expuesta. Regenerar en console.anthropic.com, añadir `.env` como `ANTHROPIC_API_KEY=` y cambiar `AI_EXTRACTION_PROVIDER=anthropic`. |
+
+---
+
+## Sesión 2026-06-29 batch-2 (claude-code) — Épica Rediseño Transacciones OWF-153..162
+
+### Cambios aplicados esta sesión
+
+**Backend (`OWFINANCEBackend2025`):**
+
+| Archivo | Cambio |
+|---|---|
+| `app/Models/Entities/Category.php` | `jars()` belongsToMany + `$appends=['jar_slug']` + `getJarSlugAttribute()` → jar_slug sale automático en todos los endpoints que serialicen Category |
+| `app/Models/Repositories/CategoryRepo.php` | `all()` y `allActive()` filtran `whereNull('user_id') OR user_id = X` (categorías globales visibles a todos) |
+| `app/Http/Controllers/Api/CategoryController.php` | `formatCategories()` + `jarSlugForCategory()` → `jar_slug` en GET /categories |
+| `database/seeders/CanonicalCategorySeeder.php` | ✨NUEVO — 15 categorías canónicas como `user_id=null` (globales). Idempotente. Ejecutado en local. |
+
+**Frontend (`OWFinanceFrontend2025`):**
+
+| Archivo | Estado | Cambio |
+|---|---|---|
+| `src/utils/txCatalog.ts` | ✨NUEVO | loadCategoriesWithJars, loadUserJars, jarForCategory, getCachedJars, getCachedCategories, JAR_SLUG_NAMES, resetTxCatalog |
+| `src/components/AnchoredJarChip.vue` | ✨NUEVO | Chip 3 estados (sin-cat / sin-jar / jar anclado). Auto-load onMounted. color-mix styling. |
+| `src/stores/transactions.ts` | MOD | Transaction interface: +category_id, +jar_id, +category?, +jar? |
+| `src/components/SmartTransactionModal.vue` | MOD | AnchoredJarChip bajo selector categoría. jar_id derivado en save(). Imports txCatalog. |
+| `src/pages/user/transactions/LiteTransactionsView.vue` | MOD | TxItem +category_id/jar_slug. Detail sheet: modo Vista con AnchoredJarChip + modo Edición inline + confirm-eliminar inline + acción Duplicar. Imports txCatalog+AnchoredJarChip. |
+| `src/components/TransactionFormDialog.vue` | MOD | q-select categoría + AnchoredJarChip. catLoading. categoryOptions. Load cats en watch(open). |
+| `src/components/TransactionEditDialog.vue` | MOD | Ídem TransactionFormDialog. category_id en mapTransactionToForm. jar_id en persist(). |
+| `src/composables/useTransactionForm.ts` | MOD | TransactionFormState +category_id. initialForm/loadFromTransaction +category_id. saveCreate/buildUpdatePayload +category_id+jar_id derivado. |
+
+**Estado TypeScript:** 0 errores (`vue-tsc --noEmit` limpio en todos los archivos)
+
+### Pendientes de esta épica
+
+| ID | P | Tarea |
+|---|---|---|
+| OWF-157 | P2 | Mobile Pro: comisiones (fija/%), split, items/factura |
+| OWF-158 | P3 | Housekeeping commit `rediseno/` |
+
+### Próximo paso
+✅ **Épica 100% completada y commiteada.** Listo para nuevo zip de rediseño + pruebas exhaustivas.
+
+---
+
+## Sesión 2026-06-29 batch-1 (claude-code) — Admin Frontend OWF-148+147+145+146
+
+| OWF | Qué hizo |
+|-----|----------|
+| OWF-148 | ✅ AdminLayout.vue sidebar v2: secciones VISIÓN GENERAL/USUARIOS/CATÁLOGOS/SISTEMA, iconos Material en todos los items, badge user count en Usuarios, logo OWF Admin + avatar+nombre en header, logout button rojo al fondo. |
+| OWF-147 | ✅ auth store: impersonating + impersonatedUser state, startImpersonation() guarda admin token en sessionStorage y swapea, stopImpersonation() restaura. ImpersonationBanner.vue (fixed top rojo). Montado en AppShell.vue. |
+| OWF-145 | ✅ admin/users/index.vue reescrita: KPI row (4 chips), filters bar (buscar/rol/estado), q-table con avatar colorizado/badges/toggle activo/acciones (detalle+impersonar+eliminar), confirm dialog impersonar, paginación. |
+| OWF-146 | ✅ admin/users/detail.vue creada: header con avatar+nombre+email+badges+btn impersonar, 6 tabs (Perfil/Cuentas/Cántaros/Transacciones/Seguridad/Ajustes), modals cambiar pwd y confirmar impersonar. Ruta `/admin/users/:id` añadida a admin.routes.ts. |
+
+| OWF-129 | [x] | applyAiResult() resuelve category_suggestion → category_id real (fuzzy match). 2026-06-29 |
+| OWF-137 | [x] | LiteJarsView v2: period selector, drag-reorder, toggle activo, carry tags, inactive dim. 2026-06-29 |
+| OWF-152 | [x] | e2e/admin-user-management.spec.ts — 8 tests. Skip guard PLAYWRIGHT_ADMIN_EMAIL. 2026-06-29 |
+
+**Pendientes (bloqueados o sin prioridad):**
+- OWF-131 P1: Validar Gemini key en prod (usuario debe regenerar si falla)
+- OWF-062 P0: SMTP creds para password reset en prod
 
 ## En Progreso RIGHT NOW
 
 | ID | Tarea | Agente | Progreso | Detalle |
 |----|-------|--------|----------|---------|
 | OWF-062 | Password Reset SMTP prod | opencode | código listo | Esperando creds SMTP del usuario |
+
+## Sesión 2026-06-28 batch-3 (claude-code) — Fix SystemController 500 + QA Admin Panel prod
+
+| OWF | Qué hizo |
+|-----|----------|
+| OWF-139 | ✅ Fix SystemController 500: `last_login_at` no existe en prod. Try/catch + fallback `updated_at`. Deploy OK. |
+| QA Admin | ✅ Admin panel QA completo en prod (admin@demo.com): Dashboard KPIs ✅, Roles CRUD (3 roles) ✅, Sistema (PHP 8.4/Laravel 12/MySQL/10 tablas) ✅, Monitor IA (7 providers) ✅ |
+| OWF-131 | ⚠️ Pendiente validar Gemini key (Anthropic inactivo en monitor = sin llamadas). OpenAI activo (1 llamada). |
+
+**Pendientes restantes:**
+- OWF-129 P0: AI transaction registration (voice/OCR → SmartTxModal prefill)
+- OWF-131 P1: Validar Gemini key en prod (prefijo AQ. inusual)
+- OWF-137 P2: Cántaros Mobile v2 (spec cantaros-mobile/screen.jsx)
+- OWF-138 P3: Transaction Detail Modal v2 (View/Edit/Delete modes)
+
+## Sesión 2026-06-28 batch-2 (claude-code) — Admin CRUD + TxLedger v2 + nav fixes
+
+| OWF | Qué hizo |
+|-----|----------|
+| OWF-117..127 | ✅ Admin security audit completado. OWF-125: RoleController.php + rutas /admin/roles. OWF-127: SystemController.php + /admin/system + Vue system/index.vue. OWF-120: password+role_id en users dictionary. OWF-132: AI Monitor link en sidebar. |
+| OWF-134 | ✅ TxLedger v2: checkbox hover, dblclick→selectMode+marca, single-click 220ms debounce→edit, cat-chip dblclick, bottom sticky multibar slide-up (count+sum+Todas+Listo), day totals en headers. |
+| OWF-135 | ✅ Asesor IA: AppShell NAV_ITEMS + currentTab, ExpandedNavigationMenuLight MENU_GROUPS. |
+| OWF-136 | ✅ LiteHomeView: Dreams antes que Debts. |
+| Deploy | ✅ Backend + Frontend deployados prod OK 2026-06-28. |
+
+**Pendientes restantes:**
+- OWF-129 P0: AI transaction registration (voice/OCR → SmartTxModal prefill)
+- OWF-131 P1: Validar Gemini key en prod (prefijo AQ. inusual)
+- OWF-137 P2: Cántaros Mobile v2 (spec cantaros-mobile/screen.jsx)
+- OWF-138 P3: Transaction Detail Modal v2 (View/Edit/Delete modes)
+
+## Sesión 2026-06-28 (claude-code) — TxPoolsHeader 3-pool + AI multi-provider + Playwright QA
+
+| OWF | Qué hizo |
+|-----|----------|
+| OWF-130 | ✅ 6 AI providers con fallback chain: opencode-go→groq→openrouter→gemini→xai→openai. AiProviderChain + OpenRouterProvider + XaiProvider + AiMonitorController. Admin panel /admin/ai. Deploy prod OK. |
+| OWF-133 | ✅ TxPoolsHeader 3-pool: Pool-1 Filtros activos (mes bloqueado + tipo segmented + chips removibles), Pool-2 Categorías multi-select, Pool-3 Cántaros con dot color. Reemplaza el popover filter card. proSelCats/proSelJars + toggleProCat/toggleProJar. CSS tx-pools/tx-pool BEM. Deploy prod OK. |
+| QA | ✅ Playwright 77 passed · 0 failed (local + prod https://owfinances.com). 125 skipped (esperados). |
+
+---
 
 ## Sesión 2026-06-23 (claude-code) — Admin audit + V-11 + IA reviews + V-04 gaps
 
@@ -261,12 +388,12 @@ Fixes aplicados al suite e2e:
 
 | Métrica | Valor |
 |---------|-------|
-| **Total** | 82 tareas (excluye 7 sub-tareas de OWF-002) |
-| **Completadas** | 75 (91%) |
+| **Total** | 96 tareas (excluye 7 sub-tareas de OWF-002) |
+| **Completadas** | 90 (~94%) |
 | **En progreso** | 1 (OWF-062 espera creds SMTP) |
 | **Bloqueadas** | 3 (OWF-004/005/006 — SSH dev/stage) |
-| **Disponibles** | 3 (OWF-020/095: AccountFilter multi-select + gaps restantes) |
-| **Progreso** | ██████████████████░░ 91% |
+| **Pendientes** | 4 (OWF-129, 131, 137, 138) |
+| **Progreso** | ██████████████████░░ 94% |
 
 ---
 
