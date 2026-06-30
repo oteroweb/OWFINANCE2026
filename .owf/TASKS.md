@@ -134,7 +134,7 @@
 | **OWF-135** | [x] | P2 | ⚪ | feat | adhoc | — | Asesor IA: añadido a AppShell NAV_ITEMS + currentTab computed, y a ExpandedNavigationMenuLight MENU_GROUPS. Deploy prod OK. | claude-code | 2026-06-28 |
 | **OWF-136** | [x] | P2 | ⚪ | fix | adhoc | — | LiteHomeView: Dreams ahora aparece ANTES que Debts. Swap corregido. Deploy prod OK. | claude-code | 2026-06-28 |
 | **OWF-137** | [x] | P2 | ⚪ | feat | adhoc | — | Cántaros Mobile v2: LiteJarsView mejorado según spec. Period selector (Mensual/Semestral/Anual), drag-to-reorder, toggle activo/inactivo por jar, carry tags (Acumula/Reset), dim para jars inactivos, JarItem ampliado (active/carry/mode/fixed). | claude-code | 2026-06-29 |
-| **OWF-138** | [ ] | P3 | ⚪ | feat | adhoc | — | Transaction Detail Modal v2: 3 modos (View/Edit/Delete) según spec. Implementación actual es básica. Ver spec TxLedger.jsx y app.jsx. | — | — |
+| **OWF-138** | [x] | P3 | ⚪ | feat | adhoc | — | Transaction Detail Modal v2 (Pro): AnchoredJarChip en VIEW, CategorySelector+chip en EDIT, category_id+jar_id en payload save/duplicate. | claude-code | 2026-06-30 |
 | **OWF-139** | [x] | P0 | 🔴 | fix | adhoc | — | Fix SystemController 500: columna `last_login_at` no existe en prod. Wrapped query en try/catch; fallback usa `updated_at`. Deploy prod OK. `/admin/system` responde 200 con data completa. | claude-code | 2026-06-28 |
 | **OWF-140** | [x] | P0 | 🟡 | feat | OWF-140-admin-users | — | [ÉPICA] Admin: Gestión completa de usuarios. COMPLETA — Backend OWF-141..144 + Frontend OWF-145..148 + Tests OWF-151..152. | claude-code | 2026-06-29 |
 | **OWF-141** | [x] | P1 | 🟡 | feat | OWF-140-admin-users | — | Backend: `GET /admin/users/:id/detail` — UserAdminController::detail(), carga user+settings+accounts+jars+recent_tx(20)+tokens_count+currencies. | claude-code | 2026-06-29 |
@@ -164,9 +164,10 @@
 | **OWF-165** | [x] | P2 | ⚪ | design | redesign-delta | — | SmartTransactionModal: monto 17px → 32px font-weight 700 (auditoría 1A). | claude-code | 2026-06-30 |
 | **OWF-166** | [x] | P2 | ⚪ | fix | redesign-delta | — | LiteTransactionsView hero collision: amount+label con overflow ellipsis, max-width, gap reducido. Label color fg-2. (auditoría mobile). | claude-code | 2026-06-30 |
 | **OWF-167** | [x] | P3 | ⚪ | chore | redesign-delta | — | Merge rediseno/rediseno/ → rediseno/ (unificación carpetas). redesign/ nuevo: auditoría TX HTML + 14 screenshots. ui_kits actualizados: CategorySelector.jsx, TransactionForm.jsx, TransactionFormSheet.jsx, tx-summary.js. | claude-code | 2026-06-30 |
+| **OWF-168** | [x] | P2 | ⚪ | fix | deploy | — | Fix lint build errors: no-base-to-string en txCatalog.ts (String cast via as unknown), no-misused-promises en admin/users/index.vue (void IIFE pattern). | claude-code | 2026-06-30 |
 
 <!--
-  NEXT_ID: OWF-168
+  NEXT_ID: OWF-169
 -->
 
 ## Completed
