@@ -2,17 +2,19 @@
 
 ---
 
-## ⚡ Protocolo de sesión (DOS REGLAS, SIN EXCEPCIONES)
+## ⚡ REGLA ÚNICA: owf-session es el orquestador central
 
-### REGLA 1 — Al iniciar: `/owf-session start`
-Antes de escribir una sola línea de código, ejecutar el skill `owf-session` con argumento `start`.
-Carga estado, tareas y memoria Engram. Sin esto, el agente trabaja a ciegas.
+**NUNCA invocar skills directamente.** Todo pasa por `owf-session`.
 
-### REGLA 2 — Al terminar: `/owf-session end`
-Antes de responder "listo" o terminar la sesión, ejecutar `owf-session end`.
-Actualiza STATE.md, TASKS.md, guarda en Engram, sincroniza, verifica deploy.
+```
+/owf-session start   ← PRIMERO, antes de cualquier código
+/owf-session end     ← ÚLTIMO, antes de responder "listo"
+```
 
-**Skill completo:** `.claude/skills/owf-session/SKILL.md`
+`owf-session` decide cuándo usar `owf-deploy`, `owf-qa-production`, `engram:memory`,
+`paseo-epic`, `sdd-*`, `verification-before-completion`. El agente no los invoca solo.
+
+**Referencia completa:** `.claude/skills/owf-session/SKILL.md`
 
 ---
 

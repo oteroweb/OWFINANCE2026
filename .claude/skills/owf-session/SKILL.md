@@ -1,153 +1,197 @@
 ---
 name: owf-session
-description: Centraliza el arranque y cierre de sesión OWFinance. Recupera estado, tareas, memoria Engram. Al cerrar: actualiza STATE/TASKS, sincroniza Engram, verifica deploy.
+description: Orquestador central de sesión OWFinance. Todas las skills del proyecto se invocan desde aquí. Ejecutar start al arrancar y end al terminar — nunca invocar otras skills directamente sin pasar por este orquestador.
 user-invocable: true
 argument-hint: "start | end"
 ---
 
-# Skill: owf-session
+# Skill: owf-session — Orquestador Central
 
-Punto de entrada y salida de cada sesión de trabajo en OWFinance.
-**Siempre invocar `/owf-session start` al inicio y `/owf-session end` al terminar.**
+**Este skill ES el punto de entrada de todo el trabajo en OWFinance.**
+Ninguna otra skill se invoca directamente — todas pasan por aquí.
+
+---
+
+## Mapa de skills del proyecto
+
+| Skill | Cuándo se usa | Invocada desde |
+|-------|--------------|----------------|
+| `owf-session` | Arranque y cierre de sesión | El usuario o automático |
+| `owf-deploy` | Después de cada tarea completada | `owf-session end` + post-tarea |
+| `owf-qa-production` | Verificar vistas en prod tras deploy | `owf-session end` si hay cambios UI |
+| `engram:memory` | Guardar decisiones y bugs | `owf-session end` + inline al descubrir algo |
+| `verification-before-completion` | Antes de marcar cualquier tarea [x] | Post-implementación |
+| `paseo-epic` | Features grandes multi-agente (overnight) | Decisión en `owf-session start` |
+| `paseo-loop` | Loops iterativos, babysit CI/PR | Decisión en `owf-session start` |
+| `sdd-*` | Spec-driven development para features medianas | Decisión en `owf-session start` |
 
 ---
 
 ## `/owf-session start`
 
-### Propósito
-Recuperar todo el contexto antes de tocar cualquier código. Sin este paso, el agente trabaja a ciegas.
+Ejecutar ANTES de cualquier código. Sin esto, el agente trabaja a ciegas.
 
-### Pasos (en orden, todos obligatorios)
-
-**1. Leer los 3 archivos de estado del workspace**
+### Paso 1 — Leer estado del workspace
 ```
 .owf/STATE.md    — qué se hizo, qué sigue, qué está bloqueado
-.owf/TASKS.md    — board de tareas OWF-NNN
+.owf/TASKS.md    — board OWF-NNN
 .owf/CONTEXT.md  — decisiones, archivos críticos, gotchas
 ```
 
-**2. Recuperar memoria Engram**
-- `mem_context(project: 'owfinance2026')` → últimas sesiones y observaciones recientes
-- `mem_search(query: '<tema actual>', project: 'owfinance2026')` → si hay algo específico que buscar
+### Paso 2 — Recuperar memoria Engram  *(usa: `engram:memory`)*
+```
+mem_context(project: 'owfinance2026')     — sesiones recientes
+mem_search(query: '<tema>', project: ...)  — si hay algo específico
+```
 
-**3. Mostrar al usuario el resumen de sesión**
+### Paso 3 — Mostrar resumen al usuario
 
-Formato estándar del resumen:
 ```
 ## Sesión OWFinance — [fecha]
 
-### Estado actual
-- Último trabajo: [qué se completó]
-- Branch: [branch actual]
-- Prod: [OK/pendiente deploy]
+### Estado
+- Último trabajo: [descripción]
+- Branch frontend: [branch]
+- Prod: OK / pendiente deploy
 
-### Tareas activas (OWF-NNN in_progress o pending P0/P1)
+### Tareas activas
 - OWF-NNN [~] descripción
-- OWF-NNN [ ] descripción
+- OWF-NNN [ ] descripción (P1)
 
 ### Bloqueados
 - OWF-NNN [!] razón
 
-### Siguiente paso recomendado
-[una línea concreta]
+### Skills disponibles para esta sesión
+- Feature grande → /paseo-epic
+- Feature mediana → /sdd-new <nombre>
+- Tarea directa → implementar + owf-deploy al terminar
+- QA prod → /owf-qa-production
+
+### Siguiente recomendado
+OWF-NNN — descripción concreta
 ```
 
-**4. Confirmar con el usuario** qué quiere atacar esta sesión antes de escribir código.
+### Paso 4 — Confirmar plan con el usuario antes de escribir código
+
+---
+
+## Post-tarea (después de completar cada OWF-NNN)
+
+Inmediatamente después de terminar cualquier tarea:
+
+**1. Verificar** *(usa: `verification-before-completion`)*
+- TypeScript: `npx vue-tsc --noEmit` en OWFinanceFrontend2025/
+- Si hay errores lint: corregir antes de continuar
+
+**2. Deploy** *(usa: `owf-deploy`)*
+```bash
+./deploy-frontend.sh prod "OWF-NNN: descripción"   # si hay cambios frontend
+./deploy-backend.sh prod  "OWF-NNN: descripción"   # si hay cambios backend
+```
+
+**3. Guardar descubrimiento si aplica** *(usa: `engram:memory`)*
+```
+mem_save(title, type: 'bugfix'|'decision'|'pattern', ...)
+```
+
+**4. Marcar tarea en TASKS.md**
+```
+[x] con fecha → OWF-NNN
+```
 
 ---
 
 ## `/owf-session end`
 
-### Propósito
-Cerrar limpiamente: estado persistido, memoria guardada, prod actualizado. Sin este paso, la siguiente sesión empieza a ciegas.
+Ejecutar ANTES de responder "listo" o terminar la sesión.
 
-### Pasos (en orden, todos obligatorios)
+### Paso 1 — TASKS.md
+- `[x]` + fecha en cada tarea completada
+- `[!]` + razón en bloqueadas
+- Actualizar `NEXT_ID`
 
-**1. Actualizar `.owf/TASKS.md`**
-- Marcar `[x]` con fecha las tareas completadas esta sesión
-- Marcar `[!]` con razón las que quedaron bloqueadas
-- Actualizar `NEXT_ID` si se crearon tareas nuevas
-
-**2. Actualizar `.owf/STATE.md`**
+### Paso 2 — STATE.md
 ```markdown
-**Updated:** [timestamp ISO]
+**Updated:** [ISO timestamp]
 **By:** claude-code
 
 ## Último trabajo ([fecha])
-- **OWF-NNN** ✅ descripción de lo completado
-- **OWF-NNN** 🔲 descripción de lo pendiente
+- OWF-NNN ✅ descripción
+- OWF-NNN 🔲 pendiente
 
 ## Bloqueados
 - OWF-NNN: razón
+
+### Siguiente recomendado
+OWF-NNN — descripción
 ```
 
-**3. Guardar memoria Engram**
-- `mem_session_summary(...)` — goal, discoveries, accomplished, next steps, relevant files
-- `mem_save(...)` para cualquier decisión técnica, bug fix o patrón nuevo descubierto
+### Paso 3 — Engram  *(usa: `engram:memory`)*
+```
+mem_session_summary(goal, discoveries, accomplished, next_steps, relevant_files)
+mem_save(...)  ← para cada decisión técnica nueva
+```
 
-**4. Sincronizar `.owf/` → Engram**
+### Paso 4 — Sync `.owf/` → Engram
 ```bash
-cd /Users/otero/OW_Ecosystem/apps/owfinance/central
 .owf/sync-engram.sh push
 ```
 
-**5. Verificar deploy**
-- ¿Hay cambios de código sin deployar? → Correr `./deploy-frontend.sh prod` y/o `./deploy-backend.sh prod`
-- Confirmar `frontend=OK:200` antes de declarar sesión cerrada
-- Si el deploy falla por lint: corregir, commitear, re-deployar (ver `owf-deploy` skill)
+### Paso 5 — Deploy si hay código sin subir  *(usa: `owf-deploy`)*
+```bash
+./deploy-frontend.sh prod "sesión [fecha] — OWF-NNN"
+./deploy-backend.sh prod  "sesión [fecha] — OWF-NNN"
+```
 
-**6. Commit del repo central** (si `.owf/` o `CLAUDE.md` cambió)
+### Paso 6 — QA prod si hubo cambios de UI  *(usa: `owf-qa-production`)*
+Verificar en browser real que las vistas afectadas funcionan.
+
+### Paso 7 — Commit central
 ```bash
 git add .owf/STATE.md .owf/TASKS.md
-git commit -m "chore(state): sesión [fecha] — OWF-NNN done, next: OWF-NNN"
+git commit -m "chore(state): sesión [fecha] — OWF-NNN done, next OWF-NNN"
 ```
 
-**7. Confirmar al usuario**
+### Paso 8 — Confirmar al usuario
 ```
 ✅ Sesión cerrada:
-- [N] tareas completadas: OWF-NNN, OWF-NNN
+- N tareas completadas: OWF-NNN, OWF-NNN
 - Prod: https://owfinances.com/app/ OK
-- Engram: guardado
+- Engram: guardado + .owf/ sincronizado
 - Siguiente: OWF-NNN — descripción
 ```
 
 ---
 
-## Reglas críticas
+## Decisión de tamaño de tarea (en `start`)
 
-- **start SIEMPRE antes de cualquier código** — nunca saltar este paso
-- **end SIEMPRE antes de responder "listo" al usuario** — no terminar sin cerrar
-- Si la sesión se interrumpe, correr `/owf-session end` de todas formas con el estado parcial
-- Los archivos `.owf/` son la fuente de verdad local; Engram es la copia persistente cross-sesión
+| Tamaño | Criterio | Skill a usar |
+|--------|----------|-------------|
+| Pequeña (1-2 archivos, < 2h) | Cambio acotado y claro | Implementar directo + `owf-deploy` |
+| Mediana (3+ archivos, spec necesaria) | Requiere diseño previo | `/sdd-new <nombre>` |
+| Grande (multi-sesión, multi-agente) | Overnight, múltiples fases | `/paseo-epic <tarea>` |
+| Loop/babysit | "Sigue hasta que pase X" | `/paseo-loop` |
 
 ---
 
-## Referencia rápida de comandos
+## Comandos de referencia rápida
 
 ```bash
-# Ver estado actual
-cat .owf/STATE.md
+# Estado
+grep -E "\[ \]|\[~\]|\[!\]" .owf/TASKS.md | grep -v "^#\|^<!--" | head -15
 
-# Ver tareas pendientes
-grep -E "\[ \]|\[~\]|\[!\]" .owf/TASKS.md | head -20
+# Deploy
+./deploy-frontend.sh prod "OWF-NNN: desc"
+./deploy-backend.sh prod  "OWF-NNN: desc"
 
 # Sync Engram
 .owf/sync-engram.sh push    # local → Engram
-.owf/sync-engram.sh pull    # Engram → local (máquina nueva)
-.owf/sync-engram.sh status  # comparar timestamps
-
-# Deploy
-./deploy-frontend.sh prod "OWF-NNN: descripción"
-./deploy-backend.sh prod "OWF-NNN: descripción"
+.owf/sync-engram.sh pull    # nueva máquina
+.owf/sync-engram.sh status  # comparar
 
 # Verificar prod
 curl -s -o /dev/null -w "%{http_code}" https://owfinances.com/up
+
+# TypeScript check
+cd OWFinanceFrontend2025 && npx vue-tsc --noEmit
 ```
-
----
-
-## Skills relacionados
-
-- `owf-deploy` — proceso completo de deploy frontend/backend
-- `owf-qa-production` — verificar vistas en el browser real de prod
-- `engram:memory` — guardar/buscar memoria entre sesiones

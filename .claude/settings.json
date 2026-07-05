@@ -1,0 +1,15 @@
+{
+  "hooks": {
+    "UserPromptSubmit": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash -c 'cd /Users/otero/OW_Ecosystem/apps/owfinance/central && echo \"=== OWF SESSION CONTEXT ===\"; echo \"Updated: $(grep -m1 \\\"^\\\\*\\\\*Updated:\\\\*\\\\*\\\" .owf/STATE.md 2>/dev/null | head -1)\"; echo \"Branch: $(git -C OWFinanceFrontend2025 branch --show-current 2>/dev/null)\"; echo \"Pending tasks:\"; grep -E \"\\\\[ \\\\]|\\\\[~\\\\]\" .owf/TASKS.md 2>/dev/null | grep -v \"^#\\|^<!--\" | head -8; echo \"Blocked:\"; grep -E \"\\\\[!\\\\]\" .owf/TASKS.md 2>/dev/null | grep -v \"^#\\|^<!--\" | head -3; echo \"=== END CONTEXT ===\"'"
+          }
+        ]
+      }
+    ]
+  }
+}
