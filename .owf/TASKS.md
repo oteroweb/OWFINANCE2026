@@ -189,9 +189,12 @@
 | **OWF-190** | [x] | P3 | ⚪ | chore | dx | — | Skill owf-session: protocolo centralizado start/end. Arranque: lee STATE+TASKS+CONTEXT+Engram. Cierre: STATE+TASKS+Engram+sync+deploy. CLAUDE.md con 2 reglas al tope. | claude-code | 2026-07-05 |
 | **OWF-062** | [!] | P0 | 🔴 | fix | adhoc | — | Password Reset: código listo. BLOQUEADO: credenciales SMTP/Resend reales en .env prod. Usuario debe proveer. | opencode | — |
 | **OWF-131** | [ ] | P1 | 🟡 | fix | adhoc | — | Gemini key prod prefijo AQ. inusual (estándar AIza). Regenerar en aistudio.google.com y actualizar .env prod. | — | — |
+| **OWF-191** | [x] | P1 | 🟡 | fix | adhoc | — | Backend: `Category::getJarSlugAttribute()` usaba mapa hardcodeado de 12 nombres → cántaro, ignorando la relación real `jar_category`. Categorías personalizadas (ej. "Familia") devolvían jar_slug=null. Ahora consulta primero la relación real, cae al mapa legado si no hay asignación. Eager-load en CategoryRepo. Deploy prod OK. | claude-code | 2026-07-05 |
+| **OWF-192** | [x] | P2 | ⚪ | fix | adhoc | — | Frontend Pro: botón "Editar" del detalle de transacción abría el modal vacío (no llamaba a `txDetailFillForm()`). Agregado `txDetailStartEdit()` en index.vue, igual que ya hacía Duplicar. Deploy prod OK. | claude-code | 2026-07-05 |
+| **OWF-193** | [x] | P2 | ⚪ | fix | adhoc | — | SmartTransactionModal: "Nuevo movimiento" siempre preseleccionaba la primera cuenta de la lista en vez de la cuenta filtrada/seleccionada (`txStore.selectedAccountIds`). Además la moneda del monto era un selector independiente que podía no coincidir con la cuenta — ahora queda fija a la moneda de la cuenta elegida. Deploy prod OK. | claude-code | 2026-07-05 |
 
 <!--
-  NEXT_ID: OWF-191
+  NEXT_ID: OWF-194
 -->
 
 ## Completed

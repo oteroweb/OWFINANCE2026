@@ -3,10 +3,36 @@
 <!-- Solo un agente escribe a la vez. Updated = timestamp del ultimo escritor. -->
 <!-- Tareas se referencian por ID (OWF-NNN) → ver .owf/TASKS.md -->
 
-**Updated:** 2026-07-05T18:30:00Z
+**Updated:** 2026-07-05T20:15:00Z
 **By:** claude-code
 
-## Último trabajo (2026-07-05) — OWF-138+168+189+190 + Protocolos estandarizados
+## Último trabajo (2026-07-05, tarde) — OWF-191+192+193: bugs reportados por usuario en producción
+
+### Completado esta sesión
+- **OWF-191** ✅ Backend: `Category::getJarSlugAttribute()` ahora usa la relación real `jar_category` en vez del mapa hardcodeado de 12 nombres. Categorías personalizadas (ej. "Familia") ya resuelven cántaro correctamente. Eager-load añadido en `CategoryRepo`.
+- **OWF-192** ✅ Frontend Pro: botón "Editar" en detalle de transacción abría formulario vacío — faltaba `txDetailFillForm()`. Agregado `txDetailStartEdit()`.
+- **OWF-193** ✅ SmartTransactionModal: "Nuevo movimiento" no preseleccionaba la cuenta filtrada (`txStore.selectedAccountIds`), siempre tomaba la primera de la lista. Además la moneda ahora queda fija a la moneda de la cuenta elegida (antes era selector independiente).
+- **Backend + Frontend deployados** ✅ https://owfinances.com — ambos OK
+
+### Incidente durante deploy (resuelto)
+`deploy-frontend.sh` (su propio `git add -A` interno) coló 208 archivos generados de `src-capacitor/ios/` (CocoaPods) en el commit del fix, ya pusheado a `origin/main`. Se corrigió con un commit de limpieza (`git rm -r --cached` + `.gitignore`), sin reescribir historial. No había secretos en esos archivos (el token de `e2e/.auth.json` sí se resguardó correctamente vía stash antes del deploy).
+
+### Nota — trabajo en curso de otro agente/sesión (no tocado)
+`SmartTransactionModal.vue` tiene implementación sustancial de OWF-179 (tasa paralelo/oficial), OWF-185 (transfer Desde→Hacia + cruce de moneda) y OWF-186 (tipo Ajuste) ya presente en el archivo, aparentemente de una sesión/agente paralelo (probablemente opencode). Esas 3 tareas siguen `[ ]` en TASKS.md porque no se verificó su completitud en esta sesión — pendiente de que alguien confirme y las marque done.
+
+### Commit local sin pushear (frontend, de sesión anterior)
+`2abb7ee` — "merge rediseño 2 → rediseño/..." — existe en `main` local pero no en `origin/main`. No se tocó; usuario debe decidir si pushearlo.
+
+### Bloqueados
+- **OWF-062** [!] SMTP prod — esperando credenciales del usuario
+- **OWF-131** [ ] Gemini key — verificar/regenerar en prod
+
+### Siguiente recomendado
+Verificar en el navegador (login real) que OWF-192/193 funcionan como se espera, y revisar si OWF-179/185/186 ya están completas para marcarlas done.
+
+---
+
+## Sesión anterior (2026-07-05) — OWF-138+168+189+190 + Protocolos estandarizados
 
 ### Completado esta sesión
 - **OWF-138** ✅ Pro detail modal v2: VIEW usa AnchoredJarChip, EDIT usa CategorySelector+chip separado de proveedor, category_id+jar_id en payload save/duplicate
