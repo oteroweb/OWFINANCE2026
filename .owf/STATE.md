@@ -3,8 +3,111 @@
 <!-- Solo un agente escribe a la vez. Updated = timestamp del ultimo escritor. -->
 <!-- Tareas se referencian por ID (OWF-NNN) → ver .owf/TASKS.md -->
 
-**Updated:** 2026-06-30T18:00:00Z
+**Updated:** 2026-07-05T05:00:00Z
 **By:** claude-code
+
+## Último trabajo (2026-07-05) — OWF-169..172 + Delta formulario transacciones consolidado
+
+### Completado esta sesión
+- **OWF-169** ✅ Backend: `PUT /admin/users/:id/profile` — actualiza name, email, role_id, active, layout_mode
+- **OWF-170** ✅ Frontend admin: Tab Perfil editable en `admin/users/detail.vue` (Rol q-select + Plan toggle lite/pro)
+- **OWF-171** ✅ Pool-2 categorías agrupadas por cántaro con colores (`catPoolByJar` computed)
+- **OWF-172** ✅ SmartTransactionModal: panel comisión con cards (pagomovil/porcentaje/fijo), tipo pagomovil 0.30% BCV auto, tasa cross-currency en split por fila. Deploy prod OK.
+
+### Delta formulario (rediseno/ vs actual) — OWF-179..188 registradas
+Comparación screenshots + TransactionForm.jsx del rediseno. Tareas priorizadas:
+
+| ID | Pri | Descripción breve |
+|----|-----|-------------------|
+| OWF-179 | P1 | PRO: TfRateBreakdown — caja paralelo+BCV cuando currency≠USD |
+| OWF-180 | P1 | PRO: Categoría+Cántaro side by side (sacar Cuenta a fila propia) |
+| OWF-181 | P2 | PRO: Proveedor+Fecha side by side |
+| OWF-182 | P1 | PRO: Switches "Pago múltiple" + "Detalle/factura" en lugar de botones |
+| OWF-183 | P2 | PRO: Switch "Afecta el saldo" (include_in_balance) |
+| OWF-184 | P1 | PRO: TfReview card (preview NL + validaciones + 3 estados + toast) |
+| OWF-185 | P2 | PRO: Transfer type UI — Desde→Hacia + panel cruce de moneda |
+| OWF-186 | P2 | PRO: Ajuste type section (Cuenta + Saldo objetivo + diff + Motivo) |
+| OWF-187 | P2 | LITE: Income → "Se reparte automáticamente" (info box jars) |
+| OWF-188 | P3 | LITE: Income → Categoría opcional al lado de Fecha |
+
+**Archivo de referencia**: `OWFinanceFrontend2025/rediseno/ui_kits/lite-desktop/organisms/TransactionForm.jsx`
+**Componente a modificar**: `OWFinanceFrontend2025/src/components/SmartTransactionModal.vue`
+
+### Pendiente para el usuario
+- Recargar saldo en opencode.ai (local y prod son cuentas distintas).
+- Instalar Xcode.app completo (App Store, login manual) para compilar iOS.
+
+## Último trabajo (2026-07-05 madrugada) — Toolchain mobile operativo + descarga de prueba + diagnóstico IA
+
+### Android — build verificado end-to-end en esta Mac
+- JDK 17 (`brew install openjdk@17`) + Android SDK (`brew install --cask android-commandlinetools`) instalados sin sudo. `ANDROID_HOME`/`JAVA_HOME` persistidos en `~/.zshrc`.
+- `quasar build -m capacitor -T android` → `cap sync android` → `gradlew assembleDebug` → BUILD SUCCESSFUL. APKs en `OWFinanceFrontend2025/src-capacitor/android/app/build/outputs/apk/{dev,prod}/debug/`.
+
+### iOS — scaffolding listo, falta Xcode.app (paso manual del usuario)
+- CocoaPods instalado (`brew install cocoapods`, requiere `LANG=en_US.UTF-8` en `~/.zshrc`). `@capacitor/ios` agregado, `npx cap add ios` + `pod install` OK → `src-capacitor/ios/App/App.xcworkspace` listo.
+- Bloqueo real: esta Mac solo tiene Xcode Command Line Tools. Instalar Xcode.app requiere login manual en Mac App Store (no automatizable).
+
+### Descarga de la app (para pruebas en el celular) — YA PUBLICADO
+- `https://owfinances.com/downloads/` — página de descarga del APK debug v1.0.22.
+- Fuente local: `releases/downloads/` (index.html + apk). Script: `./deploy-downloads.sh prod` (rsync directo a `public_html/downloads/`, bypassea el router SPA porque el .htaccess sirve archivos existentes en disco antes de reenviar a index.php).
+- Actualizar en cada nueva build: copiar el APK a `releases/downloads/`, actualizar el link en `index.html`, correr `./deploy-downloads.sh prod`.
+
+### Servicios de IA — bloqueador de saldo encontrado (local Y prod)
+- `AiProviderFactory::makeWithRuntimeFallback()` (usado por `AiChatController` y `AiExtractionController`) SÍ hace fallback automático en runtime — por eso prod sigue funcionando.
+- `opencode-go` (provider primario) está SIN SALDO en dos workspaces distintos: local (`wrk_01KS8B31VFYTY8RW202XGZW0RA`) y prod (`wrk_01KKHD11JGBA1MM518SRNQDA6V`). Ambos necesitan recarga en https://opencode.ai — acción de pago, pendiente del usuario.
+- Prod cae a **Groq** automáticamente y responde OK (probado en vivo vía SSH). Local no pudo probar Groq (bloqueo de red del sandbox hacia api.groq.com, no es la key).
+- BUG encontrado y corregido: `OPENAI_API_KEY` en `.env` (local y prod) era un duplicado exacto de `OPENCODE_GO_API_KEY`, no una key real de OpenAI → vaciada en ambos entornos + `config:cache` en prod.
+- Nuevo comando: `php artisan ai:diagnose` — prueba en vivo cada provider configurado (extraction/advisor) y reporta cuál responde. Correrlo después de cualquier cambio de credenciales de IA.
+- Nuevo test: `tests/Feature/AiProviderFallbackTest.php` — fija en CI el comportamiento de fallback (Http::fake simulando opencode-go sin crédito → cae a groq).
+
+### Pendiente para el usuario
+- Recargar saldo en opencode.ai (local y prod son cuentas distintas).
+- Instalar Xcode.app completo (App Store, login manual) para poder compilar/correr iOS.
+- Decidir si vale la pena reactivar Gemini/Anthropic/OpenRouter/XAI como fallback adicional (hoy solo opencode-go y groq tienen key en prod).
+
+## Último trabajo (2026-07-03) — E2E Playwright suite completa
+
+### Tests añadidos (commit `45848c6` en frontend)
+| Spec | Tests | Resultado |
+|------|-------|-----------|
+| `e2e/transaction-api.spec.ts` | 13 | **10 pass / 3 skip** (multi-moneda, 1 cuenta demo) |
+| `e2e/transaction-ui.spec.ts` | 7 | **5 pass / 2 skip** (Pro mode inactivo en demo) |
+
+### Bugs corregidos en el proceso
+- `User::isAdmin()` missing → 500 para todos los usuarios no-admin (backend commit `1082732`)
+- `items[].amount` doble-multiplicado por qty → totales incorrectos en facturas (mismo commit)
+- Playwright `fill()` no dispara Vue `v-model.number` → cambiado a `pressSequentially + dispatchEvent('input')`
+- `Escape` en QSelect cerraba el modal entero via Quasar q-dialog → eliminado
+
+### Cómo correr los tests en cada deploy
+```bash
+PLAYWRIGHT_TEST_EMAIL=user@demo.com \
+PLAYWRIGHT_TEST_PASSWORD='S$ratoga.1990' \
+./run-e2e-prod.sh
+```
+
+## Último trabajo (2026-07-02) — Sistema de Tags
+
+- **Sistema de etiquetas (tags)** ✅ backend completo + deployado prod
+  - Tabla `tags` (slug, name, description, color, icon, type system/user)
+  - Pivots `transaction_tags` + `item_transaction_tags`
+  - Campos `is_fee` + `fee_type` en `item_transactions`
+  - 6 tags de sistema sembrados en prod: comision, pago_movil, impulso, planificado, recurrente, transferencia_interna
+  - API: GET/POST/DELETE `/api/v1/tags`
+  - `TransactionController` acepta `tags[]` y `items.*.tags` en save/update
+  - Filtro `?tag_ids=` (AND semántico) en listado
+  - Commit: `aadd9d6`
+
+## Pendiente para próxima sesión
+
+- **Frontend tags + proveedor** — prompt listo en conversación. Agregar a `SmartTransactionModal.vue`:
+  - Selector proveedor/comercio (autocomplete contra `/api/v1/providers`)
+  - Chips de etiquetas (multi-select, colores, tooltip con description)
+  - Store `tags.ts` nuevo
+  - Payload: `provider_id` + `tags: number[]`
+- **Carpeta rediseno actualizada** — pendiente de recibir (usuario lo indica al inicio de próxima sesión)
+- **OWF-062** 🔴 SMTP prod — bloqueado esperando credenciales
+- **OWF-131** 🟡 Gemini key prod — verificar/regenerar
 
 ## Último trabajo (2026-06-30)
 - **OWF-138** ✅ Pro detail modal v2 — AnchoredJarChip VIEW + CategorySelector EDIT + category_id/jar_id en payload
