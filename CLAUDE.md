@@ -17,6 +17,39 @@ Rules:
 
 ---
 
+## Deploy Protocol (MANDATORY after every task)
+
+**Rule: code done = deploy done. Every completed OWF-NNN task ends with a deploy.**
+
+The user will NEVER need to ask "¿lo subiste?". It's always already in prod.
+
+### Frontend changes → deploy frontend
+```bash
+cd /Users/otero/OW_Ecosystem/apps/owfinance/central
+./deploy-frontend.sh prod "OWF-NNN: descripción"
+```
+
+### Backend changes → deploy backend
+```bash
+cd /Users/otero/OW_Ecosystem/apps/owfinance/central
+./deploy-backend.sh prod "OWF-NNN: descripción"
+```
+
+### Both changed → backend first, then frontend
+
+### ESLint gate (build fails if lint errors)
+Before deploying, if .vue/.ts files were modified:
+- `@typescript-eslint/no-unused-vars` — remove unused imports/refs/computed
+- `@typescript-eslint/no-misused-promises` — `void (async () => {...})()`
+- `@typescript-eslint/no-base-to-string` — `String(x as unknown)`
+- `vue/no-deprecated-filter` — never use `|` (pipe) in template bindings, even for TS union types
+
+### After deploy: verify exit code 0 + "DEPLOY COMPLETADO" + `frontend=OK:200`
+
+Full deploy reference: `.claude/skills/owf-deploy/SKILL.md`
+
+---
+
 # Agent Teams Lite — Orchestrator Instructions
 
 Add this section to your existing `~/.claude/CLAUDE.md` or project-level `CLAUDE.md`.
