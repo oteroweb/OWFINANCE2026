@@ -1,19 +1,25 @@
 # CLAUDE.md — Claude Code Instructions for OWFINANCE2026
 
-## Session Start (ALWAYS READ FIRST)
+---
 
-Before any work, read these 3 files to know the current project state:
+## ⚡ Protocolo de sesión (DOS REGLAS, SIN EXCEPCIONES)
 
-1. **`.owf/STATE.md`** — Active work, blockers, next steps
-2. **`.owf/TASKS.md`** — Unified task board (OWF-NNN IDs)
-3. **`.owf/CONTEXT.md`** — Decisions, critical files, gotchas
+### REGLA 1 — Al iniciar: `/owf-session start`
+Antes de escribir una sola línea de código, ejecutar el skill `owf-session` con argumento `start`.
+Carga estado, tareas y memoria Engram. Sin esto, el agente trabaja a ciegas.
 
-Rules:
-- All tasks use OWF-NNN IDs. Legacy IDs (DS-*, TECH-*, BUG-*) mapped in STATE.md.
-- Before ending session: update `.owf/STATE.md` with what was done and what's next.
-- After updating `.owf/`: run `.owf/sync-engram.sh push` to sync to Engram.
-- On new machine or fresh session: run `.owf/sync-engram.sh pull` first.
-- `.owf/TASKS.md` is the ONLY active task board. `TASKS_LEDGER.md` is read-only legacy.
+### REGLA 2 — Al terminar: `/owf-session end`
+Antes de responder "listo" o terminar la sesión, ejecutar `owf-session end`.
+Actualiza STATE.md, TASKS.md, guarda en Engram, sincroniza, verifica deploy.
+
+**Skill completo:** `.claude/skills/owf-session/SKILL.md`
+
+---
+
+## Task IDs
+
+- Todos los tickets usan OWF-NNN. IDs legacy (DS-*, TECH-*, BUG-*) mapeados en STATE.md.
+- `.owf/TASKS.md` es el ÚNICO board activo. `TASKS_LEDGER.md` es legado read-only.
 
 ---
 
