@@ -185,11 +185,13 @@
 | **OWF-186** | [ ] | P2 | ⚪ | feat | rediseno | — | PRO form — Ajuste type section: para type=ajuste mostrar: (1) Cuenta a ajustar (q-select); (2) Saldo objetivo MoneyInput; (3) diff box (trending_up/down con texto "Se creará un ajuste de ±$X"); (4) Motivo text field. Enviar target_balance al backend. | — | — |
 | **OWF-187** | [ ] | P2 | ⚪ | feat | rediseno | — | LITE form — Income "Se reparte automáticamente": cuando type=income en modo LITE, reemplazar CategorySelector con info box que muestre distribución por cántaro (Necesidades X% · Diversión X% · etc.), usando SAMPLE_JARS/jarOpts. | — | — |
 | **OWF-188** | [ ] | P3 | ⚪ | feat | rediseno | — | LITE form — Income Categoría opcional: cuando type=income en modo LITE, mostrar Categoría (opcional) en la misma fila que Fecha (stm-row-2). Actualmente Fecha va sola. | — | — |
+| **OWF-189** | [x] | P3 | ⚪ | chore | dx | — | Skill owf-deploy: proceso estandarizado de deploy frontend/backend prod. ESLint gotchas documentados. CLAUDE.md actualizado. | claude-code | 2026-07-05 |
+| **OWF-190** | [x] | P3 | ⚪ | chore | dx | — | Skill owf-session: protocolo centralizado start/end. Arranque: lee STATE+TASKS+CONTEXT+Engram. Cierre: STATE+TASKS+Engram+sync+deploy. CLAUDE.md con 2 reglas al tope. | claude-code | 2026-07-05 |
 | **OWF-062** | [!] | P0 | 🔴 | fix | adhoc | — | Password Reset: código listo. BLOQUEADO: credenciales SMTP/Resend reales en .env prod. Usuario debe proveer. | opencode | — |
 | **OWF-131** | [ ] | P1 | 🟡 | fix | adhoc | — | Gemini key prod prefijo AQ. inusual (estándar AIza). Regenerar en aistudio.google.com y actualizar .env prod. | — | — |
 
 <!--
-  NEXT_ID: OWF-169
+  NEXT_ID: OWF-191
 -->
 
 ## Completed

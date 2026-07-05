@@ -3,10 +3,28 @@
 <!-- Solo un agente escribe a la vez. Updated = timestamp del ultimo escritor. -->
 <!-- Tareas se referencian por ID (OWF-NNN) → ver .owf/TASKS.md -->
 
-**Updated:** 2026-07-05T05:00:00Z
+**Updated:** 2026-07-05T18:30:00Z
 **By:** claude-code
 
-## Último trabajo (2026-07-05) — OWF-169..172 + Delta formulario transacciones consolidado
+## Último trabajo (2026-07-05) — OWF-138+168+189+190 + Protocolos estandarizados
+
+### Completado esta sesión
+- **OWF-138** ✅ Pro detail modal v2: VIEW usa AnchoredJarChip, EDIT usa CategorySelector+chip separado de proveedor, category_id+jar_id en payload save/duplicate
+- **OWF-168** ✅ Fix lint: no-base-to-string (txCatalog), no-misused-promises (admin/users detail+index), vue/no-deprecated-filter (union type en template), unused vars
+- **OWF-189** ✅ Skill `owf-deploy`: proceso estandarizado, ESLint gotchas documentados, CLAUDE.md actualizado
+- **OWF-190** ✅ Skill `owf-session`: protocolo start/end centralizado, CLAUDE.md con 2 reglas al tope
+- **Frontend deployado** ✅ https://owfinances.com/app/ — 151 archivos, prod OK
+
+### Bloqueados
+- **OWF-062** [!] SMTP prod — esperando credenciales del usuario
+- **OWF-131** [ ] Gemini key — verificar/regenerar en prod
+
+### Siguiente recomendado
+OWF-179 (P1) — TfRateBreakdown: caja paralelo+BCV en SmartTransactionModal cuando currency≠USD
+
+---
+
+## Sesión anterior (2026-07-05) — OWF-169..172 + Delta formulario transacciones consolidado
 
 ### Completado esta sesión
 - **OWF-169** ✅ Backend: `PUT /admin/users/:id/profile` — actualiza name, email, role_id, active, layout_mode
