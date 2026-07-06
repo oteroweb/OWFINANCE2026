@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OWFINANCE — Descargar App</title>
+<style>
+  :root { color-scheme: dark; }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(160deg, #0f172a, #1e293b);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    color: #f1f5f9;
+    padding: 24px;
+  }
+  .card {
+    max-width: 420px;
+    width: 100%;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 20px;
+    padding: 32px 28px;
+    text-align: center;
+    backdrop-filter: blur(6px);
+  }
+  .logo {
+    width: 64px; height: 64px;
+    border-radius: 16px;
+    background: linear-gradient(135deg, #6366f1, #22d3ee);
+    margin: 0 auto 16px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 28px; font-weight: 700;
+  }
+  h1 { font-size: 1.4rem; margin: 0 0 4px; }
+  .sub { color: #94a3b8; font-size: 0.9rem; margin-bottom: 24px; }
+  .btn {
+    display: block;
+    width: 100%;
+    padding: 16px;
+    border-radius: 14px;
+    background: linear-gradient(135deg, #6366f1, #4f46e5);
+    color: white;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 1.05rem;
+    margin-bottom: 12px;
+  }
+  .meta {
+    font-size: 0.8rem;
+    color: #64748b;
+    margin-bottom: 24px;
+  }
+  .steps {
+    text-align: left;
+    background: rgba(255,255,255,0.03);
+    border-radius: 12px;
+    padding: 16px 18px;
+    font-size: 0.85rem;
+    color: #cbd5e1;
+    line-height: 1.6;
+  }
+  .steps b { color: #f1f5f9; }
+  .badge {
+    display: inline-block;
+    background: rgba(234, 179, 8, 0.15);
+    color: #eab308;
+    border: 1px solid rgba(234,179,8,0.3);
+    border-radius: 999px;
+    padding: 4px 12px;
+    font-size: 0.75rem;
+    margin-bottom: 16px;
+  }
+</style>
+</head>
+<body>
+  <div class="card">
+    <div class="logo">OW</div>
+    <h1>OWFINANCE</h1>
+    <div class="sub">App móvil — build de prueba (Android)</div>
+
+    <div class="badge">⚠️ Versión debug — solo para pruebas internas</div>
+
+    <a class="btn" href="owfinance-1.0.22-debug.apk" download>⬇ Descargar APK (v1.0.22)</a>
+    <div class="meta">Android 6.0+ · ~7.3 MB</div>
+
+    <div class="steps">
+      <b>Cómo instalar:</b><br>
+      1. Descargá el APK desde este link en tu teléfono.<br>
+      2. Si Android bloquea la instalación, andá a <b>Ajustes → Seguridad → Instalar apps desconocidas</b> y permitilo para el navegador.<br>
+      3. Abrí el archivo descargado y confirmá la instalación.<br>
+      4. Iniciá sesión con tu cuenta de OWFINANCE.
+    </div>
+  </div>
+</body>
+</html>

@@ -8,7 +8,11 @@
 ## Contexto del producto
 
 **OWFINANCE** es una app de finanzas personales con un asesor IA integrado.
-Tiene dos modos: **Lite** (móvil, minimalista) y **Pro** (escritorio, denso).
+Tiene dos modos: **Lite** (minimalista) y **Pro** (denso). Estos modos son
+independientes del tamaño de pantalla — no equivalen a "Lite=móvil,
+Pro=escritorio". Ambos se ven en Desktop y en Mobile: `src/layouts/AppShell.vue`
+calcula `isMobile` (viewport) por separado de `layout_mode` (Lite/Pro, setting
+de usuario) y combina ambos ejes de forma ortogonal.
 Stack: Quasar 2 + Vue 3 + TypeScript. Design System ya establecido (tokens en `app.scss`).
 
 ### Paleta actual

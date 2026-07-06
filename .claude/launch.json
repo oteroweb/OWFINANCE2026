@@ -24,6 +24,7 @@
         "dev"
       ],
       "port": 3000,
+      "autoPort": false,
       "cwd": "/Users/otero/OW_Ecosystem/apps/owfinance/central/OWFinanceFrontend2025"
     }
   ]

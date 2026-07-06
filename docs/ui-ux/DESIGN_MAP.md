@@ -1,6 +1,13 @@
 # OWFinance 2026 — Mapa Completo de Diseño
 > Generado: 2026-05-26 | Consolidación de 13 docs ui-ux + 23 pantallas Stitch + código frontend
 
+> **⚠️ ESTADO ACTUAL (2026-06-20):** La arquitectura de layouts fue refactorizada completamente (OWF-055/056/060).
+> - `UserLayout.vue`, `DynamicRoleLayout.vue`, `LiteMobileLayout.vue`, `LiteDesktopLayout.vue`, `ProLayout.vue` — **ELIMINADOS**
+> - `user_dashboard.vue` — **ELIMINADO**
+> - Reemplazados por un único **`AppShell.vue`** (`src/layouts/AppShell.vue`) que gestiona Lite+Pro+Mobile reactivamente.
+> - Dashboard home actual: **`LiteHomeView.vue`** (Lite) y **`ProHomeView.vue`** (Pro) en `src/pages/user/`.
+> - Las referencias a layouts viejos en este doc son **históricas** — válidas para entender la evolución del diseño, no el código actual.
+
 ---
 
 ## 1. JERARQUÍA DE AUTORIDAD (cuándo hay conflicto)
@@ -119,21 +126,30 @@
 
 ## 6. ESTADO DE IMPLEMENTACIÓN FRONTEND
 
-### Componentes Lite que YA EXISTEN
-- `LiquidHeader.vue` — Header con balance, toggle visibilidad, moneda
-- `LiquidBottomNavNew.vue` — Bottom nav 5 tabs
+> **Actualizado 2026-06-20 (OWF-068)** — refleja el código real en prod.
+
+### Shell actual (AppShell.vue)
+- `AppShell.vue` (`src/layouts/AppShell.vue`) — Shell único Lite+Pro+Mobile. Reemplaza todos los layouts anteriores.
+- `LiteNavPill.vue` — Nav desktop Lite (pill flotante)
+- `BottomNavMobile.vue` — Bottom nav 5 tabs mobile
+- `LiteHeaderDesktop.vue` — Header desktop Lite (balance, toggle, moneda)
 - `QuickActionSheet.vue` — FAB bottom sheet
-- `LiteMobileLayout.vue` — Layout integrador mobile
-- `LiquidJarCard.vue` — Card cántaro
-- `LiquidBalanceCard.vue` — Card balance
-- `LiteHomeView.vue` — Vista home Lite
+- `ExpandedMenu.vue` — Menú expandido desktop Pro
 
-### Componentes que EXISTEN pero NO INTEGRADOS
-- `LiteHeaderDesktop.vue` — Header desktop Lite
-- `LiteBottomNavDesktop.vue` — Nav desktop Lite
-- `ExpandedNavigationMenuLight.vue` — Menú expandido desktop
+### Vistas Lite activas
+- `LiteHomeView.vue` — Home Lite con balance global, preview jars, transacciones recientes, Dreams+Debts
+- `LiteJarsView.vue` — Cántaros Lite (lista vertical + detail sheet)
+- `LiteTransactionsView.vue` — Transacciones Lite (lista + detail sheet)
+- `src/pages/user/dreams/index.vue` — Sueños (hero violeta, grid cards)
+- `src/pages/user/debts/index.vue` — Deudas (grupos Cashea/Otras, pago cuotas)
 
-### Problema actual: `DynamicRoleLayout` envía Lite desktop a shell mobile
+### Vistas Pro activas
+- `ProHomeView.vue` — Home Pro (KPI strip, Exchange Rates, notifications)
+- `AsesorPage.vue` — Chat IA redesignado (bubbles BEM, CTA pills)
+- `AnalysisPage.vue` — Análisis (jar strip, metric-grid)
+
+### ~~Problema anterior~~ RESUELTO
+~~`DynamicRoleLayout` envía Lite desktop a shell mobile~~ → Eliminado. `AppShell.vue` detecta `$q.screen` reactivamente.
 
 ---
 

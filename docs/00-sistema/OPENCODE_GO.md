@@ -1,4 +1,4 @@
-# OpenCode Go — Referencia de integración
+# OpenCode Zen — Referencia de integración
 
 > Servicio de acceso a modelos open-source de alto rendimiento por suscripción.
 > **$5 primer mes → $10/mes**. Política zero-retention. Servidores: US, EU, Singapur.
@@ -9,9 +9,9 @@
 
 | Formato | URL |
 |---------|-----|
-| OpenAI-compatible  | `https://opencode.ai/zen/go/v1/chat/completions` |
-| Anthropic-compatible | `https://opencode.ai/zen/go/v1/messages` |
-| Listar modelos | `https://opencode.ai/zen/go/v1/models` |
+| OpenAI-compatible  | `https://opencode.ai/zen/v1/chat/completions` |
+| Anthropic-compatible | `https://opencode.ai/zen/v1/messages` |
+| Listar modelos | `https://opencode.ai/zen/v1/models` |
 
 ## Autenticación
 
@@ -39,8 +39,8 @@ x-api-key: {TU_API_KEY}
 | Qwen3.6 | `qwen3.6` | Anthropic |
 | Qwen3.7 Max | `qwen3.7-max` | Anthropic |
 
-**Formato de configuración en OpenCode CLI:** `opencode-go/<model-id>`
-Ejemplo: `opencode-go/kimi-k2.6`
+**Formato de configuración en OpenCode CLI:** `opencode-zen/<model-id>`
+Ejemplo: `opencode-zen/kimi-k2.6`
 
 ## Límites de uso
 
@@ -55,25 +55,25 @@ Ejemplo: `opencode-go/kimi-k2.6`
 ## Uso desde Laravel (laravel/ai o prism)
 
 Como los endpoints son **compatibles con OpenAI**, se configuran como un proveedor OpenAI
-apuntando a la URL base de OpenCode Go:
+apuntando a la URL base de OpenCode Zen:
 
 ### Con `laravel/ai` (oficial Laravel 12+)
 
 ```php
 // config/ai.php
 'providers' => [
-    'opencode-go' => [
+    'opencode-zen' => [
         'driver'   => 'openai',
-        'base_url' => 'https://opencode.ai/zen/go/v1',
-        'api_key'  => env('OPENCODE_GO_API_KEY'),
+        'base_url' => 'https://opencode.ai/zen/v1',
+        'api_key'  => env('OPENCODE_ZEN_API_KEY'),
     ],
 ],
-'default_provider' => env('AI_PROVIDER', 'opencode-go'),
+'default_provider' => env('AI_PROVIDER', 'opencode-zen'),
 ```
 
 ```php
 // Uso
-Ai::using('opencode-go')
+Ai::using('opencode-zen')
   ->withModel('deepseek-v4-flash')
   ->prompt('Analiza mis gastos del mes');
 ```
@@ -85,7 +85,7 @@ use EchoLabs\Prism\Prism;
 use EchoLabs\Prism\Enums\Provider;
 
 Prism::text()
-    ->using('opencode-go', 'kimi-k2.6')
+    ->using('opencode-zen', 'kimi-k2.6')
     ->withSystemPrompt('Eres el asesor financiero de OWFINANCE...')
     ->withPrompt($userMessage)
     ->generate();
@@ -94,8 +94,8 @@ Prism::text()
 ### Curl directo (prueba rápida)
 
 ```bash
-curl https://opencode.ai/zen/go/v1/chat/completions \
-  -H "Authorization: Bearer $OPENCODE_GO_API_KEY" \
+curl https://opencode.ai/zen/v1/chat/completions \
+  -H "Authorization: Bearer $OPENCODE_ZEN_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
     "model": "deepseek-v4-flash",
@@ -109,17 +109,17 @@ curl https://opencode.ai/zen/go/v1/chat/completions \
 
 ```env
 # .env del backend
-OPENCODE_GO_API_KEY=tu_clave_aqui
-AI_PROVIDER=opencode-go          # openai | anthropic | opencode-go | groq | gemini
-AI_EXTRACTION_PROVIDER=opencode-go
-AI_ADVISOR_PROVIDER=opencode-go
+OPENCODE_ZEN_API_KEY=tu_clave_aqui
+AI_PROVIDER=opencode-zen          # openai | anthropic | opencode-zen | groq | gemini
+AI_EXTRACTION_PROVIDER=opencode-zen
+AI_ADVISOR_PROVIDER=opencode-zen
 ```
 
 ---
 
 ## Ventaja sobre OpenAI directo
 
-| | OpenAI GPT-4o | OpenCode Go DeepSeek Flash |
+| | OpenAI GPT-4o | OpenCode Zen DeepSeek Flash |
 |---|---|---|
 | Costo | Por token (caro) | $10/mes flat |
 | Privacidad | Retención por defecto | Zero-retention |
@@ -142,12 +142,12 @@ O en `~/.config/opencode/opencode.jsonc`:
 {
   "$schema": "https://opencode.ai/config.json",
   "provider": {
-    "opencode-go": {
+    "opencode-zen": {
       "api_key": "tu_clave_aqui",
-      "base_url": "https://opencode.ai/zen/go/v1"
+      "base_url": "https://opencode.ai/zen/v1"
     }
   },
-  "model": "opencode-go/kimi-k2.6"
+  "model": "opencode-zen/kimi-k2.6"
 }
 ```
 

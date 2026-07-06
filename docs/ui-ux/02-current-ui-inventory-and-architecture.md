@@ -1,5 +1,7 @@
 # Inventario Actual de UI/UX (OW Finance) y Propuesta Lite vs Pro
 
+> **⚠️ REFERENCIA HISTÓRICA (2026-06-20):** Este inventario refleja el estado del repo antes del refactor OWF-055/056/060. `UserLayout.vue` y `user_dashboard.vue` fueron eliminados. El inventario actual está en `DESIGN_MAP.md` §6.
+
 Este documento hace un "vaciado" de todas las vistas, componentes y widgets existentes actualmente en el repositorio `OWFinanceFrontend2025`, y sugiere una categorización para la nueva experiencia separada en versiones **Lite** y **Pro**.
 
 ## 1. Inventario de Vistas (Páginas y Rutas)

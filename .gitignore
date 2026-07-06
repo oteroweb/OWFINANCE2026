@@ -27,6 +27,9 @@ build/
 test-serve/
 Oteroweb.zip
 
+# Archivos archivados (Stitch, histórico)
+_archive/
+
 # Backups de base de datos (sensible)
 backups/*.sql
 backups/*.sql.gz

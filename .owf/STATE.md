@@ -3,8 +3,67 @@
 <!-- Solo un agente escribe a la vez. Updated = timestamp del ultimo escritor. -->
 <!-- Tareas se referencian por ID (OWF-NNN) → ver .owf/TASKS.md -->
 
-**Updated:** 2026-07-05T23:45:00Z
+**Updated:** 2026-07-06T02:40:00Z
 **By:** claude-code
+
+## Último trabajo (2026-07-06, madrugada tarde) — Fixes post-deploy en iPhone real (mobile-app-shell)
+
+Al probar la Fase 1 en el iPhone real aparecieron 3 bugs reales, todos corregidos y deployados:
+
+1. **Login "network error" en la app nativa** — causa real: `config/cors.php` (backend) no incluía los orígenes sintéticos de Capacitor (`capacitor://localhost` en iOS, `https://localhost` en Android). Agregados ambos + `http://localhost` fallback. Deployado a prod, verificado con `curl -X OPTIONS` → `access-control-allow-origin` correcto para ambos orígenes.
+2. **Password de `otero@demo.com` no coincidía entre local y prod** — reseteada a la misma password en ambos entornos (usuario decidió una password más corta a propósito, se le avisó explícitamente que era más débil antes de aplicarla).
+3. **Notch tapando contenido en Home (iPhone 13 Pro Max)** — causa real: `AppShell.vue` tenía `env(safe-area-inset-bottom/left/right)` pero le faltaba `safe-area-inset-top`. Un solo `padding-top` agregado soluciona el problema en TODA la app autenticada (no solo Home), sin tocar CSS por pantalla.
+4. **Barra de estado invisible (íconos oscuros sobre fondo oscuro)** — instalado `@capacitor/status-bar`, nuevo boot file `src/boot/capacitor.ts` que setea `Style.Light` (íconos claros) solo en plataforma nativa.
+5. **Limpieza de referencias a `appfinanzasdev.blockshift.website` / `appfinanzas.blockshift.website`** — el usuario confirmó que NO se desarrolla contra esos dominios, todo debe estar centralizado en `owfinances.com`. Reemplazado en: `.env.dev`, `.env.mobile`, `.env.mobile-dev`, `.env.remote`, `.env.example`, y los links de descarga de APK en `PublicLayout.vue`/`LoginPage.vue` (ahora apuntan a `https://owfinances.com/downloads/`).
+
+**Gotcha de Quasar descubierto**: `npm run dev` (buildType='dev') carga `.env` y LUEGO `.env.dev` (que sobreescribe las mismas keys) — por eso el dev-server local usaba blockshift aunque `.env` decía owfinances.com. Esto es comportamiento intencional de `@quasar/app-vite` (ver `node_modules/@quasar/app-vite/lib/utils/env.js`), no un bug — pero como ya no developemos contra blockshift, `.env.dev` ahora también apunta a owfinances.com, así que da igual.
+
+Todos los fixes ya deployados y confirmados corriendo en el iPhone físico vía `./deploy-ios.sh`.
+
+**Pendiente para mañana (sin cambios respecto al handoff anterior):** conectar Android y correr `./deploy-android.sh` con TODOS estos fixes incluidos; arrancar Fase 2 (Home mobile posture) con su propio ciclo SDD.
+
+## Último trabajo (2026-07-06) — mobile-app-shell Fase 1 implementada (ciclo SDD completo)
+
+Ciclo SDD completo (explore→proposal→spec→design→tasks→apply) para portar `rediseno/ui_kits/mobile/components/EntryGateMobile.jsx` (plantilla visual) a Vue real, conectado a la lógica de auth ya existente (`auth.login()`, `POST /auth/register`).
+
+**Hallazgo clave**: el gap real NO era "toda la app sin mobile" — el área autenticada (`AppShell.vue`) ya tenía mobile-responsive maduro. El gap 100% real era el flujo público (landing/login), que nunca tuvo tratamiento mobile.
+
+**Implementado y verificado (screenshots reales @375px y @1440px, type-check + lint limpios):**
+- `src/pages/public/LandingHeroMobile.vue` (nuevo) — hero + 3 bullets + CTAs, calca 1:1 la captura que mandó el usuario.
+- `src/pages/LoginMobileView.vue` (nuevo) — login/registro mobile, reusa `auth.login()`/`api.post('/auth/register')` tal cual (mismo payload que desktop), + login biométrico (reusa `useBiometric()` ya existente).
+- `LandingPage.vue`, `LoginPage.vue`: agregado `isMobile` computed (mismo criterio `$q.platform.is.mobile || $q.screen.lt.md` que `AppShell.vue`), branch `v-if`.
+- `PublicLayout.vue`: oculta header/footer de marketing SOLO en `/` + mobile — `/funciones`, `/planes`, `/matriz` quedan intactas (decisión explícita del usuario: esas páginas son exclusivas del sitio web, sin tratamiento mobile-app).
+- `docs/00-sistema/DESIGN_PROMPT_ONBOARDING.md`: corregido — Lite/Pro y Desktop/Mobile son ejes ortogonales, no lo mismo.
+- Patrón seguido: componente hijo autocontenido sin props (mismo precedente que `LiteJarsView.vue` en `jars/index.vue`), no ramas gigantes inline.
+
+**Pendiente (acción del usuario):**
+- Validar en dispositivos reales: `./deploy-android.sh` y `./deploy-ios.sh`.
+- Decidir si vale introducir Vitest para tests de componentes (hoy `npm test` es un stub sin implementación real).
+- Actualizar OWF-TASKS con Fase 2/3 del mobile-app-shell (Home, Asesor IA, Debts/Dreams cards) como backlog — quedaron fuera de alcance de esta fase a propósito.
+
+**Todos los artefactos SDD** (proposal/spec/design/tasks/apply-progress) guardados en Engram, ids 126-132.
+
+
+## Último trabajo (2026-07-06 madrugada) — iOS corriendo en dispositivo físico real
+
+- Xcode.app completo instalado vía `mas install 497799835` (CLI de App Store) — la Mac ya tenía sesión iniciada en App Store, así que no hizo falta login.
+- `sudo xcode-select -s /Applications/Xcode.app` + `sudo xcodebuild -license accept` — requieren TTY interactivo, los corrió el usuario manualmente (no automatizable vía agente).
+- Platform iOS 26.5 (8.52GB, simulador+device support vienen juntos en Xcode 15+) descargado — la conexión del usuario es lenta (~536kbps medidos), tardó horas y se cortó una vez (retomó desde donde quedó, xcodebuild soporta resume).
+- Apple ID agregado en Xcode → Settings → Accounts, y Team seleccionado en Signing & Capabilities del target App (`App.xcodeproj`) → generó automáticamente el certificado "Apple Development: oterolopez1990@gmail.com", Team ID `3U3F2C7S3N`.
+- iPhone del usuario (iPhone 13 Pro Max, iPhone14,3) requirió activar **Developer Mode** (Ajustes → Privacidad y seguridad → Modo Desarrollador) — sin esto `devicectl` reporta `developerModeStatus: disabled` y no deja instalar nada.
+- Build real a dispositivo: `xcodebuild -workspace App.xcworkspace -scheme App -destination 'id=<udid>' -allowProvisioningUpdates build` → BUILD SUCCEEDED. El primer build tarda varios minutos firmando cada framework de Pods (Capacitor, CapacitorCordova, CapacitorApp, CapacitorNativeBiometric) uno por uno.
+- Gotcha real: durante el primer `codesign` con la clave recién creada, macOS mostró un popup de autorización de Keychain que quedó esperando invisible (el agente no tiene acceso a pantalla) — el proceso `codesign` se queda colgado indefinidamente hasta que el usuario hace click en "Siempre permitir". Si un build a device se cuelga sin usar CPU en el paso de firma, ES ESTO — pedirle al usuario que revise si hay un popup en pantalla.
+- Instalación + lanzamiento: `xcrun devicectl device install app --device <udid> <ruta al .app>` luego `xcrun devicectl device process launch --device <udid> com.owfinance.app`.
+- Gotcha real #2: el primer lanzamiento SIEMPRE falla con `FBSOpenApplicationServiceErrorDomain error 1 / RequestDenied — invalid code signature... profile has not been explicitly trusted` aunque la firma esté bien — es 100% esperado, requiere que el usuario vaya a **Ajustes → General → VPN y gestión de dispositivos** en el iPhone y toque "Confiar" en el Apple ID del developer. Recién después de eso el mismo comando `devicectl device process launch` funciona.
+- Resultado: app corriendo en el iPhone físico del usuario, sin necesitar el simulador para nada.
+
+### Comandos clave para reproducir en otro dispositivo/sesión
+```bash
+xcrun devicectl device info details --device <udid>   # chequear developerModeStatus
+xcodebuild -workspace src-capacitor/ios/App/App.xcworkspace -scheme App -destination 'id=<udid>' -allowProvisioningUpdates build
+xcrun devicectl device install app --device <udid> <ruta .app>
+xcrun devicectl device process launch --device <udid> com.owfinance.app
+```
 
 ## Último trabajo (2026-07-05, noche) — OWF-194+195+196: formulario huérfano + entradas rotas
 
