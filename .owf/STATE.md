@@ -3,10 +3,38 @@
 <!-- Solo un agente escribe a la vez. Updated = timestamp del ultimo escritor. -->
 <!-- Tareas se referencian por ID (OWF-NNN) → ver .owf/TASKS.md -->
 
-**Updated:** 2026-07-05T20:15:00Z
+**Updated:** 2026-07-05T23:45:00Z
 **By:** claude-code
 
-## Último trabajo (2026-07-05, tarde) — OWF-191+192+193: bugs reportados por usuario en producción
+## Último trabajo (2026-07-05, noche) — OWF-194+195+196: formulario huérfano + entradas rotas
+
+### Contexto
+Sesión de continuación de la remota (`SESION-2026-07-05-RESUMEN.md`, OWF-179..188). Al sincronizar y deployar se detectó que el usuario veía "el formulario exactamente igual" pese a build/tests OK.
+
+### Completado esta sesión
+- **Ramas unificadas** en los 3 repos (central/frontend/backend): borradas `dev`/`stage`/`claude/*`/`transaction-add-form` (todas ya eran ancestros de `main`/`master`, sin trabajo único) + 8 worktrees fantasma (`worktree-agent-*`). Un solo branch activo por repo. Backend tenía 4 commits locales sin pushear (jar_slug fix, test seeders, tags, items fix) — pusheados.
+- **OWF-194** ✅ Causa raíz: OWF-179..188 se habían implementado en `TransactionCreateDialog.vue`, componente que ningún template monta (`grep "<TransactionCreateDialog"` → 0 resultados). El formulario real es `SmartTransactionModal.vue` (montado en `AppShell.vue`, global, vía `ui.openSmartModal()`). Se portaron las 10 tareas ahí (ya estaban parcialmente hechas por otra sesión paralela — ver nota de la sesión anterior sobre OWF-179/185/186). Verificado con capturas reales (Ajuste, Cuenta full-width, switch "Afecta el saldo", TfReviewCard con validaciones) + 115/115 tests E2E contra prod.
+- **OWF-195** ✅ 4 puntos de entrada adicionales llamaban a `ui.openNewTransactionDialog()`, una acción que solo togglea un flag sin ningún listener real (dead code) — botones silenciosamente no hacían nada: "Nueva transaccion" en `expense-analysis`, "+ Registrar ingreso" + quick actions en `jars/LiteJarsView` (Lite), hero CTA + botones rápidos + FAB en el layout "legacy" de `transactions/index.vue` (afecta usuarios con `layout_mode=legacy`, un modo real y seleccionable). Todos reapuntados a `ui.openSmartModal(...)`. El watcher que refrescaba la tabla tras crear también estaba muerto — reemplazado por listener del evento global `owf:transaction-saved` (patrón ya usado en `LiteTransactionsView.vue`).
+- **OWF-196** ✅ Eliminados `TransactionCreateDialog.vue` (4037 líneas) y `TransactionEditDialog.vue` (509 líneas) — código muerto, nunca montados, solo referenciados por un barrel export (`components/index.ts`) sin consumidores reales. Lint/typecheck/build limpios tras el borrado.
+- **Deploy + verificación**: 2 deploys a prod en esta sesión (uno por cada fix), ambos con 115/115 (o 7/7+10/10 según el run) tests E2E pasando + capturas visuales confirmando la UI real.
+- **Hygiene**: tokens de test (`e2e/.auth*.json`) y reportes de Playwright se estaban commiteando en cada deploy — agregados a `.gitignore` y removidos del tracking.
+
+### Nota — sesión concurrente detectada
+Durante esta sesión se detectó otra sesión de Claude Code activa en paralelo sobre el mismo repo (commits `77d11e3`, `aaa3845`, `8f3de90`, `b0de35f`, `8436cd4` con OWF-189..193 aparecieron sin que esta sesión los creara). Sus IDs no colisionan porque se renumeró esta sesión a partir de `NEXT_ID` (191→194). Verificar con el usuario si hay dos sesiones locales abiertas.
+
+### Pendiente — decisión de producto
+**OWF-180**: selector explícito de Cántaro junto a Categoría no implementado — no existe `jar_id` estable en el frontend (`stores/jars.ts` solo tiene `uid` de cliente). Definir de dónde sale ese id si se quiere ese selector.
+
+### Bloqueados
+- **OWF-062** [!] SMTP prod — esperando credenciales del usuario
+- **OWF-131** [ ] Gemini key — verificar/regenerar en prod
+
+### Siguiente recomendado
+Ninguna tarea crítica pendiente de esta sesión. Backlog normal: OWF-171..178 (tags en listas, gaps de vistas Pro/Mobile), OWF-131 (Gemini key), OWF-062 (bloqueado, requiere al usuario).
+
+---
+
+## Sesión anterior (2026-07-05, tarde) — OWF-191+192+193: bugs reportados por usuario en producción
 
 ### Completado esta sesión
 - **OWF-191** ✅ Backend: `Category::getJarSlugAttribute()` ahora usa la relación real `jar_category` en vez del mapa hardcodeado de 12 nombres. Categorías personalizadas (ej. "Familia") ya resuelven cántaro correctamente. Eager-load añadido en `CategoryRepo`.
