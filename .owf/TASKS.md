@@ -207,8 +207,10 @@
 
 | **OWF-203** | [x] | P2 | ⚪ | fix | views | — | CategorySelector.vue: categorías no aparecían agrupadas por cántaro al editar/crear transacciones. Causa: `groupedCats` filtraba por `JAR_COLORS` con 5 slugs hardcodeados (`necesidades`, `diversion`, etc.) ignorando `assigned_jar_id` real. Fix: agrupar por `assigned_jar_id` usando los jars reales cargados via `loadUserJars()`; colores desde `jar.color`; fallback a slug/nombre canónico para compatibilidad. `_cachedJars` es ref reactivo para re-trigger cuando carga. Deploy OK. | claude-code | 2026-07-08 |
 
+| **OWF-206** | [x] | P2 | ⚪ | feat | config | — | Nueva sección "Seguridad" en /user/config (Lite y Pro): (1) toggle "Pedir confirmación para ver saldos" (movido desde Aplicación, ya existía como `ui.togglePrivacyLock()`); (2) NUEVO: PIN de acceso rápido (4-6 dígitos) — backend `security_pin` hasheado en users, endpoints GET pin-status / PUT set / POST verify / DELETE remove (`UserSecurityController`), requiere contraseña actual para crear/eliminar. Frontend: `useSecurityPin.ts` composable, `ui.ts` revealValues() intenta biometría → PIN → contraseña completa (en ese orden) antes de revelar saldos. 5/5 tests backend pasan. Verificado end-to-end en prod (configurar/verificar/eliminar PIN + flujo de revelar saldos). Deploy backend+frontend OK. | claude-code | 2026-07-08 |
+
 <!--
-  NEXT_ID: OWF-204
+  NEXT_ID: OWF-207
 -->
 
 ## Completed

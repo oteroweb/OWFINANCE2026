@@ -3,8 +3,23 @@
 <!-- Solo un agente escribe a la vez. Updated = timestamp del ultimo escritor. -->
 <!-- Tareas se referencian por ID (OWF-NNN) → ver .owf/TASKS.md -->
 
-**Updated:** 2026-07-08T03:15:00Z
+**Updated:** 2026-07-08T04:20:00Z
 **By:** claude-code
+
+## Último trabajo (2026-07-08, continuación) — OWF-206: Sección Seguridad en /user/config + PIN
+
+Pedido del usuario: sección de Seguridad en /user/config con "pedir contraseña para revelar saldos" (ya existía, mal ubicado) + un PIN general.
+
+- **OWF-206** ✅ Nueva sección/card "Seguridad" (Lite y Pro) en `/user/config`:
+  - Toggle "Pedir confirmación para ver saldos" — movido desde "Aplicación" (ya existía como `ui.togglePrivacyLock()`), ahora vive en Seguridad.
+  - **PIN de acceso rápido (nuevo)**: alternativa numérica (4-6 dígitos) a la contraseña completa para revelar saldos.
+    - Backend: migración `security_pin` (hasheado, cast 'hashed' igual que password) en `users`; `UserSecurityController` con 4 endpoints (`GET/PUT/POST/DELETE /api/v1/user/security/pin*`), requiere contraseña actual para crear/eliminar el PIN. 5/5 tests nuevos pasan (`UserSecurityPinTest.php`).
+    - Frontend: `src/composables/useSecurityPin.ts` + `ui.ts::revealValues()` ahora prueba biometría → PIN → contraseña completa, en ese orden.
+    - UI duplicada en Pro (tab Perfil, card "Privacidad y PIN") y Lite (sección Seguridad): botones Configurar/Cambiar/Eliminar PIN + diálogo compartido.
+  - Verificado end-to-end contra prod (cuenta demo `usertestpro@demo.com`): configurar PIN → verificado al revelar saldos → eliminado, los 3 pasos funcionaron correctamente vía preview real.
+  - Deploy backend + frontend prod OK.
+- **Nota de arquitectura**: dev local (`npm run dev`) apunta a la API de PROD (`.env.dev` migrado hace unas sesiones) — cualquier endpoint backend nuevo debe deployarse a prod ANTES de poder probarlo en el preview local, o dará 404.
+- **Hallazgo no relacionado**: `TransactionTest::bulk create account permissions` falla en la suite completa de PHPUnit (200 en vez de 422 esperado) — no tocado por esta sesión, pre-existente, pendiente de investigar en otra sesión.
 
 ## Último trabajo (2026-07-08) — OWF-205+176+178: fixes de pendientes de sesión anterior
 
