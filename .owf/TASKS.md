@@ -241,10 +241,12 @@
 | **OWF-233** | [ ] | P3 | ⚪ | refactor | home-audit | OWF-223 | Carga de datos de Deudas ocurre en momentos distintos del ciclo: Lite las carga junto al resto del resumen mensual al entrar a Home; Pro solo las carga cuando el usuario abre el panel lateral de Cuentas/Deudas (`loadAccountsPanel()`). Revisar si esto genera datos desactualizados en algún KPI de Pro que dependa de deudas. | — | — |
 | **OWF-234** | [ ] | P3 | ⚪ | fix | home-audit | OWF-223 | `currencySymbol` en LiteHomeView.vue es un ref inicializado en '$' que nunca se actualiza dinámicamente desde los datos reales del usuario — mismo problema de fondo que OWF-224 (Pro) y OWF-213 (config): ningún lugar de Home lee la moneda real del usuario desde la API. Resolver de raíz junto con OWF-224. | — | — |
 | **OWF-235** | [ ] | P3 | ⚪ | design | home-audit | OWF-223 | Decisión de producto pendiente: varias secciones son exclusivas de Pro sin ningún equivalente en Lite (Spending breakdown por categoría, Exchange Rates widget editable, Asesor IA strip/CTA, Accounts Panel lateral con Cuentas+Deudas). Confirmar si son features premium intencionales o si Lite debería tener versiones simplificadas. | — | — |
-| **OWF-236** | [x] | P2 | 🟡 | feat | home-pro | — | Click en transacción de "Movimientos recientes" (ProHomeView) abre TransactionFormDialog inline para editar sin navegar a /user/transactions. | 2026-07-08 | — |
+| **OWF-236** | [x] | P2 | 🟡 | feat | home-pro | — | TxDetailModal rediseñado (vista+edición+eliminación) en ProHomeView y LiteHomeView. Reemplaza TransactionFormDialog en contexto home. | 2026-07-08 | — |
+| **OWF-237** | [x] | P2 | 🟡 | fix | ux | — | SmartTransactionModal: fix scroll en desktop — max-height 92vh + overflow-y auto en stm-body, flex-shrink:0 en header y tabs. | 2026-07-08 | — |
+| **OWF-238** | [x] | P2 | ⚪ | docs | infra | — | Skill owf-component-map creado: mapa completo de 60 componentes, 7 stores, flujos de creación/edición, hub nodes, gotchas críticos. | 2026-07-08 | — |
 
 <!--
-  NEXT_ID: OWF-237
+  NEXT_ID: OWF-239
 -->
 
 ## Completed
