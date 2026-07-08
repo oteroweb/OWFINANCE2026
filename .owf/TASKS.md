@@ -271,12 +271,16 @@
 | **OWF-264** | [ ] | P3 | ⚪ | feat | txform-audit | OWF-240 | Picker Proveedor/Comercio: agregar flujo de crear proveedor nuevo (hoy solo busca/filtra existentes). | — | — |
 | **OWF-265** | [ ] | P3 | ⚪ | fix | txform-audit | OWF-240 | Verificar si AnchoredJarChip incluye ícono de candado (lock) como pide el diseño. | — | — |
 | **OWF-266** | [ ] | P2 | ⚪ | fix | txform-audit | OWF-240 | Categoría + chip Cántaro quedan apilados verticalmente en el Vue real (confirmado navegando localhost:3000 Pro) — el diseño los pone lado a lado en 2 columnas (flex row, cada Field flex:1). Confirmar en TransactionForm.jsx líneas 384-392. | — | — |
-| **OWF-267** | [ ] | P2 | ⚪ | design | txform-audit | OWF-240 | QuickActionSheet.vue: tiles son tarjetas rectangulares con fondo; el diseño (QuickActionSheet.jsx) usa círculo grande de 72px flotante sin fondo + label debajo (ActionTile). Confirmado con captura del usuario en Pro real. | — | — |
-| **OWF-268** | [ ] | P2 | 🟡 | fix | txform-audit | OWF-240 | QuickActionSheet.vue tiene un 7mo tile "Personalizado" que NO existe en el diseño (solo 6: Gasto/Ingreso/Transferir/Voz/Escanear/Auto IA) y hoy es dead-end (muestra "estará disponible muy pronto" al tocarlo). Decidir: quitarlo o implementarlo. | — | — |
-| **OWF-269** | [ ] | P2 | ⚪ | feat | txform-audit | OWF-240 | QuickActionSheet.vue: faltan los 2 atajos "Pago deuda" / "Aporte sueño" (navegan directo a /user/debts y /user/dreams) que sí están en el diseño, debajo de la grilla de acciones. | — | — |
+| **OWF-267** | [!] | P2 | ⚪ | design | txform-audit | OWF-240 | ~~QuickActionSheet.vue vs QuickActionSheet.jsx~~ — DESCARTADA: la referencia correcta para desktop es DesktopQuickModal.jsx (OWF-270), no QuickActionSheet.jsx (ese es el diseño mobile). Ver OWF-270..273. | Bloqueada: referencia incorrecta, ver OWF-270 | — |
+| **OWF-268** | [!] | P2 | 🟡 | fix | txform-audit | OWF-240 | ~~Tile "Personalizado" fantasma~~ — DESCARTADA como hallazgo aislado, absorbida por OWF-270 (el modal completo de desktop está sin implementar, no solo un tile). | Bloqueada: absorbida por OWF-270 | — |
+| **OWF-269** | [!] | P2 | ⚪ | feat | txform-audit | OWF-240 | ~~Faltan shortcuts Pago deuda/Aporte sueño~~ — DESCARTADA: sí existen en el diseño correcto (DesktopQuickModal.jsx, sección "movimiento especial", + incluye "Aporte a jar" que tampoco se había detectado). Ver OWF-271. | Bloqueada: absorbida por OWF-271 | — |
+| **OWF-270** | [ ] | P0 | 🔴 | feat | txform-audit | OWF-240 | [GAP GRANDE] `DesktopQuickModal.jsx` (modal "¿Qué quieres registrar?" de 2 pasos: Tipo segmentado + 4 tarjetas de método Escribir/Nota de voz/Foto de factura/Auto IA) NO tiene ningún componente Vue equivalente — el desktop Pro real reutiliza QuickActionSheet.vue (diseño mobile, bottom-sheet de círculos) también en desktop, sin distinguir mobile/desktop. Confirmado: grep sin resultados en src/ para "Paso 1 de 2"/"Qué quieres registrar". Decidir alcance: crear DesktopQuickModal.vue nuevo o adaptar QuickActionSheet.vue para desktop. | — | — |
+| **OWF-271** | [ ] | P1 | 🟡 | feat | txform-audit | OWF-240 | DesktopQuickModal.jsx sección "O registrá un movimiento especial": 3 tarjetas Pago de deuda (badge Cashea) / Aporte a sueño / Aporte a jar, cada una con navegación directa a su flujo (`onSelectAction("<planId>:text")`). Ninguna existe hoy en el flujo de creación de transacción — Deudas/Sueños/Jars solo se gestionan desde sus propias vistas, no desde el modal rápido. | OWF-270 | — |
+| **OWF-272** | [ ] | P2 | ⚪ | design | txform-audit | OWF-240 | DesktopQuickModal.jsx método "Foto de factura" muestra chips de preview (Monto/Comercio/Items/Fecha/IVA) antes de tomar la foto, anticipando qué extrae la IA. Verificar si el flujo real (OcrTransactionDialog) comunica esto de alguna forma. | OWF-270 | — |
+| **OWF-273** | [ ] | P3 | ⚪ | design | txform-audit | OWF-240 | DesktopQuickModal.jsx: badges visuales por método ("Transcripción IA" en Nota de voz, "Beta" en Auto IA) — confirmar si el real comunica estas distinciones de madurez de feature. | OWF-270 | — |
 
 <!--
-  NEXT_ID: OWF-270
+  NEXT_ID: OWF-274
 -->
 
 ## Completed
