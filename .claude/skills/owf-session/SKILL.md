@@ -17,6 +17,9 @@ Ninguna otra skill se invoca directamente — todas pasan por aquí.
 | Skill | Cuándo se usa | Invocada desde |
 |-------|--------------|----------------|
 | `owf-session` | Arranque y cierre de sesión | El usuario o automático |
+| `owf-entity-map` | Referencia ANTES de tocar código de transacciones/cuentas/categorías/cántaros/deudas/sueños/IA | `owf-session start`, paso 1.5, si la tarea toca datos |
+| `owf-component-map` | Referencia ANTES de tocar cualquier componente/página/store del frontend | `owf-session start`, paso 1.5, si la tarea toca UI |
+| `owf-design-sync` | El usuario cambió algo en `rediseno/` (JSX) y hay que portarlo a Vue, o pide un feature nuevo sin diseño aún | `owf-session start`, paso 1.5, si la tarea menciona rediseño o UI nueva |
 | `owf-deploy` | Después de cada tarea completada | `owf-session end` + post-tarea |
 | `owf-qa-production` | Verificar vistas en prod tras deploy | `owf-session end` si hay cambios UI |
 | `engram:memory` | Guardar decisiones y bugs | `owf-session end` + inline al descubrir algo |
@@ -24,6 +27,14 @@ Ninguna otra skill se invoca directamente — todas pasan por aquí.
 | `paseo-epic` | Features grandes multi-agente (overnight) | Decisión en `owf-session start` |
 | `paseo-loop` | Loops iterativos, babysit CI/PR | Decisión en `owf-session start` |
 | `sdd-*` | Spec-driven development para features medianas | Decisión en `owf-session start` |
+
+### Flujo rediseño → frontend
+
+`rediseno/` (JSX sin build, referencia visual) es la fuente de diseño; `src/` (Vue real) es la implementación en prod. Nunca son la misma cosa — un cambio en uno no se refleja en el otro automáticamente:
+
+- **El rediseño cambió y falta portarlo a Vue** → `owf-design-sync` Ciclo 1.
+- **Feature nuevo pedido sin diseño previo** → `owf-design-sync` Ciclo 2 (busca si ya existe en `rediseno/`; si no, genera prompt para Claude Design y espera el JSX).
+- **Ya existe el JSX de referencia y toca implementar** → seguir con la implementación normal en Vue, usando `owf-component-map` para no duplicar componentes existentes, y cerrar con `owf-deploy`.
 
 ---
 
@@ -43,6 +54,13 @@ Ejecutar ANTES de cualquier código. Sin esto, el agente trabaja a ciegas.
 mem_context(project: 'owfinance2026')     — sesiones recientes
 mem_search(query: '<tema>', project: ...)  — si hay algo específico
 ```
+
+### Paso 2.5 — Cargar mapas de referencia si la tarea lo requiere
+
+Antes de tocar código, según lo que toque la tarea:
+- Datos (transacciones/cuentas/categorías/cántaros/deudas/sueños/IA) → `owf-entity-map`
+- UI (componente/página/store existente) → `owf-component-map`
+- Rediseño/diseño nuevo → `owf-design-sync` (ver "Flujo rediseño → frontend" arriba)
 
 ### Paso 3 — Mostrar resumen al usuario
 

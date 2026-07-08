@@ -19,15 +19,17 @@ la columna 🔍 IA de `.owf/EPIC_VIEWS.md`.
 
 ## Herramientas requeridas
 
-Usar **Claude in Chrome MCP** (`mcp__Claude_in_Chrome__*`) — NO el preview tool local.
+Usar **claude-in-chrome MCP** (`mcp__claude-in-chrome__*`) — NO el preview tool local.
 El usuario tiene su sesión activa en el browser; no se necesita credenciales.
+Estas tools suelen estar diferidas — cargarlas con una sola llamada a ToolSearch antes de usarlas:
+`ToolSearch({query: "select:mcp__claude-in-chrome__tabs_context_mcp,mcp__claude-in-chrome__navigate,mcp__claude-in-chrome__computer,mcp__claude-in-chrome__read_page,mcp__claude-in-chrome__get_page_text,mcp__claude-in-chrome__find"})`
 
 ```
-mcp__Claude_in_Chrome__navigate      — ir a una URL
-mcp__Claude_in_Chrome__read_page     — obtener snapshot accesible
-mcp__Claude_in_Chrome__get_page_text — texto plano de la página
-mcp__Claude_in_Chrome__find          — buscar elementos
-mcp__Claude_in_Chrome__computer      — screenshot del estado actual
+mcp__claude-in-chrome__navigate      — ir a una URL
+mcp__claude-in-chrome__read_page     — obtener snapshot accesible
+mcp__claude-in-chrome__get_page_text — texto plano de la página
+mcp__claude-in-chrome__find          — buscar elementos
+mcp__claude-in-chrome__computer      — screenshot del estado actual
 ```
 
 ---
@@ -37,7 +39,7 @@ mcp__Claude_in_Chrome__computer      — screenshot del estado actual
 ### Paso 1 — Conectar al browser
 
 ```
-list_connected_browsers → seleccionar tab owfinances.com activo
+mcp__claude-in-chrome__list_connected_browsers → seleccionar tab owfinances.com activo
 ```
 Si no hay tab activo, navegar a `https://owfinances.com/login`.
 
