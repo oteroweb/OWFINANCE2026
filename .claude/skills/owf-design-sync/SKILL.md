@@ -103,6 +103,29 @@ Identificar exactamente:
 - Qué tokens CSS usa (buscar `var(--)` en el JSX)
 - Qué lógica de datos necesita (props nuevas, computed, stores)
 
+### Paso 2.5: Comparar contra la app real (auditorías de paridad)
+
+Cuando la tarea es "dejar igual al diseño" (no solo portar un cambio puntual), no alcanza con
+comparar código fuente — hay que ver ambos renders lado a lado:
+
+```
+1. preview_start({name: "rediseno-static"}) → navegar al harness/index.html del componente,
+   preview_screenshot (render real del diseño)
+2. preview_start({name: "frontend-quasar"}) → login (sesión suele persistir), navegar a la
+   vista real, abrir el componente (modal/dialog), preview_resize a desktop si aplica,
+   preview_screenshot (render real de Vue en prod/dev)
+3. Comparar ambas capturas campo por campo: orden, textos, iconos, condiciones de visibilidad
+4. Para archivos grandes (>500 líneas), delegar la lectura + diff estructural a un Agent en vez
+   de leer todo inline — pasarle el resumen del JSX ya leído + pedir comparación exhaustiva
+   con líneas exactas del Vue
+5. Registrar cada gap como sub-tarea OWF-NNN de una épica (mismo patrón que config-audit/
+   home-audit), priorizada P1 (funcional) / P2 (orden/cosmético) / P3 (detalle menor)
+```
+
+Esto confirma o descarta gaps que un diff de código por sí solo no detecta (layouts que se ven
+distinto aunque el JSX "diga" lo mismo, campos que en la práctica quedan apilados en vez de
+lado a lado, etc.).
+
 ### Paso 3: Implementar en Vue
 
 Seguir el mapeo rediseno→Vue de arriba.
