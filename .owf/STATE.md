@@ -3,8 +3,16 @@
 <!-- Solo un agente escribe a la vez. Updated = timestamp del ultimo escritor. -->
 <!-- Tareas se referencian por ID (OWF-NNN) → ver .owf/TASKS.md -->
 
-**Updated:** 2026-07-06T02:40:00Z
+**Updated:** 2026-07-08T03:15:00Z
 **By:** claude-code
+
+## Último trabajo (2026-07-08) — OWF-205+176+178: fixes de pendientes de sesión anterior
+
+- **OWF-205** ✅ Causa raíz del "Error cargando monedas" en /user/config: `GET /api/v1/currencies` exigía `CheckRole:admin`, devolviendo 403 a cualquier usuario no-admin. Fix en `routes/api/currencies.php`: separado en 2 grupos — GET / y GET /active ahora solo `auth:sanctum` (lectura para cualquier usuario autenticado); el resto (save/update/delete/find/{id}/all-trashed/status) sigue admin-only. Deploy backend prod OK.
+- **OWF-176** ✅ V-27 Forgot/Reset PW: `ForgotPasswordPage.vue` emoji ✉️ reemplazado por `q-icon name="mail"`. `ResetPasswordPage.vue` ahora tiene el mismo strength meter de 4 segmentos que `LoginPage.vue` (pwStrength computed + barra + label). Ya no estaba bloqueado por SMTP (OWF-062 resuelto desde 2026-07-03). Deploy frontend prod OK.
+- **OWF-178** ✅ C-04 BulkImportPanel (`TransactionBulkImportDialog.vue`): (1) `needsRateForSelectedAccount` comparaba contra lista hardcodeada de 10 monedas → ahora compara contra `authStore.defaultCurrencyCode` real (antes EUR/GBP quedaban mal clasificados para usuarios con base USD); (2) dialog tenía `maximized` fijo (siempre fullscreen) → ahora `:maximized="$q.screen.lt.md"`, en desktop es ventana flotante 92vw×92vh máx 1400px. Nota: este componente solo es accesible en `layout_mode=legacy` (botón "Carga masiva"), no en Pro/Lite. Deploy frontend prod OK.
+- **OWF-131** sigue pendiente — requiere acción manual del usuario en aistudio.google.com (regenerar key Gemini, prefijo `AQ.` inusual). No ejecutable por el agente.
+- **Recomendación de servicio multipropósito para cargar saldo**: dada la migración de IA a fallback chain (opencode-go→groq→openrouter→gemini→xai→openai), lo más práctico es cargar saldo directo en **OpenRouter** — es el proveedor multipropósito real de la cadena (agrega Gemini/Claude/GPT/Llama bajo una sola cuenta con un solo saldo), evitando gestionar N cuentas/keys por separado como hoy (opencode-go, groq, gemini, xai, openai todos por su cuenta).
 
 ## Último trabajo (2026-07-06, madrugada tarde) — Fixes post-deploy en iPhone real (mobile-app-shell)
 
@@ -262,6 +270,7 @@ PLAYWRIGHT_TEST_PASSWORD='S$ratoga.1990' \
 ### Estado
 - **Tests PHP:** 182/182 ✅ (antes: 180/182)
 - **TypeScript:** 0 errores ✅
+- **Deploy backend:** ✅ prod OK:200 (2026-06-30)
 
 ### Bloqueados por el usuario
 | OWF | Bloqueador |
