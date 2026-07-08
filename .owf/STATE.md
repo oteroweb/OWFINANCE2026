@@ -3,8 +3,17 @@
 <!-- Solo un agente escribe a la vez. Updated = timestamp del ultimo escritor. -->
 <!-- Tareas se referencian por ID (OWF-NNN) → ver .owf/TASKS.md -->
 
-**Updated:** 2026-07-08T05:10:00Z
+**Updated:** 2026-07-08T06:20:00Z
 **By:** claude-code
+
+## Último trabajo (2026-07-08, continuación 3) — OWF-208: Fix IDOR en user_currencies + accounts
+
+Reporte de seguridad del usuario (confirmado vía curl en prod): `GET /api/v1/user_currencies?user_id=<otro>` devolvía las tasas de cambio de otro usuario; omitiendo `user_id` devolvía TODOS los usuarios sin scope. Esto es exactamente el hallazgo que quedó flotante al cierre de OWF-207 (línea de abajo).
+
+- **OWF-208** ✅ `UserCurrencyController`: `index`/`store` ahora fuerzan `user_id = auth()->id()` para no-admins (ignoran el param si no es admin); `update`/`destroy` — que ANTES no verificaban ownership en absoluto (cualquier usuario autenticado podía editar/borrar el registro de otro por id) — ahora verifican `record->user_id === auth()->id()` salvo admin.
+- **Auditoría de endpoints vecinos** (pedido explícito del reporte): `AccountController::all()` / `allActive()` → `AccountRepo` tenía el MISMO patrón (`?user_id=` en query confiado sin scope) — cualquier usuario podía listar cuentas (con saldos) de otro usuario. Fix: no-admins nunca pueden ampliar el scope vía el param, se fuerza a su propio id antes de aplicar filtros.
+- 6 tests de regresión nuevos: `tests/Feature/Api/UserCurrencyIdorTest.php` (4), `tests/Feature/Api/AccountIdorTest.php` (2). Suite completa: 192/193 pasan (1 fallo pre-existente en `TransactionTest::bulk_create_account_permission`, no relacionado — confirmado con `git stash` antes de aplicar mis cambios, falla igual sin ellos).
+- Deploy backend prod OK (`./deploy-backend.sh prod`), health check 200.
 
 ## Último trabajo (2026-07-08, continuación 2) — OWF-207: Unificar config Pro con Lite + Tasas de Cambio
 

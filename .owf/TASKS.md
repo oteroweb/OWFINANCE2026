@@ -211,8 +211,10 @@
 
 | **OWF-207** | [x] | P2 | ⚪ | feat | config | — | Unificar layout Pro de /user/config con el mismo diseño de Lite (mockup `rediseno/ui_kits/lite-desktop/templates/ConfigRoute.jsx`): agregado ARRIBA de los tabs existentes (Perfil/Finanzas/Categorías/Cuentas/Impuestos, sin tocar) un bloque con 3 cards — Aplicación (modo Lite/Pro, idioma, ocultar saldos, divisa predeterminada), Seguridad (movida desde dentro del tab Perfil — pedir confirmación + PIN), y NUEVO componente `ExchangeRatesTable.vue` (tabla Oficial BCV vs Tasa actual por moneda con badge de variación %, reusa modelo `user_currencies` con flag `is_official` ya existente de OWF-179). Verificado en prod: edición de tasa VES persiste y calcula delta correctamente (+10.1%) tras reload. Deploy frontend OK (sin cambios backend, reusa endpoints existentes). | claude-code | 2026-07-08 |
 
+| **OWF-208** | [x] | P0 | 🔴 | fix | security | — | IDOR reportado por el usuario: `GET /api/v1/user_currencies` (y alias `/user-currencies`) confiaba en `?user_id=` sin verificar contra el usuario autenticado — cualquier usuario podía leer/crear/editar/borrar `user_currencies` (tasas de cambio) de otro usuario; omitir `user_id` devolvía TODOS los usuarios sin scope. Fix en `UserCurrencyController`: index/store fuerzan `user_id = auth()->id()` salvo admin; update/destroy verifican `record->user_id === auth()->id()` (antes no verificaban nada, cualquiera podía editar/borrar por id). Auditoría del mismo patrón en endpoints vecinos: `AccountController::all/allActive` → `AccountRepo` tenía el MISMO bug (`?user_id=` en query params de cuentas permitía listar cuentas+saldos de otro usuario) — fix: no-admins nunca pueden ampliar el scope vía el param. 6 tests de regresión nuevos (`UserCurrencyIdorTest`, `AccountIdorTest`), 192/193 suite pasa (1 fallo pre-existente no relacionado, confirmado con git stash antes de mis cambios). Deploy backend prod OK. | claude-code | 2026-07-08 |
+
 <!--
-  NEXT_ID: OWF-208
+  NEXT_ID: OWF-209
 -->
 
 ## Completed
