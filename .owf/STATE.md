@@ -3,8 +3,19 @@
 <!-- Solo un agente escribe a la vez. Updated = timestamp del ultimo escritor. -->
 <!-- Tareas se referencian por ID (OWF-NNN) → ver .owf/TASKS.md -->
 
-**Updated:** 2026-07-08T04:20:00Z
+**Updated:** 2026-07-08T05:10:00Z
 **By:** claude-code
+
+## Último trabajo (2026-07-08, continuación 2) — OWF-207: Unificar config Pro con Lite + Tasas de Cambio
+
+Pedido del usuario mostrando 2 screenshots: la vista Pro actual (tabs, sin Aplicación/Seguridad) vs el mockup `rediseno/.../ConfigRoute.jsx` (bloques Aplicación+Tasas de Cambio). Pidió unificar: llevar ese diseño a Pro.
+
+- **OWF-207** ✅ Arriba de los tabs existentes de Pro (sin tocarlos), agregado:
+  - Card "Aplicación": modo Lite/Pro, idioma, ocultar saldos, divisa predeterminada — reusa estado ya existente en el script (antes solo se pintaba en Lite).
+  - Card "Seguridad": movida desde dentro del tab Perfil (donde la había puesto en OWF-206) al bloque superior compartido.
+  - **`ExchangeRatesTable.vue`** (nuevo componente): tabla Oficial(BCV) vs Tasa actual por moneda (EUR/VES/COP/CLP/PEN) con badge de variación %. Reusa el modelo de datos `user_currencies` con `is_official`/`is_current` que ya existía desde OWF-179 (SmartTransactionModal) — no hizo falta backend nuevo.
+  - Verificado en prod: edité VES (oficial 36.8, actual 40.5) → persistió y calculó +10.1% de delta tras recargar, coincide con el ejemplo del mockup del usuario.
+- **Hallazgo de seguridad NO corregido (fuera de alcance de esta tarea)**: `GET /api/v1/user_currencies` sin `user_id` en query devuelve las tasas de **todos los usuarios** (confirmado via curl en prod, vi filas de user_id 21, 9, etc. sin filtrar). El frontend siempre pasa `user_id` propio así que no se explota en la práctica desde la UI, pero el endpoint no fuerza `user_id = auth()->id()` server-side — cualquier usuario autenticado podría pedir `?user_id=<otro>` y ver sus tasas. Se dejó una tarea flotante para revisar en otra sesión (no es admin-gated).
 
 ## Último trabajo (2026-07-08, continuación) — OWF-206: Sección Seguridad en /user/config + PIN
 

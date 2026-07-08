@@ -209,8 +209,10 @@
 
 | **OWF-206** | [x] | P2 | ⚪ | feat | config | — | Nueva sección "Seguridad" en /user/config (Lite y Pro): (1) toggle "Pedir confirmación para ver saldos" (movido desde Aplicación, ya existía como `ui.togglePrivacyLock()`); (2) NUEVO: PIN de acceso rápido (4-6 dígitos) — backend `security_pin` hasheado en users, endpoints GET pin-status / PUT set / POST verify / DELETE remove (`UserSecurityController`), requiere contraseña actual para crear/eliminar. Frontend: `useSecurityPin.ts` composable, `ui.ts` revealValues() intenta biometría → PIN → contraseña completa (en ese orden) antes de revelar saldos. 5/5 tests backend pasan. Verificado end-to-end en prod (configurar/verificar/eliminar PIN + flujo de revelar saldos). Deploy backend+frontend OK. | claude-code | 2026-07-08 |
 
+| **OWF-207** | [x] | P2 | ⚪ | feat | config | — | Unificar layout Pro de /user/config con el mismo diseño de Lite (mockup `rediseno/ui_kits/lite-desktop/templates/ConfigRoute.jsx`): agregado ARRIBA de los tabs existentes (Perfil/Finanzas/Categorías/Cuentas/Impuestos, sin tocar) un bloque con 3 cards — Aplicación (modo Lite/Pro, idioma, ocultar saldos, divisa predeterminada), Seguridad (movida desde dentro del tab Perfil — pedir confirmación + PIN), y NUEVO componente `ExchangeRatesTable.vue` (tabla Oficial BCV vs Tasa actual por moneda con badge de variación %, reusa modelo `user_currencies` con flag `is_official` ya existente de OWF-179). Verificado en prod: edición de tasa VES persiste y calcula delta correctamente (+10.1%) tras reload. Deploy frontend OK (sin cambios backend, reusa endpoints existentes). | claude-code | 2026-07-08 |
+
 <!--
-  NEXT_ID: OWF-207
+  NEXT_ID: OWF-208
 -->
 
 ## Completed
