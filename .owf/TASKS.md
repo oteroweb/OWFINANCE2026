@@ -271,9 +271,12 @@
 | **OWF-264** | [ ] | P3 | ⚪ | feat | txform-audit | OWF-240 | Picker Proveedor/Comercio: agregar flujo de crear proveedor nuevo (hoy solo busca/filtra existentes). | — | — |
 | **OWF-265** | [ ] | P3 | ⚪ | fix | txform-audit | OWF-240 | Verificar si AnchoredJarChip incluye ícono de candado (lock) como pide el diseño. | — | — |
 | **OWF-266** | [ ] | P2 | ⚪ | fix | txform-audit | OWF-240 | Categoría + chip Cántaro quedan apilados verticalmente en el Vue real (confirmado navegando localhost:3000 Pro) — el diseño los pone lado a lado en 2 columnas (flex row, cada Field flex:1). Confirmar en TransactionForm.jsx líneas 384-392. | — | — |
+| **OWF-267** | [ ] | P2 | ⚪ | design | txform-audit | OWF-240 | QuickActionSheet.vue: tiles son tarjetas rectangulares con fondo; el diseño (QuickActionSheet.jsx) usa círculo grande de 72px flotante sin fondo + label debajo (ActionTile). Confirmado con captura del usuario en Pro real. | — | — |
+| **OWF-268** | [ ] | P2 | 🟡 | fix | txform-audit | OWF-240 | QuickActionSheet.vue tiene un 7mo tile "Personalizado" que NO existe en el diseño (solo 6: Gasto/Ingreso/Transferir/Voz/Escanear/Auto IA) y hoy es dead-end (muestra "estará disponible muy pronto" al tocarlo). Decidir: quitarlo o implementarlo. | — | — |
+| **OWF-269** | [ ] | P2 | ⚪ | feat | txform-audit | OWF-240 | QuickActionSheet.vue: faltan los 2 atajos "Pago deuda" / "Aporte sueño" (navegan directo a /user/debts y /user/dreams) que sí están en el diseño, debajo de la grilla de acciones. | — | — |
 
 <!--
-  NEXT_ID: OWF-267
+  NEXT_ID: OWF-270
 -->
 
 ## Completed
