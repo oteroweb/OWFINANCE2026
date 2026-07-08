@@ -245,18 +245,18 @@
 | **OWF-237** | [x] | P2 | 🟡 | fix | ux | — | SmartTransactionModal: fix scroll en desktop — max-height 92vh + overflow-y auto en stm-body, flex-shrink:0 en header y tabs. | 2026-07-08 | — |
 | **OWF-238** | [x] | P2 | ⚪ | docs | infra | — | Skill owf-component-map creado: mapa completo de 60 componentes, 7 stores, flujos de creación/edición, hub nodes, gotchas críticos. | 2026-07-08 | — |
 | **OWF-240** | [ ] | P1 | 🟡 | epic | txform-audit | — | [ÉPICA] Paridad SmartTransactionModal Pro vs diseño rediseno/TransactionForm.jsx — 25 gaps encontrados (OWF-241..265), a revisar y confirmar con usuario antes de implementar. Ver reporte completo en engram (mem_search "txform-audit"). | — | — |
-| **OWF-241** | [ ] | P1 | 🟡 | fix | txform-audit | OWF-240 | Transfer: excluir cuenta origen de las opciones del picker "Hacia" — hoy se puede elegir la misma cuenta en ambos lados. | — | — |
-| **OWF-242** | [ ] | P1 | 🟡 | fix | txform-audit | OWF-240 | Split activo: ocultar el campo "Cuenta" simple cuando proPanel==='split' — hoy coexiste con el editor multi-cuenta, ambigüedad de qué cuenta se usa. | — | — |
-| **OWF-243** | [ ] | P1 | 🟡 | fix | txform-audit | OWF-240 | Items activo: ocultar/sincronizar el campo Monto principal con itemsTotal en vez de dejarlo editable independiente. | — | — |
-| **OWF-244** | [ ] | P1 | 🟡 | fix | txform-audit | OWF-240 | Items activo: ocultar la fila Categoría/Cántaro principal (la categoría se gestiona por ítem dentro de TfItemsEditor). | — | — |
-| **OWF-245** | [ ] | P1 | 🟡 | fix | txform-audit | OWF-240 | showDualRates (Paralelo/BCV): condicionar a que NO haya split ni items activos. | — | — |
-| **OWF-246** | [ ] | P1 | 🟡 | design | txform-audit | OWF-240 | Decidir si Split/Items deben estar disponibles en type==='transfer' — el diseño solo prevé TfCommission ahí, no split/items. | — | — |
-| **OWF-247** | [ ] | P1 | 🟡 | feat | txform-audit | OWF-240 | Reemplazar input datetime-local de Fecha por Picker con atajos Hoy/Ayer/Personalizada, según diseño. | — | — |
+| **OWF-241** | [x] | P1 | 🟡 | fix | txform-audit | OWF-240 | Transfer: `accountToOptions` filtra `account_from_id` del picker "Hacia" + watcher resetea "Hacia" si coincide con "Desde". | 2026-07-08 | — |
+| **OWF-242** | [x] | P1 | 🟡 | fix | txform-audit | OWF-240 | Campo "Cuenta" simple oculto con `v-if="!splitOn"` — ya no coexiste con el editor multi-cuenta. | 2026-07-08 | — |
+| **OWF-243** | [x] | P1 | 🟡 | fix | txform-audit | OWF-240 | Campo Monto oculto en modo items (`v-if="!itemsOn"`), reemplazado por banner "Total (suma de ítems)". `rawAmt`/`finalAmount` en `save()` ahora usan `itemsTotal` cuando itemsOn. | 2026-07-08 | — |
+| **OWF-244** | [x] | P1 | 🟡 | fix | txform-audit | OWF-240 | Fila Categoría/Cántaro oculta con `!itemsOn` (junto con OWF-266, ver esa fila). | 2026-07-08 | — |
+| **OWF-245** | [x] | P1 | 🟡 | fix | txform-audit | OWF-240 | `showDualRates` ahora excluye `splitOn`/`itemsOn`. | 2026-07-08 | — |
+| **OWF-246** | [x] | P1 | 🟡 | design | txform-audit | OWF-240 | Decidido: split/items ocultos en Transferencia (`v-if="form.type !== 'transfer'"` en el row de switches) + watcher resetea `proPanel` a null si el usuario cambia a transfer con split/items activo. Comisión sigue disponible. | 2026-07-08 | — |
+| **OWF-247** | [x] | P1 | 🟡 | feat | txform-audit | OWF-240 | Reemplazados los 3 `datetime-local` por chips Hoy/Ayer/Otra fecha (`setDateShortcut`, `dateChipActive`) — el input nativo solo aparece al elegir "Otra fecha…". | 2026-07-08 | — |
 | **OWF-248** | [ ] | P2 | ⚪ | fix | txform-audit | OWF-240 | Transfer: mover campo "Concepto" al final (después de comisión) en vez de justo después del monto. | — | — |
 | **OWF-249** | [ ] | P2 | ⚪ | feat | txform-audit | OWF-240 | Transfer: confirmar/forzar visibilidad de TfCommission (switch cobrar comisión) en esta rama. | — | — |
 | **OWF-250** | [ ] | P2 | ⚪ | design | txform-audit | OWF-240 | Cruce de moneda: texto a formato "Cruce de moneda · USD → VES" + "Envías X"/"Llega Y" en vez del actual "{{from}} ≈ {{to}}". | — | — |
 | **OWF-251** | [ ] | P2 | ⚪ | design | txform-audit | OWF-240 | Cruce de moneda: aplicar color morado #8B5CF6 (hoy usa stm-pro-panel genérico). | — | — |
-| **OWF-252** | [ ] | P2 | ⚪ | design | txform-audit | OWF-240 | Agregar íconos call_split y receipt_long a los switches "Pago múltiple"/"Detalle/factura". | — | — |
+| **OWF-252** | [x] | P2 | ⚪ | design | txform-audit | OWF-240 | Agregados `icon="call_split"`/`icon="receipt_long"` a los q-toggle (hecho de paso junto con OWF-246). | 2026-07-08 | — |
 | **OWF-253** | [ ] | P2 | ⚪ | design | txform-audit | OWF-240 | Unificar el control "Comisión" a q-toggle (hoy es botón pill, inconsistente con los otros 2 switches). | — | — |
 | **OWF-254** | [ ] | P2 | ⚪ | fix | txform-audit | OWF-240 | Mover switch "Afecta el saldo" al final de la rama gasto/ingreso Pro (hoy es universal y aparece antes del bloque Pro). | — | — |
 | **OWF-255** | [ ] | P2 | ⚪ | design | txform-audit | OWF-240 | Confirmar/ajustar .stm-tags-row para scroll horizontal en una sola fila (Pro) en vez de wrap multi-línea. | — | — |
@@ -270,7 +270,7 @@
 | **OWF-263** | [ ] | P3 | ⚪ | design | txform-audit | OWF-240 | Switch "Afecta el saldo": agregar sub-texto "Desactiva para movimientos informativos" + ícono account_balance_wallet. | — | — |
 | **OWF-264** | [ ] | P3 | ⚪ | feat | txform-audit | OWF-240 | Picker Proveedor/Comercio: agregar flujo de crear proveedor nuevo (hoy solo busca/filtra existentes). | — | — |
 | **OWF-265** | [ ] | P3 | ⚪ | fix | txform-audit | OWF-240 | Verificar si AnchoredJarChip incluye ícono de candado (lock) como pide el diseño. | — | — |
-| **OWF-266** | [ ] | P2 | ⚪ | fix | txform-audit | OWF-240 | Categoría + chip Cántaro quedan apilados verticalmente en el Vue real (confirmado navegando localhost:3000 Pro) — el diseño los pone lado a lado en 2 columnas (flex row, cada Field flex:1). Confirmar en TransactionForm.jsx líneas 384-392. | — | — |
+| **OWF-266** | [x] | P2 | ⚪ | fix | txform-audit | OWF-240 | Categoría y Cántaro ahora en `.stm-row-2` (2 columnas lado a lado), cada uno su propio `stm-field` — antes el chip vivía apilado dentro del mismo field que el selector. | 2026-07-08 | — |
 | **OWF-267** | [!] | P2 | ⚪ | design | txform-audit | OWF-240 | ~~QuickActionSheet.vue vs QuickActionSheet.jsx~~ — DESCARTADA: la referencia correcta para desktop es DesktopQuickModal.jsx (OWF-270), no QuickActionSheet.jsx (ese es el diseño mobile). Ver OWF-270..273. | Bloqueada: referencia incorrecta, ver OWF-270 | — |
 | **OWF-268** | [!] | P2 | 🟡 | fix | txform-audit | OWF-240 | ~~Tile "Personalizado" fantasma~~ — DESCARTADA como hallazgo aislado, absorbida por OWF-270 (el modal completo de desktop está sin implementar, no solo un tile). | Bloqueada: absorbida por OWF-270 | — |
 | **OWF-269** | [!] | P2 | ⚪ | feat | txform-audit | OWF-240 | ~~Faltan shortcuts Pago deuda/Aporte sueño~~ — DESCARTADA: sí existen en el diseño correcto (DesktopQuickModal.jsx, sección "movimiento especial", + incluye "Aporte a jar" que tampoco se había detectado). Ver OWF-271. | Bloqueada: absorbida por OWF-271 | — |
