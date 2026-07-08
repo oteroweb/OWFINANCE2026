@@ -278,9 +278,13 @@
 | **OWF-271** | [ ] | P1 | 🟡 | feat | txform-audit | OWF-240 | DesktopQuickModal.jsx sección "O registrá un movimiento especial": 3 tarjetas Pago de deuda (badge Cashea) / Aporte a sueño / Aporte a jar, cada una con navegación directa a su flujo (`onSelectAction("<planId>:text")`). Ninguna existe hoy en el flujo de creación de transacción — Deudas/Sueños/Jars solo se gestionan desde sus propias vistas, no desde el modal rápido. | OWF-270 | — |
 | **OWF-272** | [ ] | P2 | ⚪ | design | txform-audit | OWF-240 | DesktopQuickModal.jsx método "Foto de factura" muestra chips de preview (Monto/Comercio/Items/Fecha/IVA) antes de tomar la foto, anticipando qué extrae la IA. Verificar si el flujo real (OcrTransactionDialog) comunica esto de alguna forma. | OWF-270 | — |
 | **OWF-273** | [ ] | P3 | ⚪ | design | txform-audit | OWF-240 | DesktopQuickModal.jsx: badges visuales por método ("Transcripción IA" en Nota de voz, "Beta" en Auto IA) — confirmar si el real comunica estas distinciones de madurez de feature. | OWF-270 | — |
+| **OWF-274** | [ ] | P2 | ⚪ | design | txform-audit | OWF-240 | Eyebrow del modal dice solo "Nuevo movimiento" — el diseño (SmartTransactionModal.jsx) agrega sufijo " · Pro" / " · Lite" según `layout_mode`. Confirmado comparando captura del usuario (diseño) vs snapshot real: `.stm-eyebrow` no tiene el sufijo. | — | — |
+| **OWF-275** | [ ] | P1 | 🟡 | feat | txform-audit | OWF-240 | Falta la 5ta pestaña de método "Carga masiva" en `methods` (SmartTransactionModal.vue línea 582) — el diseño SIEMPRE la incluye (`STM_METHODS + bulk`). Ya existe `TransactionBulkImportDialog.vue` en el código (accesible hoy solo vía layout_mode=legacy) — falta integrarlo como 5to tab de este modal en vez de dejarlo aislado. | — | — |
+| **OWF-276** | [ ] | P3 | ⚪ | design | txform-audit | OWF-240 | Fecha (fix OWF-247, esta sesión) implementada como 3 chips separados (Hoy/Ayer/Otra fecha) — el diseño (`TransactionForm.jsx` Picker) los presenta como UN solo dropdown/select con 3 opciones, igual estilo que Cuenta/Proveedor. Revisar si conviene unificar a ese patrón visual. | — | — |
+| **OWF-277** | [ ] | P3 | ⚪ | design | txform-audit | OWF-240 | Estilo general de campos tipo-select (Cuenta/Categoría/Proveedor): el diseño usa una caja "filled" con ícono+valor+chevron inline (look de picker custom); el real usa `q-select outlined dense` de Quasar (bordes finos, label arriba) — diferencia de sistema de diseño más amplia, no exclusiva de este formulario. Evaluar si vale la pena un q-select styleado a medida o dejarlo como deuda de design system general. | — | — |
 
 <!--
-  NEXT_ID: OWF-274
+  NEXT_ID: OWF-278
 -->
 
 ## Completed
