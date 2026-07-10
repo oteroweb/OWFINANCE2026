@@ -36,6 +36,65 @@ Usar `Read` sobre el `.jsx` para el Paso 1/2 (análisis de estructura y delta) S
 
 ---
 
+## Canal directo con Claude Design (MCP DesignSync) — reemplaza el copy-paste manual
+
+El proyecto `rediseno` en claude.ai (design-system, `projectId: 5fd9e16d-4e55-4813-8714-3dd0f0a35c48`)
+es un espejo del árbol local `OWFinanceFrontend2025/rediseno/`. Con el tool `DesignSync` disponible,
+**no hace falta que el usuario copie/pegue JSX entre chats**: Claude Code puede bajar y subir
+archivos directamente contra ese proyecto.
+
+> Nota: existe además un proyecto huérfano `Design System` (`6fc08e8c-988c-4474-b035-e8ec8256c38e`,
+> vacío) — no usarlo, es legacy pendiente de borrado manual por el usuario.
+
+### PULL — bajar una iteración que el diseñador hizo en Claude Design
+
+Trigger: el usuario dice "ya lo cambié en Claude Design", "revisa lo que ajustó el diseñador",
+"jala la última versión de [componente]" — en vez de pedirle que pegue el JSX a mano.
+
+```
+1. DesignSync.get_file(projectId: "5fd9e16d-4e55-4813-8714-3dd0f0a35c48", path: <ruta del .jsx>)
+2. Escribir ese contenido al mismo path en rediseno/ local (Write)
+3. git diff en OWFinanceFrontend2025/rediseno/ para confirmar qué cambió realmente
+4. Si hay cambios locales sin commitear en ese mismo path → avisar antes de sobreescribir
+   (git stash si hace falta preservarlos)
+5. Continuar con Ciclo 1 desde Paso 1 (leer cambios → analizar delta → portar a Vue)
+```
+
+Para no adivinar qué componente cambió: si el usuario no especifica el path, preguntar cuál
+(no hacer diff de los ~200 archivos del proyecto — `list_files` no expone hash/mtime, así que
+un diff completo implicaría un `get_file` por archivo; es caro y lento comparado con pedir el
+nombre del componente).
+
+### PUSH — subir un fix o componente nuevo que Claude Code hizo en rediseno/ local
+
+Trigger: después de que Code edite/cree un `.jsx` en `rediseno/` (ej. Paso 2b resuelto localmente,
+o un ajuste menor durante el port), o cuando el usuario pida "sube esto a Claude Design".
+
+```
+1. git status en OWFinanceFrontend2025/rediseno/ → listar archivos modificados/nuevos
+2. DesignSync.finalize_plan(projectId: "5fd9e16d-4e55-4813-8714-3dd0f0a35c48",
+     writes: [paths modificados], localDir: "OWFinanceFrontend2025/rediseno")
+3. DesignSync.write_files(planId, files: [{path, localPath}, ...])
+4. Confirmar al usuario que el proyecto "rediseno" en claude.ai quedó actualizado
+```
+
+### Los "prompts para Claude Design" (Paso 4 / Paso 2b) siguen vigentes — pero el retorno cambia
+
+Generar el prompt sigue teniendo valor (Code no puede invocar generación de diseño por sí mismo;
+eso ocurre en una sesión de Claude Design aparte, humana o dirigida por el usuario). Lo que cambia
+es el cierre del ciclo: en vez de "el usuario pega el JSX resultante", el usuario dice **"listo,
+ya está en Claude Design"** y Code hace **PULL** del path correspondiente — sin copy-paste.
+
+### Reglas para no perder sincronía
+
+- `rediseno/` local (git-tracked) sigue siendo la fuente de verdad canónica — todo PUSH sale de ahí.
+- Antes de un PUSH: `git status` para no subir cambios a medio hacer.
+- Antes de un PULL: verificar que no haya cambios locales sin commitear en esos paths.
+- El `projectId` de `rediseno` es fijo (`5fd9e16d-4e55-4813-8714-3dd0f0a35c48`) — no listar
+  proyectos cada vez, usarlo directo.
+
+---
+
 ## Rutas clave del design system
 
 ```
@@ -156,6 +215,10 @@ Referencia visual: [mencionar ev-*.png si es relevante]
 Devuelve el bloque JSX modificado listo para reemplazar en el archivo.
 ```
 
+Cuando el usuario confirme que el ajuste ya está hecho en Claude Design, **no pedir que pegue el
+JSX** — hacer PULL directo (ver sección "Canal directo con Claude Design" arriba) del path exacto
+del componente.
+
 ---
 
 ## CICLO 2 — El usuario pide un feature nuevo
@@ -204,7 +267,8 @@ Devuelve:
 2. Si necesitas un componente nuevo, devuelve también su JSX como archivo separado
 ```
 
-→ Esperar a que el usuario pegue el resultado en rediseno/
+→ Cuando el usuario confirme que ya está en Claude Design, hacer **PULL** directo del/los
+  archivo(s) nuevos (ver sección "Canal directo con Claude Design" arriba) — no pedir copy-paste
 → Luego proceder con Ciclo 1
 
 ---
