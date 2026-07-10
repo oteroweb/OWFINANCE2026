@@ -3,8 +3,65 @@
 <!-- Solo un agente escribe a la vez. Updated = timestamp del ultimo escritor. -->
 <!-- Tareas se referencian por ID (OWF-NNN) → ver .owf/TASKS.md -->
 
-**Updated:** 2026-07-08T06:20:00Z
+**Updated:** 2026-07-10T12:00:00Z
 **By:** claude-code
+
+## Último trabajo (2026-07-10, continuación 2) — Segunda opinión + contrato de generación diseño↔código (rama `feat/design-contract`, SIN mergear)
+
+Consulta de arquitectura sobre las propuestas A (contrato de callbacks) y B (fixtures con shape real). Veredicto: B > A; ambas valen ahora, pero SOLO en versión **generada desde el código real** (no mantenida a mano) para que no se pudra como la tabla de mapeo vieja de SKILL.md. Implementado el primer paso en ramas `feat/design-contract` — **pendiente de revisión/merge del usuario, sin push, sin deploy**:
+
+- Frontend `392635b`: `rediseno/tools/generate-fixtures.mjs` (TS compiler API; valida `fixture-seeds.json` contra las interfaces reales, `--check` como gate anti-stale, regla cántaro←categoría verificada), `rediseno/data/sample-data.contract.js` (window.SAMPLE_* GENERATED con shapes reales), `rediseno/DESIGN_CONTRACT.md` (contrato para prompts a Claude Design: callbacks fijos onSave/onDelete/onClose/onSelectAction, un useState-objeto, material-icons, Lite/Pro en archivos separados, mobile flagged, jar nunca selector).
+- Central `2beb1b8`: `owf-design-sync/SKILL.md` Ciclo 2 adjunta el contrato al prompt y verifica el JSX recibido contra checklist.
+- Hallazgo: NO hay interfaces canónicas Account/Provider en stores — viven en `useTransactionForm.ts` (`AccountOption`/`ProviderOption`); candidato futuro a extraer a `src/types/`.
+- Siguiente si se aprueba: merge ambas ramas + push de `DESIGN_CONTRACT.md` y `sample-data.contract.js` al proyecto Claude Design vía DesignSync MCP; opcional añadir `--check` al gate de deploy.
+
+## Último trabajo (2026-07-10, continuación) — Guía de traducción JSX→Vue/Quasar (reto "MCP Claude Design", parte tecnología)
+
+Segunda parte del reto (la primera fue el canal directo DesignSync, commit `11e0ae7`). Se auditaron 4 pares JSX↔Vue reales ya en producción (TransactionForm→SmartTransactionModal, TransactionDetailModal→LiteTransactionsView detail-sheet, RecentTransactions→LiteTransactionsView lista, DesktopQuickModal→DesktopQuickModal.vue) para extraer las reglas reales de traducción sintáctica (no una guía genérica de React→Vue).
+
+- **Creado** `.claude/skills/owf-design-sync/JSX_VUE_TRANSLATION_GUIDE.md`: mapeo de eventos, hooks→Composition API, HTML→componentes q-*, dónde entra Pinia (y dónde NO — catálogos son módulo cache-first `txCatalog.ts`, no store), y sección E con los patrones que NUNCA son mecánicos (cántaro anclado a categoría, Lite/Pro se refactoriza en vez de mantenerse como prop `mode`, "planes especiales" cambian de navegación vs modal, gaps mobile silenciosos, animaciones se pierden).
+- **Decisión**: NO automatizar el primer paso con un script/sub-skill — evaluado y descartado con el volumen actual (4 componentes portados a la fecha). Lo mecánico es la parte rápida; el tiempo real se va en juicio de negocio (D/E de la guía). Revisar si el ritmo supera ~15 componentes/trimestre.
+- `owf-design-sync/SKILL.md` Paso 3 actualizado para referenciar la guía en vez de "seguir el mapeo" ad-hoc.
+- Sin cambios de código de app (solo docs de skill) → sin deploy esta vez.
+- **Pregunta abierta del usuario, respondida inline (no bloquea nada)**: discordancia de que `rediseno/` es una plantilla no-persistente (fixtures `window.SAMPLE_*`) mientras el frontend real sí tiene backend — recomendación dada: no conectar el JSX a datos reales (es intencionalmente desechable), sino estandarizar las FORMAS de los fixtures para que calcen con las interfaces TS reales (`Transaction`, `Account`, etc. de `stores/*.ts`) y fijar un contrato de nombres de callback (`onSelectAction`, `onSave`, `onDelete`) consistente entre componentes — reduce fricción en la sección D (Pinia) de cada port futuro sin comprometer que el design system siga siendo standalone.
+
+## Último trabajo (2026-07-10) — OWF-280/281/282: Amount hero pills + Transfer layout + comparativa visual
+
+Continuación del audit `txform-audit` (OWF-240). Completados en esta sesión:
+- **OWF-280** ✅ Amount hero: reemplazado `q-select` de moneda por pills inline `USD/EUR/VES` dentro del mismo campo de monto (`$ 0.00` grande + pills a la derecha), estilo referencia `ev-expense-top.png`. Aplica a gasto/ingreso/transfer.
+- **OWF-281** ✅ Transfer: `Desde (origen)*` → flecha → `Hacia (destino)*` en una sola fila (`.stm-transfer-accounts`), antes estaban apiladas verticalmente sin indicador visual de dirección.
+- **OWF-282** ✅ Label "Cuenta" → "Cuenta de origen *" (con asterisco rojo de requerido) en gasto/ingreso.
+- Deploy frontend prod OK, verificado `frontend=OK:200`, TypeScript y ESLint limpios.
+- Se generó un artifact de comparativa visual (18 gaps totales, priorizados P1-P3) contra `rediseno/redesign/audit/*.png` — cubre formulario, Home Pro, Config Pro, DesktopQuickModal.
+
+**Nota importante — no confundir con bug real**: el usuario reportó screenshot mostrando los 3 toggle-cards (Pago múltiple/Detalle-factura/Gasto compartido) en una sola fila en vez de apilados. Verificado vía `curl` contra el CSS compilado en prod (`AppShell-C2iuzGX6.css`): `.stm-pro-card-toggles[data-v-5afabb12]{display:flex;flex-direction:column;gap:6px}` — **el código YA está correcto**, apila en columna. El screenshot del usuario es casi seguro un tab con bundle JS viejo cacheado en memoria (SPA no hace full reload). Pedir hard-refresh (Cmd+Shift+R) antes de seguir investigando esto como bug.
+
+**CORRECCIÓN — el design system YA está en disco, no hace falta MCP:**
+El usuario pidió conectar el MCP `claude_design` (`https://api.anthropic.com/v1/design/mcp`) e importar el proyecto `https://claude.ai/design/p/5fd9e16d-4e55-4813-8714-3dd0f0a35c48`. Verificado: `OWFinanceFrontend2025/rediseno/_ds_manifest.json` tiene `"namespace":"OWFinanceDesignSystem_5fd9e1"` — coincide exactamente con el ID de ese proyecto. **La carpeta `rediseno/` ES la exportación completa** (HTML, CSS, tokens, componentes) de ese mismo proyecto de Claude Design, ya sincronizada en disco.
+
+Contenido de `rediseno/`:
+- `_ds_manifest.json` — índice de 30+ pantallas HTML navegables (`cards[]`), tokens de color/spacing/radius/font, temas light+dark (`[data-theme="dark"]`)
+- `colors_and_type.css` — todos los design tokens (navy/cyan/emerald/red/amber/violet + slate + ink dark mode)
+- `components/` — Button, Chip, Avatar, Card, Eyebrow, Money (JSX de referencia)
+- `redesign/audit/*.png` — capturas ya usadas en el audit de esta sesión
+- `ui_kits/lite-desktop/` y `ui_kits/mobile/` — demos vivos navegables
+- `README.md` — brief del design system completo (Lite vs Pro, rutas canónicas, comandments de UX)
+
+**Próxima sesión**: no conectar MCP salvo que se quiera sync en vivo con ediciones futuras online. En su lugar, recorrer `_ds_manifest.json` → `cards[]` sistemáticamente (cada `path` es un HTML navegable con `viewport` definido) para comparar contra el código real, en vez de depender solo de los PNGs estáticos de `redesign/audit/`.
+
+Gaps aún pendientes del audit visual (ver artifact de comparativa de esta sesión): formulario P3 (OWF-259/260/261/262/264/265), Home Pro P2 (OWF-227/228/229/230), Config Pro P2 (OWF-211/212/215/218/219), DesktopQuickModal P1 (OWF-271).
+
+## Último trabajo (2026-07-09) — OWF-278: Jailbreak Protection para AI Chat Coach
+
+El usuario pidió protección contra jailbreaking: evitar que usen el chatbot como asistente genérico (código, matemáticas, cultura general). Implementado en dos capas:
+
+1. **System prompt reforzado** — instrucciones explícitas de restricción de alcance, con sección ❌ BLOQUEA ESTRICTAMENTE y ✅ SÍ HACER. El asesor solo responde sobre finanzas personales OwFinance.
+
+2. **Capa de detección pre-LLM** (`detectJailbreakAttempt`) — regex en 4 categorías (role_change, code_math, data_leak, off_topic) que intercepta el mensaje ANTES de enviarlo al provider de IA. Si detecta jailbreak, responde con SSE bloqueado directamente sin gastar tokens.
+
+3. **jailbreakBlockResponse()** — respuestas amables pero firmes según categoría.
+
+Sin cambios en la experiencia del usuario legítimo. Deploy backend prod OK (1a7b401).
 
 ## Último trabajo (2026-07-08, continuación 3) — OWF-208: Fix IDOR en user_currencies + accounts
 
@@ -716,5 +773,18 @@ Fixes aplicados al suite e2e:
 | TECH-LP-02 | OWF-007 | BUG-006 | OWF-019 |
 | TECH-LP-03 | OWF-042 | INFRA-001..004 | OWF-035..038 |
 | TECH-LP-04 | OWF-008 | DS-01..52 | OWF-039..045 |
+## Último trabajo (2026-07-08, Hermes) — OWF-224/225/226/213/216+234: Home Audit — bugs P1 corregidos
+
+Sesión iniciada pidiendo tomar decisiones autónomas: arranqué por los bugs P1 que afectan cifras que el usuario VE en Pro cada vez que abre la app.
+
+- **OWF-226** ✅ `classifyTx()` ahora retorna `'income' | 'expense' | 'transfer'` — detecta transfers por transaction_type_id=4, slug/name contiene 'transfer'/'traspaso', y los filtra en `loadMonthSummary()` (no inflan income/expense) y en `recentTransactions`.
+- **OWF-224** ✅ 3 lugares hardcodeados "USD" en template de ProHomeView reemplazados por `{{ currencyCode }}` (computed → `authStore.defaultCurrencyCode`).
+- **OWF-225** ✅ Deltas (+4.2%, +8.1%, -2.3%) reemplazados por cálculo real MoM: `loadMonthSummary()` ahora carga MES ANTERIOR en paralelo, computa variación % de ingresos, gastos y neto, con color dinámico según si subió/bajó.
+- **OWF-213** ✅ `currencySymbol` en LiteHomeView de ref('$') hardcodeado → computed() dinámico que mapea `authStore.defaultCurrencyCode` a símbolo real (VES→Bs, EUR→€, COP→$, USD→$).
+- **OWF-216** ✅ "Perfil financiero" agregado al sidebar NAV_ITEMS de AppShell.vue con icon insights + detección de ruta en currentTab. También está en el menú expandido mobile.
+- **OWF-234** ⚪ Problema de currencySymbol estático absorbido dentro de OWF-213.
+- **OWF-131** sigue pendiente (acción manual: regenerar key Gemini con prefijo normal).
+- **Verificación**: build SPA exitoso sin errores TypeScript. Pendiente deploy frontend.
+
 | OPS-001 | OWF-020 | WEEK2-A | OWF-021 |
-| BUG-001..008 | OWF-023..028, OWF-046 | WEEK2-B | OWF-022 |
+|| BUG-001..008 | OWF-023..028, OWF-046 | WEEK2-B | OWF-022 |
