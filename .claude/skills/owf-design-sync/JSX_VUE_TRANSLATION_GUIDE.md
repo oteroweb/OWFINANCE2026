@@ -21,7 +21,7 @@ No es una guía genérica de React→Vue — son las convenciones reales que ya 
 - `Picker onChange={setX}` → `q-select v-model="form.x" emit-value map-options dense outlined` (a veces `clearable`).
 - `Switch onChange={setX}` → `q-toggle :model-value="..." @update:model-value="..."`. Si el JSX tenía dos booleans independientes, en Vue suelen colapsarse a un solo enum (`proPanel: 'split'|'invoice'|'shared'|null`).
 - `TextInput`/`MoneyInput onChange` → `v-model` / `v-model.number` nativo. **Ojo**: no siempre se sube a `q-input` — hay formularios reales (`LiteTransactionsView` detail edit) que quedaron con `<input>` plano por deuda técnica, no por regla.
-- `document.addEventListener('keydown', ...)` dentro de `useEffect` → se mantiene **igual de imperativo** en Vue: `watch()` + `document.addEventListener` + cleanup en el `else` del watch y en `onBeforeUnmount`. No se declara con `@keydown` en el template.
+- `document.addEventListener('keydown', ...)` dentro de `useEffect` → se mantiene **igual de imperativo** en Vue: `watch()` + `document.addEventListener` + cleanup en el `else` del watch y en `onBeforeUnmount`. Además, usar `onCleanup` (tercer parámetro del callback: `watch(fuente, (val, old, onCleanup) => {...})`) para remover el listener anterior cuando la condición del watch cambia — evita listeners duplicados y fugas de memoria si el watch se re-dispara. No se declara con `@keydown` en el template.
 - `onMouseEnter/onMouseLeave` para hover state → **eliminado**, reemplazado 100% por `:hover` en SCSS con CSS custom properties (`--dqm-accent`, `--dqm-tint`) inyectadas vía `:style`.
 
 ## B) Hooks React → Composition API
@@ -39,7 +39,7 @@ No es una guía genérica de React→Vue — son las convenciones reales que ya 
 
 Reglas consistentes en los 4 pares:
 
-- `<span className="material-icons">` → `<q-icon :name="..." size="Npx" />`. **100% consistente, sin excepciones.**
+- `<span className="material-icons">` → `<q-icon name="..." size="Npx" />` (nombre estático sin `:`; `:name="..."` solo cuando el icono es dinámico). **100% consistente, sin excepciones.**
 - Botones → **se quedan `<button>` nativo + BEM** salvo el submit primario del formulario (`q-btn`). No asumir que todo botón se traduce a `q-btn`.
 - Selects/pickers estructurados → `q-select` con `emit-value map-options dense outlined` casi siempre.
 - Toggles/switches → `q-toggle`.
