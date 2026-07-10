@@ -3,8 +3,17 @@
 <!-- Solo un agente escribe a la vez. Updated = timestamp del ultimo escritor. -->
 <!-- Tareas se referencian por ID (OWF-NNN) → ver .owf/TASKS.md -->
 
-**Updated:** 2026-07-10T00:00:01Z
+**Updated:** 2026-07-10T12:00:00Z
 **By:** claude-code
+
+## Último trabajo (2026-07-10, continuación 2) — Segunda opinión + contrato de generación diseño↔código (rama `feat/design-contract`, SIN mergear)
+
+Consulta de arquitectura sobre las propuestas A (contrato de callbacks) y B (fixtures con shape real). Veredicto: B > A; ambas valen ahora, pero SOLO en versión **generada desde el código real** (no mantenida a mano) para que no se pudra como la tabla de mapeo vieja de SKILL.md. Implementado el primer paso en ramas `feat/design-contract` — **pendiente de revisión/merge del usuario, sin push, sin deploy**:
+
+- Frontend `392635b`: `rediseno/tools/generate-fixtures.mjs` (TS compiler API; valida `fixture-seeds.json` contra las interfaces reales, `--check` como gate anti-stale, regla cántaro←categoría verificada), `rediseno/data/sample-data.contract.js` (window.SAMPLE_* GENERATED con shapes reales), `rediseno/DESIGN_CONTRACT.md` (contrato para prompts a Claude Design: callbacks fijos onSave/onDelete/onClose/onSelectAction, un useState-objeto, material-icons, Lite/Pro en archivos separados, mobile flagged, jar nunca selector).
+- Central `2beb1b8`: `owf-design-sync/SKILL.md` Ciclo 2 adjunta el contrato al prompt y verifica el JSX recibido contra checklist.
+- Hallazgo: NO hay interfaces canónicas Account/Provider en stores — viven en `useTransactionForm.ts` (`AccountOption`/`ProviderOption`); candidato futuro a extraer a `src/types/`.
+- Siguiente si se aprueba: merge ambas ramas + push de `DESIGN_CONTRACT.md` y `sample-data.contract.js` al proyecto Claude Design vía DesignSync MCP; opcional añadir `--check` al gate de deploy.
 
 ## Último trabajo (2026-07-10, continuación) — Guía de traducción JSX→Vue/Quasar (reto "MCP Claude Design", parte tecnología)
 
