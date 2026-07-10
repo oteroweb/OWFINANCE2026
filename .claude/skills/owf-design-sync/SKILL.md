@@ -92,6 +92,11 @@ ya está en Claude Design"** y Code hace **PULL** del path correspondiente — s
 - Antes de un PULL: verificar que no haya cambios locales sin commitear en esos paths.
 - El `projectId` de `rediseno` es fijo (`5fd9e16d-4e55-4813-8714-3dd0f0a35c48`) — no listar
   proyectos cada vez, usarlo directo.
+- **Mantenimiento del contrato de generación**: si cambian las interfaces TS de stores
+  (`Transaction`, `Tag`, `CatalogCategory`, `JarRef`, …), correr
+  `node rediseno/tools/generate-fixtures.mjs` en el frontend (falla si los seeds quedaron
+  stale; `--check` sirve de gate). Luego re-subir `rediseno/DESIGN_CONTRACT.md` +
+  `rediseno/data/sample-data.contract.js` al proyecto de Claude Design (PUSH vía DesignSync).
 
 ---
 
@@ -246,7 +251,12 @@ del componente.
 
 ### Paso 2b: Si el diseño NO EXISTE en rediseno/
 
-→ Generar prompt para Claude Design:
+→ Generar prompt para Claude Design — **adjuntando SIEMPRE el contrato de generación**:
+  incluir en el pedido los archivos `rediseno/DESIGN_CONTRACT.md` y
+  `rediseno/data/sample-data.contract.js` (subirlos vía DesignSync si no están ya al día
+  en el proyecto `rediseno` de claude.ai). El contrato fija shapes de datos reales,
+  callbacks permitidos, iconos y separación Lite/Pro — evita reconciliar campos inventados
+  en cada port.
 
 ```
 == PROMPT PARA CLAUDE DESIGN ==
@@ -264,7 +274,9 @@ Restricciones de diseño:
   - [Agregar restricciones específicas del feature]
 
 Contexto técnico:
-  - Los datos de tx tienen: { id, label, meta, amount, jar, jarColor, tags[], category }
+  - CONTRATO ADJUNTO (obligatorio): DESIGN_CONTRACT.md + data/sample-data.contract.js —
+    consumir window.SAMPLE_* con esas shapes REALES (account_id, category_id, jar_id, …);
+    nunca inventar nombres de campo ni callbacks fuera de onSave/onDelete/onClose/onSelectAction
   - El kit Lite NO tiene: comisiones, split, items (solo Pro)
   - [Agregar contexto de datos relevante]
 
@@ -277,6 +289,12 @@ Devuelve:
 
 → Cuando el usuario confirme que ya está en Claude Design, hacer **PULL** directo del/los
   archivo(s) nuevos (ver sección "Canal directo con Claude Design" arriba) — no pedir copy-paste
+→ **Verificar que el JSX recibido cumple el contrato** (`rediseno/DESIGN_CONTRACT.md`):
+  - consume `window.SAMPLE_*` con los nombres de campo reales (nada de `jarColor`, `acctId`, `label`)
+  - callbacks solo `onSave`/`onDelete`/`onClose`/`onSelectAction` (+ `onChange(field, value)` documentado)
+  - iconos `<span className="material-icons">`, estado de form en UN solo `useState` objeto
+  - sin prop `mode` Lite/Pro (archivos separados), sin custom hooks nuevos
+  Si algo no cumple → devolver prompt de corrección a Claude Design antes de portar
 → Luego proceder con Ciclo 1
 
 ---
