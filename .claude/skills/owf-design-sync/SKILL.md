@@ -188,7 +188,15 @@ lado a lado, etc.).
 ### Paso 3: Implementar en Vue
 
 Seguir el mapeo rediseno→Vue de arriba.
-Principios del INSTRUCTIVO.md:
+
+**Para la traducción sintáctica JSX→Vue/Quasar** (eventos, hooks→Composition API, HTML→componentes q-*,
+dónde entra Pinia), no improvisar componente por componente — seguir
+[`JSX_VUE_TRANSLATION_GUIDE.md`](./JSX_VUE_TRANSLATION_GUIDE.md), extraída de auditar los 4 ports reales
+ya en producción. Incluye además qué patrones NUNCA se traducen mecánicamente (sección E) y por qué
+NO conviene automatizar el primer paso con un script (evaluado y descartado, ver el final del documento).
+
+Principios de negocio del INSTRUCTIVO.md (no sintácticos, siempre requieren criterio — ver también
+sección E de la guía):
 1. Cántaro anclado a categoría — nunca selector independiente
 2. `jarForCategory()` resuelve jar automáticamente
 3. Ingresos (kind='income') → jarId null → chip "Sin cántaro"
