@@ -3,8 +3,18 @@
 <!-- Solo un agente escribe a la vez. Updated = timestamp del ultimo escritor. -->
 <!-- Tareas se referencian por ID (OWF-NNN) → ver .owf/TASKS.md -->
 
-**Updated:** 2026-07-10T12:00:00Z
+**Updated:** 2026-07-10T12:30:00Z
 **By:** claude-code
+
+## Último trabajo (2026-07-10, continuación 3) — Verificado y deployado: merge de feat/design-contract + pull TransactionForm (OWF-283)
+
+Escaneo de cierre de sesión: `feat/design-contract` (ambos repos, frontend y central) **ya estaba mergeado a main/master** por otra sesión/agente (PR #1 frontend, PR #8 central) tras la segunda opinión de Fable — no hacía falta mergear, solo verificar y deployar.
+
+- Confirmado: `rediseno/tools/generate-fixtures.mjs --check` pasa limpio contra las 6 interfaces reales (Transaction/AccountOption/JarRef/CatalogCategory/Tag/ProviderOption), solo 8 warnings de campos opcionales sin seed — sin errores, contrato al día.
+- Detectado que main también traía app-code real sin deployar: commit `14b81a3` (OWF-283 — reordena Cuenta antes de Monto, quita pills de moneda redundantes en gasto/ingreso, agrega adjunto foto/soporte) modifica `SmartTransactionModal.vue` directamente, más el pull previo del diseño en `TransactionForm.jsx`.
+- **Deploy frontend prod ejecutado** (`./deploy-frontend.sh prod`) — `frontend=OK:200`, 169 archivos subidos, sin cambios locales pendientes.
+- **Nota de higiene detectada, no corregida esta sesión**: el commit `14b81a3` referencia "OWF-283" pero la fila OWF-283 real en `.owf/TASKS.md` es sobre otro tema (confirmar que no hace falta MCP `claude_design`, ya resuelto). Hay una colisión/reuso de ID — revisar en próxima sesión si OWF-283 debe re-numerarse o si el commit debe referenciar un ID nuevo.
+- Sin acción pendiente de esta rama — `feat/design-contract` en ambos repos puede borrarse (ya fusionada, sin commits únicos restantes) si el usuario quiere limpieza, no se borró por precaución.
 
 ## Último trabajo (2026-07-10, continuación 2) — Segunda opinión + contrato de generación diseño↔código (rama `feat/design-contract`, SIN mergear)
 
