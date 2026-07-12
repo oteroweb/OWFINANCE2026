@@ -3,8 +3,15 @@
 <!-- Solo un agente escribe a la vez. Updated = timestamp del ultimo escritor. -->
 <!-- Tareas se referencian por ID (OWF-NNN) → ver .owf/TASKS.md -->
 
-**Updated:** 2026-07-12T13:55:00Z
+**Updated:** 2026-07-12T15:30:00Z
 **By:** claude-code
+
+## Último trabajo (2026-07-12, continuación 2) — Cierre épica OWF-240 (txform-audit): OWF-264 + OWF-284
+
+- **OWF-264** ✅ Flujo "+ Nuevo proveedor" inline en `SmartTransactionModal.vue` (mismo patrón que "Nueva etiqueta"). Al investigarlo se encontró un bug real: TODA la ruta `/providers` era `CheckRole:admin`, pero el formulario ya llamaba `GET /providers?search=` para cualquier usuario (403 silencioso en prod para no-admins). Dividido en 2 grupos de rutas (lectura+creación → cualquier autenticado, scoped a providers propios+globales; gestión → admin-only), mismo patrón que OWF-205/OWF-208. `save()` fuerza `user_id=auth()->id()` para no-admin. 5 tests nuevos (`ProviderScopeTest.php`), suite 196/202 (6 fallos preexistentes de `UserSecurityPinTest`, no relacionados). Deploy backend + frontend prod OK.
+- **OWF-284** [!] Investigado, NO implementado a propósito: wiring de subida real de "Foto/soporte" requiere crear infraestructura de cero (cero precedente de `Storage::` en todo el backend, `deploy-backend.sh` no corre `storage:link` → URLs devueltas serían 404 en prod hoy) — se documentó como decisión de infraestructura pendiente, no se improvisó bajo presión de cerrar la sesión.
+- **Épica OWF-240 cerrada**: 40 sub-tareas (OWF-241..284) resueltas — implementadas, descartadas por referencia de diseño incorrecta (OWF-267-269), o diferidas con razón explícita (OWF-284).
+- **Nota de proceso**: no se pudo completar verificación visual en navegador de OWF-264 (login inestable en el sandbox de preview esta vuelta) — confianza basada en TypeScript/ESLint limpios + 5 tests backend nuevos pasando + reutilización exacta de un patrón ya en producción (createTag).
 
 ## Último trabajo (2026-07-12, continuación) — Recuperado parche huérfano de PR#10 + deploy prod
 
