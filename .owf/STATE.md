@@ -3,8 +3,27 @@
 <!-- Solo un agente escribe a la vez. Updated = timestamp del ultimo escritor. -->
 <!-- Tareas se referencian por ID (OWF-NNN) → ver .owf/TASKS.md -->
 
-**Updated:** 2026-07-12T15:30:00Z
+**Updated:** 2026-07-12T16:15:00Z
 **By:** claude-code
+
+## Último trabajo (2026-07-12, continuación 3) — Cierre épica config-audit OWF-209 (210/211/212/214) + reporte CI billing
+
+Sesión concurrente a la de OWF-264/284 (ver entrada de abajo, mismo directorio de trabajo compartido). Dos frentes independientes pedidos por el usuario.
+
+**Frente 1 — config-audit (OWF-209), 4 hallazgos cerrados:**
+- Al revisar `config/index.vue` actual antes de tocar nada, se confirmó que **OWF-211** (tema claro/oscuro en bloque Aplicación de Pro) y **OWF-212** (Presupuesto estricto en bloque Aplicación de Pro) **ya estaban resueltos** por la consolidación OWF-207/213 de una sesión anterior — no hacía falta código nuevo, solo cerrar en el board.
+- **OWF-210** ✅ Pro usaba `q-btn-toggle` chico para el selector Lite/Pro mientras Lite usaba tarjetas grandes (`apref__mode-btn`). Unificado: Pro ahora reusa el mismo markup de tarjetas (mismo CSS scoped ya presente en el archivo, sin CSS nuevo).
+- **OWF-214** ✅ Decisión del usuario (confirmada explícitamente): sí agregar "Pantalla de inicio" (link a `/user/home`) también a Pro. Agregada la fila al final del bloque Aplicación de Pro, mismo patrón que "Divisa predeterminada".
+- Verificado: `vue-tsc --noEmit` limpio; ESLint solo con los 2 errores preexistentes ya documentados (no introducidos por este cambio); verificado visualmente en navegador logueado como `usertestpro@demo.com` (Pro) — toggle unificado y link "Pantalla de inicio" confirmados renderizando bien.
+- Deploy frontend prod OK (`frontend=OK:200`).
+- **Gotcha de concurrencia detectado**: al correr `./deploy-frontend.sh prod`, el script reportó "sin cambios locales pendientes" y el diff de mis ediciones apareció ya incluido (vía `git add -A` de la sesión concurrente) dentro del commit `493c3e2` ("OWF-264", de la otra sesión activa en el mismo working directory) en vez de generar un commit propio. El contenido final es correcto (verificado con `git show`), pero confirma el riesgo ya documentado en CLAUDE.md sobre `git add -A` capturando cambios de otra sesión — dos sesiones de Claude Code no deberían compartir el mismo checkout sin coordinación.
+
+**Frente 2 — 3 PRs de CI en rojo — solo reportado, no tocado (según lo pedido):**
+- **frontend #3** y **backend #11**: ambos checks fallan con "The job was not started because your account is locked due to a billing issue" — **no es un bug de código**, es un bloqueo de facturación de GitHub Actions en la cuenta. Requiere que el usuario resuelva el billing directamente en GitHub.
+- **central #9**: sigue sin correr checks. Sigue pendiente el secret `SUBMODULES_DEPLOY_KEY` que el usuario debe agregar él mismo — no tocado.
+- **Pendiente para otra sesión**: nada bloqueante de nuestro lado — el próximo paso es 100% del usuario (resolver billing de GitHub Actions + decidir si agrega el secret).
+
+**Hallazgo no relacionado, no tocado**: cambio uncommitted en el submódulo backend (`OWFINANCEBackend2025/app/Models/Repositories/ProviderRepo.php`) detectado al iniciar sesión — agrega soporte para `owned_by` (scope: providers globales `user_id=null` + propios) en `ProviderRepo::all()`/`allActive()`. Parece trabajo en progreso de la sesión concurrente (relacionado con su OWF-264, que toca scope de providers) — no tocado por esta sesión.
 
 ## Último trabajo (2026-07-12, continuación 2) — Cierre épica OWF-240 (txform-audit): OWF-264 + OWF-284
 
