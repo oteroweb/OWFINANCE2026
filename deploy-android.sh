@@ -60,7 +60,7 @@ cd "$FRONTEND_DIR"
 
 # Quasar build
 echo "   → Building Quasar..."
-quasar build -m capacitor -T android > /dev/null 2>&1
+npx quasar build -m capacitor -T android > /dev/null 2>&1
 if [ $? -ne 0 ]; then
     echo -e "${RED}   ✗ Error en build de Quasar${NC}"
     cd ..
@@ -89,7 +89,7 @@ cd ../../..
 # 5. Instalar en dispositivo
 echo ""
 echo -e "${YELLOW}📲 Instalando en dispositivo...${NC}"
-APK_PATH="$FRONTEND_DIR/src-capacitor/android/app/build/outputs/apk/debug/app-debug.apk"
+APK_PATH=$(find "$FRONTEND_DIR/src-capacitor/android/app/build/outputs/apk" -iname "app-prod-debug.apk" -o -iname "app-debug.apk" 2>/dev/null | head -1)
 adb -s "$DEVICE_NAME" install -r "$APK_PATH" > /dev/null 2>&1
 if [ $? -eq 0 ]; then
     APK_SIZE=$(ls -lh "$APK_PATH" | awk '{print $5}')

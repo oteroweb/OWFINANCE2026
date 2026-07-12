@@ -3,8 +3,18 @@
 <!-- Solo un agente escribe a la vez. Updated = timestamp del ultimo escritor. -->
 <!-- Tareas se referencian por ID (OWF-NNN) → ver .owf/TASKS.md -->
 
-**Updated:** 2026-07-10T12:30:00Z
+**Updated:** 2026-07-11T00:00:00Z
 **By:** claude-code
+
+## Último trabajo (2026-07-11) — Cierre de sesión: confirmado OWF-286 (bug real, no cache) + guía de traducción consultada con Fable
+
+Sesión de continuación centrada en cerrar/consolidar el trabajo del reto "MCP Claude Design":
+
+- **Reporte para Fable creado y entregado**: `.owf/claude-prompts/FABLE-jsx-vue-design-bridge-decision.md` — contexto completo del sistema, auditoría de 4 ports, decisión de no automatizar, y las propuestas A (contrato de callbacks) y B (fixtures con forma real) para segunda opinión.
+- **Corrección importante sobre OWF-286**: en la sesión del 2026-07-10 yo había descartado el reporte del usuario sobre los 3 toggle-cards (Pago múltiple/Detalle-factura/Gasto compartido) en una fila como "bundle JS viejo cacheado", verificando solo que el CSS deployado coincidía con MI código — **sin comparar contra la fuente de diseño real**. Otra sesión concurrente sí hizo esa comparación (Paso 2.5 de `owf-design-sync`) y encontró que **el reporte del usuario era correcto**: en `rediseno/ui_kits/lite-desktop/organisms/TransactionForm.jsx`, `rowDir = isMobile ? 'column' : 'row'` — los 3 toggles van en FILA en desktop, el Vue real los tenía siempre en columna. Fix aplicado y deployado por esa sesión (`OWF-286`, bundle `CZsBpNFl`). **Lección**: verificar contra el CSS ya deployado confirma que el código coincide consigo mismo, NO que coincide con el diseño — hay que comparar contra la fuente (`rediseno/`) cuando el usuario reporta un gap visual, no asumir que es cache.
+- **Confirmado por el usuario**: el formulario de transacciones (`SmartTransactionModal.vue`) ya refleja fielmente el diseño actual en Claude Design — verificado vía `DesignSync.get_file` que `TransactionForm.jsx` remoto es idéntico (mismo MD5) al local, y el pull+port+deploy de ese archivo (OWF-283, commits `05defb6`/`14b81a3`) ya está en producción.
+- **Pendiente detectado, no resuelto esta sesión**: `OWFINANCEBackend2025` tiene 1 commit local sin pushear (`551dc7a`, "OWF-279: Fix OCR — providers ahora pasan imágenes al modelo de vision"), de una sesión concurrente. No se pusheó ni deployó por esta sesión — no había contexto suficiente para confirmar que está probado. Revisar y decidir push+deploy en próxima sesión.
+- **Pregunta abierta sin resolver**: el usuario quiere "afianzar bien pasos, ventajas y desventajas" antes de decidir si mover `owf-design-sync` a un modelo de MCP directo (sin escribir `rediseno/` local en cada PULL) — pendiente de una sesión dedicada a esa comparación, no se avanzó en esta.
 
 ## Último trabajo (2026-07-10, continuación 3) — Verificado y deployado: merge de feat/design-contract + pull TransactionForm (OWF-283)
 
