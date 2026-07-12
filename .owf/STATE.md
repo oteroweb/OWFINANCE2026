@@ -3,8 +3,78 @@
 <!-- Solo un agente escribe a la vez. Updated = timestamp del ultimo escritor. -->
 <!-- Tareas se referencian por ID (OWF-NNN) → ver .owf/TASKS.md -->
 
-**Updated:** 2026-07-10T12:00:00Z
+**Updated:** 2026-07-12T16:15:00Z
 **By:** claude-code
+
+## Último trabajo (2026-07-12, continuación 3) — Cierre épica config-audit OWF-209 (210/211/212/214) + reporte CI billing
+
+Sesión concurrente a la de OWF-264/284 (ver entrada de abajo, mismo directorio de trabajo compartido). Dos frentes independientes pedidos por el usuario.
+
+**Frente 1 — config-audit (OWF-209), 4 hallazgos cerrados:**
+- Al revisar `config/index.vue` actual antes de tocar nada, se confirmó que **OWF-211** (tema claro/oscuro en bloque Aplicación de Pro) y **OWF-212** (Presupuesto estricto en bloque Aplicación de Pro) **ya estaban resueltos** por la consolidación OWF-207/213 de una sesión anterior — no hacía falta código nuevo, solo cerrar en el board.
+- **OWF-210** ✅ Pro usaba `q-btn-toggle` chico para el selector Lite/Pro mientras Lite usaba tarjetas grandes (`apref__mode-btn`). Unificado: Pro ahora reusa el mismo markup de tarjetas (mismo CSS scoped ya presente en el archivo, sin CSS nuevo).
+- **OWF-214** ✅ Decisión del usuario (confirmada explícitamente): sí agregar "Pantalla de inicio" (link a `/user/home`) también a Pro. Agregada la fila al final del bloque Aplicación de Pro, mismo patrón que "Divisa predeterminada".
+- Verificado: `vue-tsc --noEmit` limpio; ESLint solo con los 2 errores preexistentes ya documentados (no introducidos por este cambio); verificado visualmente en navegador logueado como `usertestpro@demo.com` (Pro) — toggle unificado y link "Pantalla de inicio" confirmados renderizando bien.
+- Deploy frontend prod OK (`frontend=OK:200`).
+- **Gotcha de concurrencia detectado**: al correr `./deploy-frontend.sh prod`, el script reportó "sin cambios locales pendientes" y el diff de mis ediciones apareció ya incluido (vía `git add -A` de la sesión concurrente) dentro del commit `493c3e2` ("OWF-264", de la otra sesión activa en el mismo working directory) en vez de generar un commit propio. El contenido final es correcto (verificado con `git show`), pero confirma el riesgo ya documentado en CLAUDE.md sobre `git add -A` capturando cambios de otra sesión — dos sesiones de Claude Code no deberían compartir el mismo checkout sin coordinación.
+
+**Frente 2 — 3 PRs de CI en rojo — solo reportado, no tocado (según lo pedido):**
+- **frontend #3** y **backend #11**: ambos checks fallan con "The job was not started because your account is locked due to a billing issue" — **no es un bug de código**, es un bloqueo de facturación de GitHub Actions en la cuenta. Requiere que el usuario resuelva el billing directamente en GitHub.
+- **central #9**: sigue sin correr checks. Sigue pendiente el secret `SUBMODULES_DEPLOY_KEY` que el usuario debe agregar él mismo — no tocado.
+- **Pendiente para otra sesión**: nada bloqueante de nuestro lado — el próximo paso es 100% del usuario (resolver billing de GitHub Actions + decidir si agrega el secret).
+
+**Hallazgo no relacionado, no tocado**: cambio uncommitted en el submódulo backend (`OWFINANCEBackend2025/app/Models/Repositories/ProviderRepo.php`) detectado al iniciar sesión — agrega soporte para `owned_by` (scope: providers globales `user_id=null` + propios) en `ProviderRepo::all()`/`allActive()`. Parece trabajo en progreso de la sesión concurrente (relacionado con su OWF-264, que toca scope de providers) — no tocado por esta sesión.
+
+## Último trabajo (2026-07-12, continuación 2) — Cierre épica OWF-240 (txform-audit): OWF-264 + OWF-284
+
+- **OWF-264** ✅ Flujo "+ Nuevo proveedor" inline en `SmartTransactionModal.vue` (mismo patrón que "Nueva etiqueta"). Al investigarlo se encontró un bug real: TODA la ruta `/providers` era `CheckRole:admin`, pero el formulario ya llamaba `GET /providers?search=` para cualquier usuario (403 silencioso en prod para no-admins). Dividido en 2 grupos de rutas (lectura+creación → cualquier autenticado, scoped a providers propios+globales; gestión → admin-only), mismo patrón que OWF-205/OWF-208. `save()` fuerza `user_id=auth()->id()` para no-admin. 5 tests nuevos (`ProviderScopeTest.php`), suite 196/202 (6 fallos preexistentes de `UserSecurityPinTest`, no relacionados). Deploy backend + frontend prod OK.
+- **OWF-284** [!] Investigado, NO implementado a propósito: wiring de subida real de "Foto/soporte" requiere crear infraestructura de cero (cero precedente de `Storage::` en todo el backend, `deploy-backend.sh` no corre `storage:link` → URLs devueltas serían 404 en prod hoy) — se documentó como decisión de infraestructura pendiente, no se improvisó bajo presión de cerrar la sesión.
+- **Épica OWF-240 cerrada**: 40 sub-tareas (OWF-241..284) resueltas — implementadas, descartadas por referencia de diseño incorrecta (OWF-267-269), o diferidas con razón explícita (OWF-284).
+- **Nota de proceso**: no se pudo completar verificación visual en navegador de OWF-264 (login inestable en el sandbox de preview esta vuelta) — confianza basada en TypeScript/ESLint limpios + 5 tests backend nuevos pasando + reutilización exacta de un patrón ya en producción (createTag).
+
+## Último trabajo (2026-07-12, continuación) — Recuperado parche huérfano de PR#10 + deploy prod
+
+Usuario pidió "unificar ramas" y detectar cambios en cola. Se encontró que PR#10 (central, `claude/cool-ritchie-CIzTk`) tenía código real de frontend (OWF-213/216/221, OWF-259-262, OWF-271-273) atrapado como archivo `.patch` — nunca llegó al repo real de `OWFinanceFrontend2025` por una restricción de proxy de la sesión que lo generó, y su commit de TASKS.md marcaba tareas `[x]` sobre código inexistente.
+
+- **Recuperado**: extraído el mbox de 5 commits del blob `d63e2f9:.owf/frontend-patches-2026-07-12.patch`, aplicado vía `git am --3way` sobre `frontend/main` real (ya incluía el merge previo de PR#4 "Ciclo de sincronización Claude Design ↔ Vue", mergeado por su propia sesión mientras tanto). Sin conflictos de aplicación.
+- **Verificado antes de pushear**: `vue-tsc --noEmit` limpio; `eslint` solo con los 2 errores preexistentes de `config/index.vue` (confirmado comparando contra `main` sin el parche — no los introduce este cambio). Verificado a mano que la consolidación de "Tasas de Cambio" no dejó CRUD duplicado ni refs muertas (`openRateForm`/`showRateForm`/etc. = 0 ocurrencias).
+- Merge a `frontend/main` (`884bca9`), pusheado.
+- **TASKS.md reconciliado a mano** (no fue un merge automático): la rama del patch se basó en un `master` anterior al 10 de julio, así que su commit re-marcaba como "recién hechas" (fecha 07-12) tareas que otra sesión ya había completado el 07-08/07-10 con descripciones más precisas (OWF-248/250/251/253-258/263). Se conservaron esas descripciones más antiguas y precisas; solo se aceptaron como genuinamente nuevas OWF-259/260/261/262 (breakdown USD, payload debug, success state, IVA por ítem + NaN guard).
+- Puntero de submódulo en central actualizado al commit real ya pusheado (`884bca9`), no al hash huérfano que traía la rama vieja (nunca existió en el remoto).
+- Commit central `9f7b082`, pusheado a `master`. PR#10 cerrado con comentario explicando que su contenido ya vive en main/master.
+- **Deploy frontend prod ejecutado**: `frontend=OK:200`, 169 archivos subidos, build limpio.
+- **Pendiente sin resolver esta sesión**: PRs de CI (central #9, frontend #3, backend #11) — todas en rojo, #9 además requiere que el usuario agregue un secret nuevo (`SUBMODULES_DEPLOY_KEY`) en GitHub, no se tocó por ser cambio de configuración de seguridad que requiere su autorización directa.
+
+## Último trabajo (2026-07-12) — Push final: backend (OWF-279 OCR fix) + central, todo cerrado
+
+El usuario pidió fusionar y cerrar todo lo pendiente de la sesión anterior:
+
+- **Verificado antes de pushear**: corrí la suite completa de PHPUnit sobre el commit local sin pushear `551dc7a` (OWF-279, fix OCR — providers pasan imágenes al modelo de vision). 6 fallas encontradas; confirmé (checkout al commit padre `6ba17d6` y re-run) que las 5 de `UserSecurityPinTest` + la 1 de `TransactionTest::bulk_create_account_permission` son **preexistentes**, no las causó este commit — seguro de pushear.
+- **Backend**: `git push origin main` (`551dc7a`) + `./deploy-backend.sh prod` → `DEPLOY EXITOSO`, health 200.
+- **Central**: `git push origin master` (`8c8aecb`) → sincronizado.
+- **Pendiente real para otra sesión** (no bloquea el cierre): las 6 fallas de test detectadas arriba siguen sin arreglarse — quedaron documentadas aquí para que alguien las tome. `UserSecurityPinTest` en particular tiene 5/6 tests fallando con 404, sugiere problema de rutas no cacheadas o rota en algún punto — investigar antes de que se acumule más deuda ahí.
+
+## Último trabajo (2026-07-11) — Cierre de sesión: confirmado OWF-286 (bug real, no cache) + guía de traducción consultada con Fable
+
+Sesión de continuación centrada en cerrar/consolidar el trabajo del reto "MCP Claude Design":
+
+- **Reporte para Fable creado y entregado**: `.owf/claude-prompts/FABLE-jsx-vue-design-bridge-decision.md` — contexto completo del sistema, auditoría de 4 ports, decisión de no automatizar, y las propuestas A (contrato de callbacks) y B (fixtures con forma real) para segunda opinión.
+- **Corrección importante sobre OWF-286**: en la sesión del 2026-07-10 yo había descartado el reporte del usuario sobre los 3 toggle-cards (Pago múltiple/Detalle-factura/Gasto compartido) en una fila como "bundle JS viejo cacheado", verificando solo que el CSS deployado coincidía con MI código — **sin comparar contra la fuente de diseño real**. Otra sesión concurrente sí hizo esa comparación (Paso 2.5 de `owf-design-sync`) y encontró que **el reporte del usuario era correcto**: en `rediseno/ui_kits/lite-desktop/organisms/TransactionForm.jsx`, `rowDir = isMobile ? 'column' : 'row'` — los 3 toggles van en FILA en desktop, el Vue real los tenía siempre en columna. Fix aplicado y deployado por esa sesión (`OWF-286`, bundle `CZsBpNFl`). **Lección**: verificar contra el CSS ya deployado confirma que el código coincide consigo mismo, NO que coincide con el diseño — hay que comparar contra la fuente (`rediseno/`) cuando el usuario reporta un gap visual, no asumir que es cache.
+- **Confirmado por el usuario**: el formulario de transacciones (`SmartTransactionModal.vue`) ya refleja fielmente el diseño actual en Claude Design — verificado vía `DesignSync.get_file` que `TransactionForm.jsx` remoto es idéntico (mismo MD5) al local, y el pull+port+deploy de ese archivo (OWF-283, commits `05defb6`/`14b81a3`) ya está en producción.
+- **Pendiente detectado, no resuelto esta sesión**: `OWFINANCEBackend2025` tiene 1 commit local sin pushear (`551dc7a`, "OWF-279: Fix OCR — providers ahora pasan imágenes al modelo de vision"), de una sesión concurrente. No se pusheó ni deployó por esta sesión — no había contexto suficiente para confirmar que está probado. Revisar y decidir push+deploy en próxima sesión.
+- **Pregunta abierta sin resolver**: el usuario quiere "afianzar bien pasos, ventajas y desventajas" antes de decidir si mover `owf-design-sync` a un modelo de MCP directo (sin escribir `rediseno/` local en cada PULL) — pendiente de una sesión dedicada a esa comparación, no se avanzó en esta.
+
+## Último trabajo (2026-07-10, continuación 3) — Verificado y deployado: merge de feat/design-contract + pull TransactionForm (OWF-283)
+
+Escaneo de cierre de sesión: `feat/design-contract` (ambos repos, frontend y central) **ya estaba mergeado a main/master** por otra sesión/agente (PR #1 frontend, PR #8 central) tras la segunda opinión de Fable — no hacía falta mergear, solo verificar y deployar.
+
+- Confirmado: `rediseno/tools/generate-fixtures.mjs --check` pasa limpio contra las 6 interfaces reales (Transaction/AccountOption/JarRef/CatalogCategory/Tag/ProviderOption), solo 8 warnings de campos opcionales sin seed — sin errores, contrato al día.
+- Detectado que main también traía app-code real sin deployar: commit `14b81a3` (OWF-283 — reordena Cuenta antes de Monto, quita pills de moneda redundantes en gasto/ingreso, agrega adjunto foto/soporte) modifica `SmartTransactionModal.vue` directamente, más el pull previo del diseño en `TransactionForm.jsx`.
+- **Deploy frontend prod ejecutado** (`./deploy-frontend.sh prod`) — `frontend=OK:200`, 169 archivos subidos, sin cambios locales pendientes.
+- **Nota de higiene detectada, no corregida esta sesión**: el commit `14b81a3` referencia "OWF-283" pero la fila OWF-283 real en `.owf/TASKS.md` es sobre otro tema (confirmar que no hace falta MCP `claude_design`, ya resuelto). Hay una colisión/reuso de ID — revisar en próxima sesión si OWF-283 debe re-numerarse o si el commit debe referenciar un ID nuevo.
+- Sin acción pendiente de esta rama — `feat/design-contract` en ambos repos puede borrarse (ya fusionada, sin commits únicos restantes) si el usuario quiere limpieza, no se borró por precaución.
+
+**Confirmación en sesión siguiente (mismo día)**: re-verificado independientemente — mismo resultado (`git push` devolvió "Everything up-to-date", confirma que el trabajo ya estaba en remoto). Deploy re-ejecutado por seguridad (`bundle gCI52nXm`, health 200, sin cambios funcionales nuevos). **Colisión de ID resuelta**: la fila `OWF-283` en `.owf/TASKS.md` ahora describe el port real de DesignSync (reorden Cuenta/Monto + adjunto foto) en vez de la nota informativa vieja ("design system ya en disco") — esa nota quedó absorbida porque ya no aporta nada nuevo una vez que el port real está deployado. Se agregó `OWF-284` (P3) para el wiring real del endpoint de subida de "Foto/soporte", hoy UI-only.
 
 ## Último trabajo (2026-07-10, continuación 2) — Segunda opinión + contrato de generación diseño↔código (rama `feat/design-contract`, SIN mergear)
 
