@@ -1,0 +1,717 @@
+From 6152a694fd3b4d16ef4bc6a4ceae4929be06d474 Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Sun, 12 Jul 2026 03:21:48 +0000
+Subject: [PATCH 1/3] =?UTF-8?q?fix(config):=20OWF-213/216/221=20=E2=80=94?=
+ =?UTF-8?q?=20moneda=20real=20en=20hint,=20perfil=20financiero=20en=20Pro,?=
+ =?UTF-8?q?=20consolidar=20tasas?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+OWF-213: hint "Divisa predeterminada" en Lite Config lee auth.defaultCurrencyCode
+         en vez de hardcodear "USD"
+OWF-216: agrega card "Perfil financiero" en bloque Pro Config con link a
+         /user/financial-profile (inaccesible antes desde modo Pro)
+OWF-221: elimina sección "Mis Tasas de Cambio" duplicada del tab Finanzas
+         (ExchangeRatesTable en la card unificada es la fuente de verdad);
+         remueve funciones y refs dead code: openRateForm/saveRate/deleteRate/
+         toggleRateCurrent/showRateForm/rateFormId/rateFormCurrencyLabel/savingRate/rateForm
+
+Co-Authored-By: Claude Sonnet 4.6 <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_01KeSX138JWBQamgYaQiJY7a
+---
+ src/pages/user/config/index.vue | 197 +++-----------------------------
+ 1 file changed, 16 insertions(+), 181 deletions(-)
+
+diff --git a/src/pages/user/config/index.vue b/src/pages/user/config/index.vue
+index eea9822..9d59009 100644
+--- a/src/pages/user/config/index.vue
++++ b/src/pages/user/config/index.vue
+@@ -137,6 +137,21 @@
+           </div>
+         </q-card>
+ 
++        <!-- ── Perfil financiero (Pro) ──────────────────────────────── -->
++        <q-card flat bordered class="q-pa-md">
++          <div class="text-subtitle1 q-mb-md">
++            <q-icon name="insights" class="q-mr-sm" />
++            Perfil financiero
++          </div>
++          <div class="row items-center justify-between" style="cursor:pointer" @click="router.push('/user/financial-profile')">
++            <div>
++              <div class="text-body2">Mi perfil financiero</div>
++              <div class="text-caption text-grey-7">Ingresos, metas, deudas y cántaros</div>
++            </div>
++            <q-icon name="chevron_right" size="18px" color="grey-7" />
++          </div>
++        </q-card>
++
+         <!-- ── Tasas de Cambio (Pro) ───────────────────────────────── -->
+         <div>
+           <div class="row items-center q-gutter-sm q-mb-sm">
+@@ -216,7 +231,7 @@
+           <span class="material-icons apref__row-icon">payments</span>
+           <div class="apref__row-text">
+             <span>Divisa predeterminada</span>
+-            <span class="apref__row-hint">USD · gestionar en Cuentas</span>
++            <span class="apref__row-hint">{{ auth.defaultCurrencyCode }} · gestionar en Cuentas</span>
+           </div>
+           <span class="material-icons" style="font-size:18px;color:var(--fg-3)">chevron_right</span>
+         </div>
+@@ -539,44 +554,6 @@
+               </q-select>
+             </q-card>
+ 
+-            <!-- Mis Tasas de Cambio -->
+-            <q-card flat bordered class="q-pa-md">
+-              <div class="text-subtitle1 q-mb-sm row items-center justify-between">
+-                <div>
+-                  <q-icon name="currency_exchange" class="q-mr-sm" />
+-                  Mis Tasas de Cambio
+-                </div>
+-                <q-btn dense flat round icon="add" color="primary" title="Agregar tasa" @click="openRateForm(null)" />
+-              </div>
+-              <div class="text-caption text-grey-7 q-mb-md">
+-                Cuántas unidades de cada moneda equivalen a <strong>1 USD</strong>. Ej: VES 530 = 530 bolívares por dólar.
+-              </div>
+-              <q-skeleton v-if="userRatesLoading" type="rect" height="60px" />
+-              <div v-else-if="!userRates.length" class="text-caption text-grey-6 q-pa-sm text-center">
+-                Sin tasas configuradas. Haz clic en <q-icon name="add" size="14px" /> para agregar.
+-              </div>
+-              <q-list v-else bordered separator dense class="rounded-borders">
+-                <q-item v-for="r in userRates" :key="r.id" class="q-py-xs">
+-                  <q-item-section avatar>
+-                    <q-chip dense :color="r.is_current ? 'teal' : 'grey-4'" :text-color="r.is_current ? 'white' : 'grey-8'" class="text-weight-bold">
+-                      {{ r.currency?.code || '?' }}
+-                    </q-chip>
+-                  </q-item-section>
+-                  <q-item-section>
+-                    <q-item-label>{{ r.currency?.name || r.currency?.code }}</q-item-label>
+-                    <q-item-label caption>Tasa: {{ r.current_rate }} {{ r.currency?.code }}/USD</q-item-label>
+-                  </q-item-section>
+-                  <q-item-section side>
+-                    <div class="row q-gutter-xs">
+-                      <q-toggle v-model="r.is_current" dense color="teal" title="Activa para conversiones" @update:model-value="(v) => toggleRateCurrent(r, v)" />
+-                      <q-btn dense flat round icon="edit" color="primary" @click="openRateForm(r)" />
+-                      <q-btn dense flat round icon="delete" color="negative" @click="deleteRate(r)" />
+-                    </div>
+-                  </q-item-section>
+-                </q-item>
+-              </q-list>
+-            </q-card>
+-
+             <!-- Ingreso mensual -->
+             <q-card flat bordered class="q-pa-md">
+               <div class="text-subtitle1 q-mb-sm">
+@@ -785,54 +762,6 @@
+       </q-tab-panels>
+     </q-card>
+ 
+-    <!-- Rate form dialog -->
+-    <q-dialog v-model="showRateForm">
+-      <q-card style="min-width: 320px; max-width: 420px">
+-        <q-card-section class="text-h6 q-pb-sm">
+-          <q-icon name="currency_exchange" class="q-mr-sm" />
+-          {{ rateFormId ? 'Editar Tasa' : 'Nueva Tasa' }}
+-        </q-card-section>
+-        <q-card-section class="q-gutter-sm">
+-          <div v-if="rateFormId" class="text-body2 text-grey-8 q-mb-sm">
+-            <strong>{{ rateFormCurrencyLabel }}</strong>
+-          </div>
+-          <q-select
+-            v-if="!rateFormId"
+-            v-model="rateForm.currency_id"
+-            :options="currencyOptions"
+-            option-value="id"
+-            option-label="nameLabel"
+-            emit-value
+-            map-options
+-            label="Moneda"
+-            dense
+-            outlined
+-            use-input
+-            input-debounce="200"
+-            @focus="ensureCurrenciesLoaded"
+-            @filter="onCurrencyFilter"
+-          />
+-          <q-input
+-            v-model.number="rateForm.current_rate"
+-            label="Tasa (unidades por 1 USD)"
+-            type="number"
+-            step="0.01"
+-            min="0.0001"
+-            dense
+-            outlined
+-            autofocus
+-          >
+-            <template #hint>Ej: 530 significa 530 VES = 1 USD</template>
+-          </q-input>
+-          <q-checkbox v-model="rateForm.is_current" label="Activa para conversiones" dense color="teal" />
+-        </q-card-section>
+-        <q-card-actions align="right">
+-          <q-btn flat label="Cancelar" color="grey" v-close-popup />
+-          <q-btn color="primary" label="Guardar" :loading="savingRate" @click="saveRate" />
+-        </q-card-actions>
+-      </q-card>
+-    </q-dialog>
+-
+     <!-- Account create/edit dialog -->
+     <q-dialog v-model="showAccountForm" persistent>
+       <q-card style="min-width: 400px; max-width: 480px;">
+@@ -1056,15 +985,6 @@ type UserRate = {
+ };
+ const userRates = ref<UserRate[]>([]);
+ const userRatesLoading = ref(false);
+-const showRateForm = ref(false);
+-const rateFormId = ref<number | null>(null);
+-const rateFormCurrencyLabel = ref('');
+-const savingRate = ref(false);
+-const rateForm = reactive({
+-  currency_id: null as number | null,
+-  current_rate: 1,
+-  is_current: true,
+-});
+ 
+ async function loadUserRates() {
+   userRatesLoading.value = true;
+@@ -1134,91 +1054,6 @@ async function syncAccountCurrencies() {
+   }
+ }
+ 
+-function openRateForm(rate: UserRate | null) {
+-  if (rate) {
+-    rateFormId.value = rate.id;
+-    rateFormCurrencyLabel.value = rate.currency
+-      ? `${rate.currency.name} (${rate.currency.code})`
+-      : String(rate.currency_id);
+-    rateForm.currency_id = rate.currency_id;
+-    rateForm.current_rate = rate.current_rate;
+-    rateForm.is_current = rate.is_current;
+-  } else {
+-    rateFormId.value = null;
+-    rateFormCurrencyLabel.value = '';
+-    rateForm.currency_id = null;
+-    rateForm.current_rate = 1;
+-    rateForm.is_current = true;
+-  }
+-  void ensureCurrenciesLoaded();
+-  showRateForm.value = true;
+-}
+-
+-async function saveRate() {
+-  if (!rateFormId.value && !rateForm.currency_id) {
+-    Notify.create({ type: 'warning', message: 'Selecciona una moneda' });
+-    return;
+-  }
+-  if (!rateForm.current_rate || rateForm.current_rate <= 0) {
+-    Notify.create({ type: 'warning', message: 'La tasa debe ser mayor a 0' });
+-    return;
+-  }
+-  savingRate.value = true;
+-  try {
+-    if (rateFormId.value) {
+-      await api.put(`/user_currencies/${rateFormId.value}`, {
+-        current_rate: rateForm.current_rate,
+-        is_current: rateForm.is_current,
+-      });
+-    } else {
+-      await api.post('/user_currencies', {
+-        user_id: auth.user?.id,
+-        currency_id: rateForm.currency_id,
+-        current_rate: rateForm.current_rate,
+-        is_current: rateForm.is_current,
+-        is_official: false,
+-      });
+-    }
+-    showRateForm.value = false;
+-    await loadUserRates();
+-    await auth.refreshUserCurrencies();
+-    Notify.create({ type: 'positive', message: 'Tasa guardada' });
+-  } catch {
+-    Notify.create({ type: 'negative', message: 'Error guardando tasa' });
+-  } finally {
+-    savingRate.value = false;
+-  }
+-}
+-
+-async function toggleRateCurrent(rate: UserRate, value: boolean) {
+-  try {
+-    await api.put(`/user_currencies/${rate.id}`, { is_current: value });
+-    await auth.refreshUserCurrencies();
+-  } catch {
+-    rate.is_current = !value; // revert
+-    Notify.create({ type: 'negative', message: 'Error actualizando tasa' });
+-  }
+-}
+-
+-function deleteRate(rate: UserRate) {
+-  $q.dialog({
+-    title: 'Eliminar tasa',
+-    message: `¿Eliminar la tasa de ${rate.currency?.code || rate.currency_id}?`,
+-    cancel: true,
+-  }).onOk(() => {
+-    void (async () => {
+-      try {
+-        await api.delete(`/user_currencies/${rate.id}`);
+-        await loadUserRates();
+-        await auth.refreshUserCurrencies();
+-        Notify.create({ type: 'positive', message: 'Tasa eliminada' });
+-      } catch {
+-        Notify.create({ type: 'negative', message: 'Error eliminando tasa' });
+-      }
+-    })();
+-  });
+-}
+-
+ const name = ref(auth.user?.name || '');
+ const email = ref(auth.user?.email || '');
+ const monthlyIncome = ref(auth.user?.monthly_income || 0);
+-- 
+2.43.0
+
+
+From d4f388c9b418d40430b65d8c1e3868bce78e222f Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Sun, 12 Jul 2026 03:24:39 +0000
+Subject: [PATCH 2/3] =?UTF-8?q?feat(quick-modal):=20OWF-271=20=E2=80=94=20?=
+ =?UTF-8?q?movimientos=20especiales=20conectados=20al=20flujo=20real?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+DesktopQuickModal: choosePlan navega con ?quickAction=(pay|contribute|deposit)
+debts/index: onMounted detecta quickAction=pay → auto-abre openPayDialog()
+dreams/index: onMounted detecta quickAction=contribute → toast contextual
+jars/index:   onMounted detecta quickAction=deposit → toast contextual
+
+Co-Authored-By: Claude Sonnet 4.6 <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_01KeSX138JWBQamgYaQiJY7a
+---
+ src/components/liquid/DesktopQuickModal.vue |  8 +++++++-
+ src/pages/user/debts/index.vue              | 11 ++++++++---
+ src/pages/user/dreams/index.vue             |  6 ++++++
+ src/pages/user/jars/index.vue               |  6 +++++-
+ 4 files changed, 26 insertions(+), 5 deletions(-)
+
+diff --git a/src/components/liquid/DesktopQuickModal.vue b/src/components/liquid/DesktopQuickModal.vue
+index c78c209..b92cd55 100644
+--- a/src/components/liquid/DesktopQuickModal.vue
++++ b/src/components/liquid/DesktopQuickModal.vue
+@@ -162,10 +162,16 @@ function choose(methodId: MethodId) {
+   onClose();
+ }
+ 
++const PLAN_ACTIONS: Record<PlanId, string> = {
++  debt: 'pay',
++  dream: 'contribute',
++  jar: 'deposit',
++};
++
+ async function choosePlan(planId: PlanId) {
+   const plan = PLANS.find((p) => p.id === planId);
+   onClose();
+-  if (plan) await router.push(plan.route);
++  if (plan) await router.push({ path: plan.route, query: { quickAction: PLAN_ACTIONS[planId] } });
+ }
+ 
+ async function openAI() {
+diff --git a/src/pages/user/debts/index.vue b/src/pages/user/debts/index.vue
+index 0f61bc0..c8ba613 100644
+--- a/src/pages/user/debts/index.vue
++++ b/src/pages/user/debts/index.vue
+@@ -212,6 +212,7 @@
+ 
+ <script setup lang="ts">
+ import { ref, computed, onMounted } from 'vue';
++import { useRoute } from 'vue-router';
+ import { useQuasar } from 'quasar';
+ import { api } from 'src/boot/axios';
+ import { useUiStore } from 'stores/ui';
+@@ -219,8 +220,9 @@ import DebtCard from './DebtCard.vue';
+ 
+ defineOptions({ name: 'DebtsPage' });
+ 
+-const $q  = useQuasar();
+-const ui  = useUiStore();
++const $q    = useQuasar();
++const ui    = useUiStore();
++const route = useRoute();
+ 
+ // ── Types ────────────────────────────────────────────────────────────────
+ interface Debt {
+@@ -316,7 +318,10 @@ async function loadDebts() {
+   finally { loading.value = false; }
+ }
+ 
+-onMounted(() => void loadDebts());
++onMounted(async () => {
++  await loadDebts();
++  if (route.query.quickAction === 'pay') openPayDialog();
++});
+ 
+ // ── Form open/save ────────────────────────────────────────────────────────
+ function openForm(debt: Debt | null) {
+diff --git a/src/pages/user/dreams/index.vue b/src/pages/user/dreams/index.vue
+index d3b0ec8..9a03032 100644
+--- a/src/pages/user/dreams/index.vue
++++ b/src/pages/user/dreams/index.vue
+@@ -260,6 +260,8 @@
+ 
+ <script setup lang="ts">
+ import { ref, reactive, onMounted } from 'vue'
++import { useRoute } from 'vue-router'
++import { Notify } from 'quasar'
+ import { useQuasar } from 'quasar'
+ import { useDreamsStore, type Dream } from 'src/stores/dreams'
+ import { useUiStore } from 'stores/ui'
+@@ -269,6 +271,7 @@ defineOptions({ name: 'DreamsPage' })
+ const $q = useQuasar()
+ const store = useDreamsStore()
+ const ui = useUiStore()
++const route = useRoute()
+ 
+ const COLORS = ['#2D4DA6', '#8B5CF6', '#10B981', '#F59E0B', '#EF4444', '#EC4899', '#06B6D4', '#F97316']
+ 
+@@ -277,6 +280,9 @@ const meta = store.$state.meta ? ref(store.$state.meta) : ref(null as null | typ
+ onMounted(async () => {
+   await store.fetchAll()
+   meta.value = store.meta
++  if (route.query.quickAction === 'contribute') {
++    Notify.create({ type: 'info', icon: 'auto_awesome', message: 'Seleccioná un sueño para hacer tu aporte', timeout: 4000 })
++  }
+ })
+ 
+ // ── Format ──────────────────────────────────────────────
+diff --git a/src/pages/user/jars/index.vue b/src/pages/user/jars/index.vue
+index 34f0f3b..89773fc 100644
+--- a/src/pages/user/jars/index.vue
++++ b/src/pages/user/jars/index.vue
+@@ -1242,7 +1242,7 @@ import { ref, computed, onMounted, onBeforeUnmount, watch } from 'vue';
+ import { useRoute, useRouter } from 'vue-router';
+ import { useAuthStore } from 'stores/auth';
+ import { usePeriodStore } from 'stores/period';
+-import { useQuasar } from 'quasar';
++import { useQuasar, Notify } from 'quasar';
+ import { useI18n } from 'vue-i18n';
+ import { api } from 'boot/axios';
+ import { useJarsStore } from 'stores/jars';
+@@ -3373,6 +3373,10 @@ function onTransactionsChangedEvent() {
+ onMounted(() => {
+   applyPeriodFromQuery();
+ 
++  if (route.query.quickAction === 'deposit') {
++    Notify.create({ type: 'info', icon: 'savings', message: 'Seleccioná un jar para hacer tu aporte', timeout: 4000 });
++  }
++
+   // Listen for transaction create/update/delete events
+   window.addEventListener('ow:transactions:changed', onTransactionsChangedEvent);
+ 
+-- 
+2.43.0
+
+
+From 0c9a68d9564e7b80148831f47c2407d4a370d66f Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Sun, 12 Jul 2026 03:32:14 +0000
+Subject: [PATCH 3/3] =?UTF-8?q?feat(stm):=20OWF-259/260/261/262=20?=
+ =?UTF-8?q?=E2=80=94=20mejoras=20P3=20SmartTransactionModal?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+OWF-259: dual rates muestra equivalente USD por fila (÷ tasa paralelo y BCV)
+         + badge "hoy" en label de tasa BCV
+OWF-260: TfReviewCard — botón colapsable "Ver payload" para debug JSON del form
+         (prop debugPayload opcional; STM pasa el estado actual del form como preview)
+OWF-261: botón submit — tercer estado "Registrado" (verde, check_circle, 800ms)
+         antes de cerrar el modal vía emitSavedWithFlash()
+OWF-262: items de factura — campo "IVA%" por línea; total incluye tax;
+         payload incluye tax_rate por ítem
+
+Co-Authored-By: Claude Sonnet 4.6 <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_01KeSX138JWBQamgYaQiJY7a
+---
+ src/components/SmartTransactionModal.vue | 89 ++++++++++++++++++++----
+ src/components/TfReviewCard.vue          | 40 ++++++++++-
+ 2 files changed, 113 insertions(+), 16 deletions(-)
+
+diff --git a/src/components/SmartTransactionModal.vue b/src/components/SmartTransactionModal.vue
+index 9f860ef..45d84e7 100644
+--- a/src/components/SmartTransactionModal.vue
++++ b/src/components/SmartTransactionModal.vue
+@@ -152,17 +152,26 @@
+             <span class="stm-items-total-banner__amount">{{ formatMoney(itemsTotal) }}</span>
+           </div>
+ 
+-          <!-- OWF-179: tasa paralelo (actual) + tasa oficial (BCV) lado a lado si la moneda de la cuenta != USD -->
++          <!-- OWF-179/259: tasa paralelo (actual) + tasa oficial (BCV) lado a lado + equiv USD -->
+           <div v-if="showDualRates" class="stm-row-2">
+             <div class="stm-field">
+               <label class="stm-label">Tasa paralelo (actual)</label>
+               <input v-model.number="rateParalelo" type="number" step="0.0001" min="0"
+                 placeholder="0.0000" class="stm-text-input" />
++              <span v-if="rateParalelo && rateParalelo > 0 && form.amount" class="stm-rate-equiv">
++                ≈ ${{ ((form.amount ?? 0) / rateParalelo).toFixed(2) }} USD
++              </span>
+             </div>
+             <div class="stm-field">
+-              <label class="stm-label">Tasa oficial (BCV)</label>
++              <label class="stm-label">
++                Tasa oficial (BCV)
++                <span class="stm-badge-hoy">hoy</span>
++              </label>
+               <input v-model.number="rateOficial" type="number" step="0.0001" min="0"
+                 placeholder="0.0000" class="stm-text-input" />
++              <span v-if="rateOficial && rateOficial > 0 && form.amount" class="stm-rate-equiv">
++                ≈ ${{ ((form.amount ?? 0) / rateOficial).toFixed(2) }} USD
++              </span>
+             </div>
+           </div>
+ 
+@@ -412,6 +421,7 @@
+                 <input v-model="item.name" class="stm-text-input stm-text-input--flex" placeholder="Artículo" />
+                 <input v-model.number="item.quantity" type="number" class="stm-text-input stm-text-input--qty" min="1" placeholder="Qty" />
+                 <input v-model.number="item.price" type="number" class="stm-text-input stm-text-input--price" min="0" placeholder="Precio" />
++                <input v-model.number="item.tax" type="number" class="stm-text-input stm-text-input--tax" min="0" max="100" placeholder="IVA%" title="Impuesto %" />
+                 <button class="stm-pro-rm" @click="facturaItems.splice(i, 1)">
+                   <span class="material-icons" style="font-size:16px">close</span>
+                 </button>
+@@ -424,7 +434,7 @@
+             <div class="stm-pro-summary">
+               Total artículos: <strong>{{ formatMoney(itemsTotal) }}</strong>
+             </div>
+-            <button class="stm-pro-add" @click="facturaItems.push({ name: '', quantity: 1, price: 0, category_id: null })">
++            <button class="stm-pro-add" @click="facturaItems.push({ name: '', quantity: 1, price: 0, tax: 0, category_id: null })">
+               <span class="material-icons" style="font-size:15px">add</span> Agregar artículo
+             </button>
+           </div>
+@@ -510,6 +520,7 @@
+           :adjuste-target-balance="adjusteTargetBalance"
+           :adjuste-motivo="adjusteMotivo"
+           :validation-errors="reviewValidationErrors"
++          :debug-payload="debugPayloadPreview"
+         />
+ 
+         <!-- Error -->
+@@ -518,10 +529,11 @@
+         <!-- Actions -->
+         <div class="stm-footer">
+           <button class="stm-btn stm-btn--ghost" @click="show = false">Cancelar</button>
+-          <button class="stm-btn stm-btn--primary" :disabled="saving || !canSave" @click="save">
++          <button class="stm-btn stm-btn--primary" :class="{ 'stm-btn--success': savedFlash }" :disabled="saving || !canSave || savedFlash" @click="save">
+             <q-spinner v-if="saving" size="16px" color="white" />
++            <q-icon v-else-if="savedFlash" name="check_circle" size="18px" />
+             <q-icon v-else name="check" size="18px" />
+-            {{ saving ? 'Guardando…' : 'Guardar' }}
++            {{ saving ? 'Guardando…' : savedFlash ? 'Registrado' : 'Guardar' }}
+           </button>
+         </div>
+       </div>
+@@ -748,8 +760,18 @@ const form = ref({
+   tags: [] as number[],
+ });
+ 
+-const saving    = ref(false);
+-const saveError = ref<string | null>(null);
++const saving     = ref(false);
++const savedFlash = ref(false);
++const saveError  = ref<string | null>(null);
++
++function emitSavedWithFlash() {
++  savedFlash.value = true;
++  emit('saved');
++  setTimeout(() => {
++    savedFlash.value = false;
++    ui.closeSmartModal();
++  }, 800);
++}
+ 
+ // OWF-183: si la transacción afecta o no el saldo agregado de la cuenta
+ const includeInBalance = ref(true);
+@@ -859,11 +881,11 @@ const splitPagos = ref<{ account_id: number | null; amount: number; rate: number
+ const splitTotal = computed(() => splitPagos.value.reduce((s, p) => s + (p.amount ?? 0), 0));
+ 
+ // Items / factura
+-const facturaItems = ref<{ name: string; quantity: number; price: number; category_id: number | null }[]>([
+-  { name: '', quantity: 1, price: 0, category_id: null },
++const facturaItems = ref<{ name: string; quantity: number; price: number; tax: number; category_id: number | null }[]>([
++  { name: '', quantity: 1, price: 0, tax: 0, category_id: null },
+ ]);
+ const itemsTotal = computed(() =>
+-  facturaItems.value.reduce((s, it) => s + (it.quantity ?? 0) * (it.price ?? 0), 0)
++  facturaItems.value.reduce((s, it) => s + (it.quantity ?? 0) * (it.price ?? 0) * (1 + (it.tax ?? 0) / 100), 0)
+ );
+ 
+ // Gasto compartido (divide entre categorías)
+@@ -1030,6 +1052,17 @@ const typeIdFor = computed(() => {
+ 
+ // ── OWF-184: TfReviewCard — helpers de preview y validación ───────────────
+ const typeLabelForReview = computed(() => types.find(t => t.id === form.value.type)?.label ?? '');
++const debugPayloadPreview = computed(() => ({
++  type: form.value.type,
++  amount: form.value.amount,
++  name: form.value.name,
++  category_id: form.value.category_id,
++  account_id: form.value.account_id,
++  account_from_id: form.value.account_from_id,
++  account_to_id: form.value.account_to_id,
++  date: form.value.date,
++  tags: form.value.tags,
++}));
+ const categoryName = computed(() => categories.value.find(c => c.id === form.value.category_id)?.name ?? null);
+ const accountName = computed(() => findAccountById(form.value.account_id)?.name ?? null);
+ const fromAccountName = computed(() => findAccountById(form.value.account_from_id)?.name ?? null);
+@@ -1095,8 +1128,7 @@ async function save() {
+     if (form.value.type === 'ajuste') {
+       await saveAdjuste();
+       $q.notify({ type: 'positive', message: 'Saldo ajustado' });
+-      emit('saved');
+-      ui.closeSmartModal();
++      emitSavedWithFlash();
+       return;
+     }
+ 
+@@ -1152,7 +1184,8 @@ async function save() {
+             return {
+               name: it.name,
+               quantity: it.quantity,
+-              amount: it.quantity * it.price,
++              amount: it.quantity * it.price * (1 + (it.tax ?? 0) / 100),
++              tax_rate: it.tax ?? 0,
+               category_id: it.category_id ?? null,
+               jar_id: itemJar?.id ?? null,
+             };
+@@ -1183,8 +1216,7 @@ async function save() {
+       await persistOfficialRateIfNeeded();
+     }
+     $q.notify({ type: 'positive', message: 'Movimiento guardado' });
+-    emit('saved');
+-    ui.closeSmartModal();
++    emitSavedWithFlash();
+   } catch (err: unknown) {
+     const e = err as { response?: { data?: { message?: string } } };
+     saveError.value = e?.response?.data?.message ?? 'Error al guardar. Intenta de nuevo.';
+@@ -1525,6 +1557,27 @@ watch(() => ui.showSmartModal, (v) => { if (!v) onHide(); });
+   &--req { color: var(--expense, #ef4444); font-weight: 700; }
+ }
+ 
++.stm-rate-equiv {
++  font-size: 11px;
++  color: var(--fg-3, #94a3b8);
++  margin-top: 3px;
++  display: block;
++}
++
++.stm-badge-hoy {
++  display: inline-block;
++  font-size: 9px;
++  font-weight: 700;
++  background: var(--income-soft, rgba(16,185,129,.15));
++  color: var(--income-fg, #059669);
++  border-radius: 4px;
++  padding: 1px 5px;
++  margin-left: 4px;
++  vertical-align: middle;
++  text-transform: uppercase;
++  letter-spacing: 0.03em;
++}
++
+ // ── OWF-280: Amount hero con currency pills ──
+ .stm-amount-field {
+   display: flex;
+@@ -1743,6 +1796,11 @@ watch(() => ui.showSmartModal, (v) => { if (!v) onHide(); });
+     color: #fff;
+     &:disabled { opacity: .5; cursor: not-allowed; }
+   }
++
++  &--success {
++    background: var(--income, #10b981) !important;
++    box-shadow: 0 4px 14px rgba(16,185,129,.3) !important;
++  }
+ }
+ 
+ // ── Voice ──
+@@ -2128,6 +2186,7 @@ watch(() => ui.showSmartModal, (v) => { if (!v) onHide(); });
+ .stm-text-input--flex  { flex: 1; min-width: 0; }
+ .stm-text-input--qty   { width: 56px; flex-shrink: 0; }
+ .stm-text-input--price { width: 80px; flex-shrink: 0; }
++.stm-text-input--tax   { width: 58px; flex-shrink: 0; }
+ 
+ .stm-jar-chip { margin-top: 8px; }
+ 
+diff --git a/src/components/TfReviewCard.vue b/src/components/TfReviewCard.vue
+index e1e3aa1..06a14b1 100644
+--- a/src/components/TfReviewCard.vue
++++ b/src/components/TfReviewCard.vue
+@@ -19,11 +19,18 @@
+         {{ err }}
+       </li>
+     </ul>
++    <div v-if="debugPayload != null" class="tf-review-card__debug">
++      <button class="tf-review-card__debug-btn" @click="showPayload = !showPayload">
++        <q-icon :name="showPayload ? 'expand_less' : 'expand_more'" size="14px" />
++        Ver payload
++      </button>
++      <pre v-if="showPayload" class="tf-review-card__debug-pre">{{ JSON.stringify(debugPayload, null, 2) }}</pre>
++    </div>
+   </div>
+ </template>
+ 
+ <script setup lang="ts">
+-import { computed } from 'vue';
++import { computed, ref } from 'vue';
+ 
+ interface Props {
+   typeLabel: string;
+@@ -40,12 +47,15 @@ interface Props {
+   adjusteTargetBalance?: number | null;
+   adjusteMotivo?: string;
+   validationErrors: string[];
++  debugPayload?: unknown;
+ }
+ 
+ defineOptions({ name: 'TfReviewCard' });
+ 
+ const props = defineProps<Props>();
+ 
++const showPayload = ref(false);
++
+ type ReviewState = 'draft' | 'valid' | 'error';
+ 
+ function formatDate(dt: string): string {
+@@ -144,4 +154,32 @@ const summaryText = computed(() => {
+   margin: 0;
+   padding-left: 18px;
+ }
++.tf-review-card__debug {
++  margin-top: 10px;
++  border-top: 1px dashed rgba(0,0,0,.1);
++  padding-top: 6px;
++}
++.tf-review-card__debug-btn {
++  display: inline-flex;
++  align-items: center;
++  gap: 3px;
++  font-size: 11px;
++  color: #64748b;
++  background: none;
++  border: none;
++  cursor: pointer;
++  padding: 0;
++  &:hover { color: #334155; }
++}
++.tf-review-card__debug-pre {
++  margin: 6px 0 0;
++  font-size: 10.5px;
++  background: rgba(0,0,0,.04);
++  border-radius: 6px;
++  padding: 8px;
++  overflow-x: auto;
++  white-space: pre;
++  max-height: 200px;
++  overflow-y: auto;
++}
+ </style>
+-- 
+2.43.0
+
