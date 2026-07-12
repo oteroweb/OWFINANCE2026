@@ -3,8 +3,17 @@
 <!-- Solo un agente escribe a la vez. Updated = timestamp del ultimo escritor. -->
 <!-- Tareas se referencian por ID (OWF-NNN) → ver .owf/TASKS.md -->
 
-**Updated:** 2026-07-11T00:00:00Z
+**Updated:** 2026-07-12T00:00:00Z
 **By:** claude-code
+
+## Último trabajo (2026-07-12) — Push final: backend (OWF-279 OCR fix) + central, todo cerrado
+
+El usuario pidió fusionar y cerrar todo lo pendiente de la sesión anterior:
+
+- **Verificado antes de pushear**: corrí la suite completa de PHPUnit sobre el commit local sin pushear `551dc7a` (OWF-279, fix OCR — providers pasan imágenes al modelo de vision). 6 fallas encontradas; confirmé (checkout al commit padre `6ba17d6` y re-run) que las 5 de `UserSecurityPinTest` + la 1 de `TransactionTest::bulk_create_account_permission` son **preexistentes**, no las causó este commit — seguro de pushear.
+- **Backend**: `git push origin main` (`551dc7a`) + `./deploy-backend.sh prod` → `DEPLOY EXITOSO`, health 200.
+- **Central**: `git push origin master` (`8c8aecb`) → sincronizado.
+- **Pendiente real para otra sesión** (no bloquea el cierre): las 6 fallas de test detectadas arriba siguen sin arreglarse — quedaron documentadas aquí para que alguien las tome. `UserSecurityPinTest` en particular tiene 5/6 tests fallando con 404, sugiere problema de rutas no cacheadas o rota en algún punto — investigar antes de que se acumule más deuda ahí.
 
 ## Último trabajo (2026-07-11) — Cierre de sesión: confirmado OWF-286 (bug real, no cache) + guía de traducción consultada con Fable
 
