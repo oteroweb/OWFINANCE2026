@@ -3,8 +3,21 @@
 <!-- Solo un agente escribe a la vez. Updated = timestamp del ultimo escritor. -->
 <!-- Tareas se referencian por ID (OWF-NNN) → ver .owf/TASKS.md -->
 
-**Updated:** 2026-07-12T00:00:00Z
+**Updated:** 2026-07-12T13:55:00Z
 **By:** claude-code
+
+## Último trabajo (2026-07-12, continuación) — Recuperado parche huérfano de PR#10 + deploy prod
+
+Usuario pidió "unificar ramas" y detectar cambios en cola. Se encontró que PR#10 (central, `claude/cool-ritchie-CIzTk`) tenía código real de frontend (OWF-213/216/221, OWF-259-262, OWF-271-273) atrapado como archivo `.patch` — nunca llegó al repo real de `OWFinanceFrontend2025` por una restricción de proxy de la sesión que lo generó, y su commit de TASKS.md marcaba tareas `[x]` sobre código inexistente.
+
+- **Recuperado**: extraído el mbox de 5 commits del blob `d63e2f9:.owf/frontend-patches-2026-07-12.patch`, aplicado vía `git am --3way` sobre `frontend/main` real (ya incluía el merge previo de PR#4 "Ciclo de sincronización Claude Design ↔ Vue", mergeado por su propia sesión mientras tanto). Sin conflictos de aplicación.
+- **Verificado antes de pushear**: `vue-tsc --noEmit` limpio; `eslint` solo con los 2 errores preexistentes de `config/index.vue` (confirmado comparando contra `main` sin el parche — no los introduce este cambio). Verificado a mano que la consolidación de "Tasas de Cambio" no dejó CRUD duplicado ni refs muertas (`openRateForm`/`showRateForm`/etc. = 0 ocurrencias).
+- Merge a `frontend/main` (`884bca9`), pusheado.
+- **TASKS.md reconciliado a mano** (no fue un merge automático): la rama del patch se basó en un `master` anterior al 10 de julio, así que su commit re-marcaba como "recién hechas" (fecha 07-12) tareas que otra sesión ya había completado el 07-08/07-10 con descripciones más precisas (OWF-248/250/251/253-258/263). Se conservaron esas descripciones más antiguas y precisas; solo se aceptaron como genuinamente nuevas OWF-259/260/261/262 (breakdown USD, payload debug, success state, IVA por ítem + NaN guard).
+- Puntero de submódulo en central actualizado al commit real ya pusheado (`884bca9`), no al hash huérfano que traía la rama vieja (nunca existió en el remoto).
+- Commit central `9f7b082`, pusheado a `master`. PR#10 cerrado con comentario explicando que su contenido ya vive en main/master.
+- **Deploy frontend prod ejecutado**: `frontend=OK:200`, 169 archivos subidos, build limpio.
+- **Pendiente sin resolver esta sesión**: PRs de CI (central #9, frontend #3, backend #11) — todas en rojo, #9 además requiere que el usuario agregue un secret nuevo (`SUBMODULES_DEPLOY_KEY`) en GitHub, no se tocó por ser cambio de configuración de seguridad que requiere su autorización directa.
 
 ## Último trabajo (2026-07-12) — Push final: backend (OWF-279 OCR fix) + central, todo cerrado
 
