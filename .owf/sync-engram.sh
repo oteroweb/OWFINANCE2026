@@ -118,12 +118,11 @@ case "${1:-}" in
     echo ""
 
     for key in state tasks context; do
-      file="$OWF_DIR/${key^^}.md"
-      [ "$key" = "state" ] && file="$OWF_DIR/STATE.md"
+      file="$OWF_DIR/STATE.md"
       [ "$key" = "tasks" ] && file="$OWF_DIR/TASKS.md"
       [ "$key" = "context" ] && file="$OWF_DIR/CONTEXT.md"
 
-      label="${key^^}.md"
+      label="$(basename "$file")"
 
       local_ts="N/A"
       engram_ts="N/A"
