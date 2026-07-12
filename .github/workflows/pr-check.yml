@@ -1,0 +1,66 @@
+name: PR Check
+
+on:
+  pull_request:
+    branches:
+      - master
+      - stage
+
+jobs:
+  build-and-test:
+    name: Build frontend + test backend
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout (with submodules)
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          fetch-depth: 0
+          ssh-key: ${{ secrets.SUBMODULES_DEPLOY_KEY }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: OWFinanceFrontend2025/package-lock.json
+
+      - name: Install frontend deps
+        working-directory: OWFinanceFrontend2025
+        run: npm ci
+
+      - name: Lint frontend
+        working-directory: OWFinanceFrontend2025
+        run: npm run lint
+
+      - name: Typecheck frontend
+        working-directory: OWFinanceFrontend2025
+        run: npx vue-tsc --noEmit
+
+      - name: Build frontend
+        working-directory: OWFinanceFrontend2025
+        run: npx quasar build
+        env:
+          VITE_API_BASE_URL: ${{ secrets.DEPLOY_API_URL }}
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          extensions: mbstring, intl, pdo_sqlite, bcmath, gd, zip, curl, xml
+          coverage: none
+
+      - name: Install backend deps
+        working-directory: OWFINANCEBackend2025
+        run: |
+          cp .env.example .env
+          composer install --prefer-dist --no-interaction --no-progress
+
+      - name: Generate backend app key
+        working-directory: OWFINANCEBackend2025
+        run: php artisan key:generate --ansi
+
+      - name: Run backend tests
+        working-directory: OWFINANCEBackend2025
+        run: php artisan test

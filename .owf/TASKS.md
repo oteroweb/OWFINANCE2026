@@ -317,7 +317,6 @@
 | **OWF-275** | [x] | P1 | 🟡 | feat | txform-audit | OWF-240 | "Carga masiva" agregada como 5ta pestaña — delega en `TransactionBulkImportDialog.vue` como overlay independiente (se cierra el modal padre al abrirla, no como tab-content anidado, porque el botón X del dialog legacy no emite `close` de forma confiable). Verificado en preview: abre, cierra sin dejar diálogos huérfanos. | 2026-07-08 | — |
 | **OWF-276** | [x] | P3 | ⚪ | design | txform-audit | OWF-240 | Fecha unificada a UN solo q-select (Hoy/Ayer/Otra fecha…) con mismo estilo que Cuenta/Proveedor, en vez de 3 chips separados. | 2026-07-08 | — |
 | **OWF-277** | [x] | P3 | ⚪ | design | txform-audit | OWF-240 | Agregado override scoped `:deep(.stm-body .q-field--outlined .q-field__control)` — fondo `--surface-2`, sin borde visible, radio `--radius-md` — acerca el look al diseño sin tocar el theme global de Quasar. Verificado visualmente en preview (background/border confirmados vía computed styles). | 2026-07-08 | — |
-
 | **OWF-278** | [x] | P1 | 🟡 | feat | adhoc | — | **Jailbreak protection + scope guardrails**: system prompt reforzado con restricción absoluta de alcance (solo finanzas OwFinance). Capa de detección pre-LLM (detectJailbreakAttempt) con 4 categorías (role_change, code_math, data_leak, off_topic) que intercepta antes del provider IA. Respuestas bloqueadas como SSE. Deploy prod OK. | — | 2026-07-09 |
 | **OWF-279** | [x] | P2 | ⚪ | feat | txform-audit | OWF-240 | Nuevo toggle Pro "Gasto compartido / Divide entre categorías": panel con N filas categoría+monto, suma vs total, botón agregar fila. ProPanel type extendido con 'shared'. | 2026-07-10 | — |
 | **OWF-280** | [x] | P2 | ⚪ | design | txform-audit | OWF-240 | Amount hero con currency pills: reemplazar q-select moneda por pills inline USD/EUR/VES dentro del mismo campo de monto (estilo referencia ev-expense-top). | 2026-07-10 | — |
@@ -328,6 +327,76 @@
 
 | **OWF-285** | [x] | P0 | 🔴 | fix | adhoc | — | Opcion B Router: publicPath `/`, rutas publicas children, slot pattern, server proxy reescrito (originalmente registrado como OWF-054; renumerado 2026-07-11 al detectarse colisión de ID con otra tarea de router.) | opencode | 2026-06-10 |
 | **OWF-286** | [x] | P1 | 🟡 | fix | txform-audit | OWF-240 | Inconsistencia real Claude Design vs Vue detectada (Paso 2.5 owf-design-sync): en `rediseno/ui_kits/lite-desktop/organisms/TransactionForm.jsx`, `rowDir = isMobile ? 'column' : 'row'` — los 3 toggles Pago múltiple/Detalle-factura/Gasto compartido van en FILA en desktop (3 columnas), no apilados. El Vue los tenía siempre en columna (`flex-direction: column` fijo) — el usuario lo reportó como bug visual, yo lo descarté erróneamente verificando solo que el CSS deployado coincidía con MI código, sin comparar contra la fuente de diseño real. Fix: `.stm-pro-card-toggles` ahora `flex-direction: row` + `flex-wrap: wrap` por defecto, `.stm-wrap--mobile &` fuerza columna (mismo criterio que `isMobile` en rediseno). Además "Cobrar comisión" se separó del grupo de 3 (en rediseno es un `TfCommission` standalone, no parte del row de 3) — ahora su propio card-toggle de ancho completo, coincide con `TfCommission` invocado fuera del `rowDir` div tanto en gasto/ingreso como en transfer. Deploy prod OK (bundle `CZsBpNFl`, CSS verificado vía curl: `flex-direction:row` + `.stm-wrap--mobile` override presentes). | claude-code | 2026-07-11 |
+
+| **OWF-287** | [x] | P0 | 🔴 | infra | cicd-pipeline | — | `.gitmodules`: branch de ambos submódulos cambiada de `dev` (no existe en remoto) a `main` (branch real). | — | 2026-07-12 |
+| **OWF-288** | [x] | P1 | 🟡 | infra | cicd-pipeline | — | `OWFinanceBackend2025`: eliminado `deploy.yml`+`debug-deploy.yml` propios (competían con el deploy central, secrets con nombres distintos: `SSH_KEY` vs `DEPLOY_SSH_KEY`). Agregado `ci.yml` (phpunit sqlite in-memory, sin deploy). Merged PR#11. | — | 2026-07-12 |
+| **OWF-289** | [x] | P1 | 🟡 | infra | cicd-pipeline | — | `OWFinanceFrontend2025`: agregado `ci.yml` (eslint + vue-tsc, sin deploy). Merged PR#3. | — | 2026-07-12 |
+| **OWF-290** | [!] | P0 | 🔴 | fix | cicd-pipeline | — | Los 3 pipelines (central + backend + frontend) fallan en ~2s antes de ejecutar nada — patrón consistente con límite de gasto/minutos de GitHub Actions agotado o política de Actions deshabilitada a nivel de organización `oteroweb`. Requiere revisar Settings → Billing → Actions / Settings → Actions → General. No accesible vía API/MCP. Check-in automático programado cada 1h para detectar cuándo se destrabe. | Bloqueada: requiere acceso a Settings de GitHub (billing/policy), fuera del alcance de las herramientas disponibles | — |
+| **OWF-291** | [ ] | P0 | 🔴 | infra | cicd-pipeline | OWF-290 | `deploy.yml` central: falta agregar `ssh-key: secrets.SUBMODULES_DEPLOY_KEY` al step de checkout — el checkout con submódulos privados corre antes de configurar cualquier auth SSH, por lo que el clone de los submódulos falla. NO implementado todavía (quedó solo diagnosticado). | — | — |
+| **OWF-292** | [ ] | P1 | 🟡 | infra | cicd-pipeline | OWF-290 | Crear `pr-check.yml` en central: gate de test en PR hacia `stage`/`master` — build frontend (lint+typecheck+build) + `php artisan test` backend, usando los punteros de submódulo del PR. No despliega. NO implementado todavía. | — | — |
+| **OWF-293** | [ ] | P2 | ⚪ | fix | cicd-pipeline | OWF-290 | `UserSecurityPinTest` (backend): 6 tests fallan con 404 en `/api/v1/user/security/pin*` — endpoint no registrado o ruta rota. Preexistente, detectado al correr el nuevo CI localmente, no relacionado a la config de pipeline. | — | — |
+| **OWF-294** | [ ] | P2 | ⚪ | feat | cicd-pipeline | OWF-290 | Deploy central sin rollback: si el health check post-deploy falla, no hay forma automática de volver al commit/release anterior. Diseñar antes de implementar (toca bash en servidor de prod, no verificable sin acceso SSH). | — | — |
+| **OWF-295** | [ ] | P3 | ⚪ | feat | cicd-pipeline | OWF-290 | Automatizar bump de punteros de submódulo: hoy hay que correr `sync-submodule-pointers.sh` a mano tras mergear a `main` en frontend/backend. Evaluar `repository_dispatch` desde esos repos hacia el central. | — | — |
+
 <!--
-  NEXT_ID: OWF-287
+  NEXT_ID: OWF-296
+-->
+
+## Completed
+
+| ID | Status | Pri | Urgency | Type | Source | Migrated from | Description | Done |
+|----|--------|-----|---------|------|--------|---------------|-------------|------|
+| **OWF-047** | [x] | P0 | 🔴 | fix | adhoc | — | Mensajes login ES + passwords fortalecidos S$ratoga.1990 + eliminar alert() nativos | 2026-06-10 |
+| **OWF-029** | [x] | P0 | ⚪ | fix | adhoc | — | Fix login roto por PHP deprecated warnings en API response | 2026-06-10 |
+| **OWF-030** | [x] | P1 | ⚪ | infra | adhoc | — | Estructura `.deploy/` centralizada (dev/stage/prod configs) | 2026-06-10 |
+| **OWF-031** | [x] | P1 | ⚪ | feat | adhoc | — | Paginas marketing como Vue routes (Landing, Features, Pricing, Matrix) | 2026-06-10 |
+| **OWF-032** | [x] | P1 | ⚪ | feat | adhoc | — | LoginPage split-panel con diseno Redesign | 2026-06-10 |
+| **OWF-033** | [x] | P1 | ⚪ | feat | adhoc | — | PublicLayout con nav + footer + descarga app | 2026-06-10 |
+| **OWF-034** | [x] | P1 | ⚪ | feat | adhoc | — | Rutas modulares (auth, admin, user, public) | 2026-06-10 |
+| **OWF-035** | [x] | P0 | ⚪ | infra | migrated | INFRA-001 | Reparar skill-registry.md (paths rotos) | 2026-06-08 |
+| **OWF-036** | [x] | P0 | ⚪ | infra | migrated | INFRA-002 | Instalar Engram (backend de memoria) | 2026-06-08 |
+| **OWF-037** | [x] | P0 | ⚪ | infra | migrated | INFRA-003 | Instalar Paseo (handoff multi-agente) | 2026-06-08 |
+| **OWF-038** | [x] | P1 | ⚪ | infra | migrated | INFRA-004 | Auto-reparacion registry al cambiar de maquina | 2026-06-08 |
+| **OWF-039** | [x] | P1 | ⚪ | design | migrated | DS-01..04 | Design System F0: Tokens, fuentes, tema navy/cyan, app.scss | 2026-06-08 |
+| **OWF-040** | [x] | P1 | ⚪ | design | migrated | DS-10..12 | Design System F1: Shell Lite Desktop (layout, header, navpill, empty states) | 2026-06-08 |
+| **OWF-041** | [x] | P1 | ⚪ | feat | migrated | DS-20..25 | Design System F2: Rutas Lite (Home, Transactions, Jars, Config, QuickAdd) | 2026-06-08 |
+| **OWF-042** | [x] | P1 | ⚪ | feat | migrated | DS-30 | Design System F3: ProHomeView (KPI strip + breakdown + AI advisor) | 2026-06-08 |
+| **OWF-043** | [x] | P1 | ⚪ | feat | migrated | DS-31 | Gating funcional por layout_mode (LiteHomeView vs ProHomeView) | 2026-06-08 |
+| **OWF-044** | [x] | P1 | ⚪ | design | migrated | DS-40..42 | Design System F4: Dark mode, iconografia, microinteracciones | 2026-06-08 |
+| **OWF-045** | [x] | P1 | ⚪ | infra | migrated | DS-50 | Design System F5: Normalizar casing git (vue-tsc limpio) | 2026-06-08 |
+| **OWF-046** | [x] | P2 | ⚪ | fix | migrated | BUG-008 | Layout LITE: vistas vacias (router-view duplicado) | 2026-06-08 |
+
+| **OWF-053** | [x] | P1 | 🟡 | infra | adhoc | — | Seed datos base prod: roles, account types, currencies, transaction types | claude-code | 2026-06-10 |
+| **OWF-054** | [x] | P0 | 🔴 | fix | adhoc | — | Opcion B Router: publicPath `/`, rutas publicas children, slot pattern, server proxy reescrito | opencode | 2026-06-10 |
+| **OWF-050** | [x] | P1 | 🟡 | fix | adhoc | — | CORS prod: config/cors.php con allowed_origins owfinances.com + dev origins | claude-code | 2026-06-10 |
+| **OWF-051** | [x] | P1 | 🟡 | infra | adhoc | — | Merge dev→main + re-deploy: AI, health, user settings, 6 migraciones nuevas | claude-code | 2026-06-10 |
+| **OWF-052** | [x] | P2 | ⚪ | infra | adhoc | — | Arquitectura evaluada: proxy index.php funcional, symlink posible pero no urgente | claude-code | 2026-06-10 |
+
+| **OWF-055** | [x] | P1 | 🟡 | design | adhoc | — | Integración rediseño → layouts: LiteHeaderDesktop + LiteFloatingBottomNav + BottomNavMobile + ExpandedMenu canónicos. Borrados 6 duplicados liquid/. LiteDesktopLayout + LiteMobileLayout actualizados. TypeCheck limpio. | claude-code | 2026-06-19 |
+| **OWF-056** | [x] | P1 | 🟡 | design | adhoc | — | AppShell.vue: shell único Lite+Pro+Mobile. Reemplaza 4 layouts. q-layout wrapper + sidebar fixed + q-page-container. Router actualizado. TypeCheck limpio. Preview OK. | claude-code | 2026-06-19 |
+| **OWF-057** | [x] | P1 | ⚪ | feat | adhoc | — | AppPrefsSection en Config: modo Lite/Pro + tema + ocultar saldos. auth.updateSettings() (PATCH /user/settings, optimista). Plain CSS (sin SCSS). | claude-code | 2026-06-19 |
+| **OWF-058** | [x] | P1 | ⚪ | feat | adhoc | — | HomeView datos reales verificados: LiteHomeView ya usa GET /accounts/summary/global-balance + GET /transactions + GET /jars. HomeView.vue prioriza settings.layout_mode. | claude-code | 2026-06-19 |
+| **OWF-060** | [x] | P2 | ⚪ | refactor | adhoc | — | Limpieza layouts legacy: borrados DynamicRoleLayout, LiteDesktopLayout, LiteMobileLayout, ProLayout, LegacyLayout, DynamicHomePage, user_dashboard, components/views/LiteHomeView. MainLayout simplificado. 3 deploys prod OK. | claude-code | 2026-06-19 |
+| **OWF-059** | [x] | P1 | ⚪ | feat | adhoc | — | Onboarding automático: AppShell watch has_seen_onboarding → OnboardingFlow. onOnboardingDone → updateSettings({has_seen_onboarding:true}). | claude-code | 2026-06-19 |
+
+| **OWF-069** | [x] | P0 | 🔴 | feat | adhoc | — | SmartTransactionModal: modal global unificado (Escribir/Voz/Foto/AutoIA), montado en AppShell, QuickActionSheet corregido. Fix raíz: TransactionCreateDialog nunca estaba montado fuera de /user/transactions. | claude-code | 2026-06-20 |
+| **OWF-070** | [x] | P1 | 🟡 | feat | adhoc | — | Página Deudas completa: migración debts + Debt model/controller/route (CRUD + pay) + DebtCard.vue + index.vue (summary, grupos Cashea/Otras, form add/edit, pago cuota, delete). Backend deployado prod. | claude-code | 2026-06-20 |
+| **OWF-071** | [x] | P1 | 🟡 | feat | adhoc | — | Transacciones Lite: openDetail(tx) + q-dialog inline (tx-detail-sheet: hero amount, tipo, categoría, cántaro, fecha, editar/eliminar). Auto-reload owf:transaction-saved. ✅ verificado git commit 3736d6e. | claude-code | 2026-06-20 |
+| **OWF-072** | [x] | P1 | 🟡 | feat | adhoc | — | Cántaros Lite: grid → lista vertical (spec), distribution strip, jar detail sheet (stats 2x2), "Nuevo cántaro" inline form. ✅ verificado git commit c22b711 (+499 líneas). | claude-code | 2026-06-20 |
+| **OWF-073** | [x] | P2 | ⚪ | feat | adhoc | — | Configuración: secciones Notificaciones (3 toggles), Seguridad, Cerrar sesión, Exportar datos, section-labels. ✅ verificado git commit 214c437. | claude-code | 2026-06-20 |
+| **OWF-074** | [x] | P2 | ⚪ | feat | adhoc | — | Análisis Pro: jar strip (scroll horizontal gasto por cántaro), metric-grid 4-col Pro mode. ✅ verificado git commits cabf22e+9c114b4. | claude-code | 2026-06-20 |
+| **OWF-075** | [x] | P2 | ⚪ | feat | adhoc | — | Exchange Rates widget en ProHomeView: carga /user_currencies → filas editables (PUT rate). Solo visible si hay tasas. ✅ verificado git commit cabf22e. | claude-code | 2026-06-20 |
+| **OWF-076** | [x] | P3 | ⚪ | feat | adhoc | — | Notifications panel: bell → popover desktop / bottom-sheet mobile. Items con tono, unread dot, mark-all-read. Montado en AppShell. ✅ verificado git commit c00a02f. | claude-code | 2026-06-20 |
+
+| **OWF-080** | [x] | P2 | ⚪ | design | adhoc | — | Config Pro heading: reemplazado emoji ⚙️ con t-eyebrow+h1 "Preferencias", restaurado q-tabs (revertido Stitch pill tabs). Fuente verdad: rediseno/ConfigRoute.jsx. Deploy prod OK. | claude-code | 2026-06-20 |
+| **OWF-081** | [x] | P2 | ⚪ | feat | adhoc | — | Transactions type chips inline + MonthBar: chips Todas/Ingresos/Gastos/Cántaros siempre visibles, prev/next month nav, chip "Cántaros" nuevo tipo. Deploy prod OK. | claude-code | 2026-06-20 |
+| **OWF-082** | [x] | P2 | ⚪ | feat | adhoc | — | Análisis: Pro heading "Navegador financiero" (t-eyebrow+h1), Lite donut CSS (conic-gradient) de distribución por cántaro con leyenda. Deploy prod OK. | claude-code | 2026-06-20 |
+| **OWF-083** | [x] | P3 | ⚪ | refactor | adhoc | — | Stitch archivado: todo movido a _archive/stitch-NO-USAR/ (carpeta principal, zip, skill, docs, html-exports). _archive/ en .gitignore. Fuente verdad = rediseno/ui_kits/. | claude-code | 2026-06-20 |
+
+<!--
+  NEXT_ID: OWF-084
+  Proximo agente: usar OWF-084 para la primera tarea nueva.
+  Incrementar NEXT_ID al final.
+  Proximo agente: usar OWF-082 para la primera tarea nueva.
+  Incrementar NEXT_ID al final.
 -->
