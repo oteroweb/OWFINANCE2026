@@ -337,9 +337,10 @@
 | **OWF-293** | [ ] | P2 | ⚪ | fix | cicd-pipeline | OWF-290 | `UserSecurityPinTest` (backend): 6 tests fallan con 404 en `/api/v1/user/security/pin*` — endpoint no registrado o ruta rota. Preexistente, detectado al correr el nuevo CI localmente, no relacionado a la config de pipeline. | — | — |
 | **OWF-294** | [ ] | P2 | ⚪ | feat | cicd-pipeline | OWF-290 | Deploy central sin rollback: si el health check post-deploy falla, no hay forma automática de volver al commit/release anterior. Diseñar antes de implementar (toca bash en servidor de prod, no verificable sin acceso SSH). | — | — |
 | **OWF-295** | [ ] | P3 | ⚪ | feat | cicd-pipeline | OWF-290 | Automatizar bump de punteros de submódulo: hoy hay que correr `sync-submodule-pointers.sh` a mano tras mergear a `main` en frontend/backend. Evaluar `repository_dispatch` desde esos repos hacia el central. | — | — |
+| **OWF-296** | [x] | P1 | 🟡 | design | txform-audit | OWF-240 | Unificación final look & feel SmartTransactionModal vs Claude Design (Ciclo 0: remoto sin cambios, todo era deuda de port). 6 gaps: selector cuenta con dot color+saldo (también Ajuste y Desde/Hacia transfer), tags con color semántico + header ETIQUETAS + hint, hint "Anclado a la categoría" en Cántaro, fix regresión OWF-286 (grid 3-col en vez de flex-basis), TfReviewCard rediseñado (ojo + "VAS A REGISTRAR" + fraseo NL de tx-summary.js + tokens dark-safe), "Sin proveedor" default con ícono. Pendientes anotados: accountType no viene en auth (sub-label "Corriente"), saldos visibles con hideValues activo (decidir), ancho modal 720px. Commit frontend `7830575`, deploy prod OK. | claude-code | 2026-07-12 |
 
 <!--
-  NEXT_ID: OWF-296
+  NEXT_ID: OWF-297
 -->
 
 ## Completed

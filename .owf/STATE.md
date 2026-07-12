@@ -3,8 +3,18 @@
 <!-- Solo un agente escribe a la vez. Updated = timestamp del ultimo escritor. -->
 <!-- Tareas se referencian por ID (OWF-NNN) → ver .owf/TASKS.md -->
 
-**Updated:** 2026-07-12T16:15:00Z
+**Updated:** 2026-07-12T18:30:00Z
 **By:** claude-code
+
+## Último trabajo (2026-07-12, continuación 4) — OWF-296: unificación final look & feel SmartTransactionModal vs Claude Design
+
+Usuario mostró capturas (frontend dark vs diseño light) con gaps visuales en el formulario de transacciones y pidió "unificar por fin el look & feel". Ejecutado vía Ciclo 0 de owf-design-sync, delegado a sub-agente.
+
+- **Ciclo 0 (pull DesignSync)**: los 4 archivos remotos relevantes (`TransactionForm.jsx`, `SmartTransactionModal.jsx`, `molecules/FormControls.jsx`, `atoms/Chips.jsx`) son byte-idénticos al espejo `rediseno/` local — **el diseño NO cambió; todos los gaps eran deuda de port**, no drift.
+- **OWF-296** ✅ 6 gaps implementados en `SmartTransactionModal.vue` + `TfReviewCard.vue` (commit frontend `7830575`): (1) selector de cuenta con dot de color + `Nombre · USD` + saldo formateado — también en "Cuenta a ajustar" y Desde/Hacia de transfer; color = `a.color || var(--brand-primary)` porque `accounts` NO tiene columna color en backend; (2) chips de etiquetas con color semántico (color-mix 7%/34%, activo fondo pleno) + header "ETIQUETAS" + hint contextual; (3) hint "Anclado a la categoría" en Cántaro; (4) **regresión real de OWF-286 encontrada y corregida**: el `flex: 1 1 140px` partía la fila de 3 toggles en 2+1 (min-content > basis) — reemplazado por `grid repeat(3, minmax(0,1fr))`; (5) TfReviewCard rediseñado al look "VAS A REGISTRAR" (ícono ojo, fraseo NL portado de `rediseno/tx-summary.js`, tokens dark-safe — antes tenía rgba negros invisibles en dark); (6) "Sin proveedor" default con ícono block/storefront, conservando búsqueda y "+ Nuevo proveedor".
+- Verificado: vue-tsc limpio, ESLint limpio (2 errores preexistentes de config/index.vue intactos), verificación visual en preview dark + screenshots. Deploy prod OK `frontend=OK:200`.
+- **Concurrencia manejada explícitamente**: 14 archivos con WIP ajeno (home/theme, otra sesión) en el mismo checkout — commit de OWF-296 aislado con `git add` selectivo + `git stash` durante el deploy (para que el build no incluyera trabajo sin verificar) + `stash pop` limpio después. El push inicial fue rechazado (PR #3 de CI mergeado en remoto mientras tanto) — rebase limpio y re-deploy. **El WIP ajeno sigue uncommitted en el working tree** — la sesión dueña debe commitearlo/deployarlo ella.
+- **Pendientes anotados (no tareas aún)**: sub-label tipo de cuenta ("Corriente") requiere exponer accountType en AuthController; los saldos del selector se muestran aunque `hideValues` esté activo (decidir producto); ancho modal Pro 720px (diseño) vs 560px actual.
 
 ## Último trabajo (2026-07-12, continuación 3) — Cierre épica config-audit OWF-209 (210/211/212/214) + reporte CI billing
 
