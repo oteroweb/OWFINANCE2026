@@ -324,6 +324,32 @@ Ambos con `vue-tsc --noEmit` limpio, commit frontend `d2b1b97`, deploy prod OK.
 | 9.16 | "Carga masiva" — abrir desde el modal | Cierra `SmartTransactionModal` y abre `TransactionBulkImportDialog` por separado; confirmar que no quedan ambos modales superpuestos |
 | 9.17 | "Carga masiva" — botón X para cerrar | ⚠️ Comentario en código indica que el cierre no es 100% confiable desde ese botón — verificar |
 
+### 🐛 Bug encontrado y corregido — OWF-308 (P0, deployado)
+
+Al retomar la Sección 9 tras confirmación del usuario de que las API keys de IA ya estaban
+configuradas: **9.12 falló** — "Auto IA" con texto claro y bien formado ("Pagué $18.50 en el
+supermercado La Cava, categoría alimentación, con la tarjeta USD") devolvía `data` completamente
+vacío (`amount`/`currency`/`description` null), sin ningún error visible en la UI (ni 429 ni 503,
+la llamada "tenía éxito" con 200). El botón "Analizar con IA" se comportó bien deshabilitado en
+vacío (9.13 pasa).
+
+**No era el problema de key de Gemini** de OWF-131 — causa raíz real en el backend: el proveedor
+primario de la cadena (`opencode-go`, modelo `deepseek-v4-flash`) a veces envuelve su respuesta en
+fences markdown pese a que el system prompt pide "solo JSON", y `json_decode($content, true) ?? []`
+fallaba en silencio a `[]` sin lanzar excepción — así que el fallback a groq/openrouter/gemini
+nunca se activaba. Fix: `AiProviderChain::parseJsonContent()` limpia fences y lanza si el
+contenido no es JSON válido, dentro de `extract()` por cada proveedor probado (activa el fallback
+real de la cadena). Verificado con el mismo input contra prod tras el deploy: ahora devuelve
+`{amount:18.5, currency:"USD", description:"supermercado La Cava",
+category_suggestion:"alimentación", confidence:0.95}`. Commit backend `b9ff757`, deploy prod OK.
+
+**Nota de alcance**: el fix corrige el endpoint compartido `/ai/extract-transaction` (usado por
+Auto IA, Voz y Foto/OCR por igual), así que 9.1-9.11 y 9.14-9.15 deberían beneficiarse del mismo
+fix, pero NO se re-probaron individualmente en esta ronda — Voz requiere micrófono real (no
+disponible en el navegador automatizado) y Foto requiere una imagen de factura de prueba;
+ninguno de los dos se ejecutó todavía. 9.16/9.17 (Carga masiva) tampoco se probaron — quedan
+pendientes para una próxima ronda.
+
 ## 10. Ver / Editar transacción existente (`TxDetailModal.vue`)
 
 | # | Caso | Esperado |
