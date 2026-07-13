@@ -20,6 +20,7 @@ Ninguna otra skill se invoca directamente — todas pasan por aquí.
 | `owf-entity-map` | Referencia ANTES de tocar código de transacciones/cuentas/categorías/cántaros/deudas/sueños/IA | `owf-session start`, paso 1.5, si la tarea toca datos |
 | `owf-component-map` | Referencia ANTES de tocar cualquier componente/página/store del frontend | `owf-session start`, paso 1.5, si la tarea toca UI |
 | `owf-design-sync` | El usuario cambió algo en `rediseno/` (JSX) y hay que portarlo a Vue, o pide un feature nuevo sin diseño aún | `owf-session start`, paso 1.5, si la tarea menciona rediseño o UI nueva |
+| `rediseno-sync` (frontend) | Pull selectivo Claude Design → espejo `rediseno/` cuando el Paso 2.3 detecta drift | `owf-session start`, paso 2.3 |
 | `owf-deploy` | Después de cada tarea completada | `owf-session end` + post-tarea |
 | `owf-qa-production` | Verificar vistas en prod tras deploy | `owf-session end` si hay cambios UI |
 | `engram:memory` | Guardar decisiones y bugs | `owf-session end` + inline al descubrir algo |
@@ -55,6 +56,23 @@ mem_context(project: 'owfinance2026')     — sesiones recientes
 mem_search(query: '<tema>', project: ...)  — si hay algo específico
 ```
 
+### Paso 2.3 — Detectar drift del diseño (Claude Design → espejo)
+
+Chequeo barato (1 llamada, ~282 bytes) en CADA arranque de sesión:
+
+1. Cargar el tool MCP `DesignSync` (ToolSearch `select:DesignSync`) y leer el journal:
+   `DesignSync get_file` → projectId `5fd9e16d-4e55-4813-8714-3dd0f0a35c48`, path `_sync/CHANGELOG.jsonl`.
+2. Las entradas DESPUÉS del último marcador `{"type":"sync",...}` son cambios del diseño
+   pendientes de pull. Sin entradas nuevas = espejo al día, seguir normal.
+3. Si hay pendientes: reportarlos en el resumen del Paso 3 (archivos + notas) y ofrecer
+   correr `/rediseno-sync` (skill del frontend, `OWFinanceFrontend2025/.claude/skills/rediseno-sync/`)
+   ANTES de tocar código de las vistas afectadas.
+4. Si el tool DesignSync no está disponible (sesión sin auth de claude.ai), anotarlo en el
+   resumen como "drift de diseño: no verificado" — NO bloquear la sesión por esto.
+
+Fallback ante sospecha de cambios no registrados en el changelog (fechas remotas nuevas sin
+entradas): full-scan por hashes contra `_sync/MANIFEST.json` — ver `rediseno/_sync/SYNC_PROTOCOL.md`.
+
 ### Paso 2.5 — Cargar mapas de referencia si la tarea lo requiere
 
 Antes de tocar código, según lo que toque la tarea:
@@ -71,6 +89,7 @@ Antes de tocar código, según lo que toque la tarea:
 - Último trabajo: [descripción]
 - Branch frontend: [branch]
 - Prod: OK / pendiente deploy
+- Diseño: al día / N cambios pendientes de pull (/rediseno-sync) / no verificado
 
 ### Tareas activas
 - OWF-NNN [~] descripción
