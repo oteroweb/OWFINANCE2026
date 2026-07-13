@@ -3,10 +3,28 @@
 <!-- Solo un agente escribe a la vez. Updated = timestamp del ultimo escritor. -->
 <!-- Tareas se referencian por ID (OWF-NNN) → ver .owf/TASKS.md -->
 
-**Updated:** 2026-07-13T03:20:00Z
+**Updated:** 2026-07-13T15:15:00Z
 **By:** claude-code
 
-## Último trabajo (2026-07-13) — OWF-299: creación de etiquetas rota (400 silencioso)
+## Último trabajo (2026-07-13) — OWF-301/302/303: proveedor + categoría en formulario de transacciones
+
+Usuario reportó en cadena, en la misma sesión: (1) "proveedores ya no funciona", (2) "el searchable de categorías no filtra", luego tras el primer fix (3) "ahora no muestra ninguna categoría", y finalmente (4) "el filtro de categoría hace focus en cuentas, no permite escribir". Cuatro reportes → cuatro causas raíz distintas en el mismo componente (`CategorySelector.vue` / `SmartTransactionModal.vue`), cada fix desenterrando el siguiente bug al verificar con interacción real de usuario.
+
+- **OWF-302** ✅ Proveedor: `filterProviders()` vaciaba `providerOptions` con `@filter('')` (apertura normal del select) en vez de precargar — nunca llamaba `GET /providers` sin texto. Fix: pedir lista sin `search` cuando el input está vacío. Commit quedó incluido en `059746b` (otra sesión concurrente en el mismo repo).
+- **OWF-301** ✅ Categoría no filtraba: `positionPopover()` sin clamp de `top` — al abrir hacia arriba con poco espacio, el popover (y su input) se renderizaba fuera del viewport/detrás del header. Fix: clamp de `top` + `max-height` dinámico. Commit frontend `542d2a2`.
+- **OWF-303** ✅ (3 iteraciones, todo desplegado):
+  1. Filtro `kind` (gasto/ingreso) agregado a CategorySelector, resuelto vs `transaction_type_id` real vía `useTransactionTypesStore`. **Causa raíz mayor encontrada de paso**: `GET /transaction_types` era admin-only en backend, pero se consulta para CUALQUIER usuario — rompía `typeIdFor` en SmartTransactionModal, dejando `transaction_type_id: null` en TODAS las transacciones de usuarios no-admin (bug preexistente, mismo patrón que OWF-264). Fix backend: rutas de lectura abiertas a cualquier autenticado. Commits `df88b6f` (backend) + `be9b2d8` (frontend).
+  2. Regresión: el filtro excluía categorías con `transaction_type_id == null` (columna nullable sin backfill, migración `2025_08_25_000500`) — cuentas con categorías legadas se quedaban con el selector vacío. Fix: null = "cualquier tipo", siempre visible. Commit `ec227d7`.
+  3. **Bug real de fondo**, no relacionado a datos: `CategorySelector.vue` teletransportaba (`Teleport to="body"`) su popover fuera del árbol DOM del `QDialog` de Quasar → el focus-trap del diálogo forzaba cualquier foco fuera de su subárbol de vuelta al primer campo real (Cuenta de origen), dando la sensación de "hace focus en cuentas, no deja escribir". Fix: Teleport dinámico a `.q-dialog__inner` (resuelto vía `closest()`), fallback a `body` fuera de diálogos. Verificado con click + tipeo REALES (no `.focus()` scripted, que enmascaraba el bug). Commit `d4f4119`.
+
+**Gotchas de proceso importantes para memoria futura:**
+- Cuando se agrega un filtro sobre una columna nullable-sin-backfill, tratar `null` como "no filtra" — nunca como "no coincide" (oculta datos legados silenciosamente).
+- Verificar componentes con focus-management complejo (Teleport, traps, popups) SIEMPRE con interacción física real (click + type), nunca solo con `.focus()`/`dispatchEvent` programático — pueden dar falsos positivos.
+- `<Teleport to="body">` dentro de un `QDialog` de Quasar rompe su focus-trap; usar `.q-dialog__inner` como target cuando el componente puede vivir dentro de un modal.
+
+Todo desplegado en prod y verificado end-to-end en browser real (dev server local apuntando a la API de prod).
+
+## Trabajo anterior (2026-07-13) — OWF-299: creación de etiquetas rota (400 silencioso)
 
 Usuario reportó: "la creación de etiquetas no está funcionando correctamente".
 
