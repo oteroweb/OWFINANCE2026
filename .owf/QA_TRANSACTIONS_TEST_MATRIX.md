@@ -117,6 +117,64 @@ confirmando que ninguna quedó con un monto incorrecto silencioso.
 
 ---
 
+## RONDA 3 — 2026-07-13 (paneles Pro Split/Items/Shared — secciones 5, 6, 7)
+
+Objetivo: cubrir las secciones de mayor riesgo aún sin probar exhaustivamente (paneles Pro
+avanzados). Metodología idéntica (interacción real + verificación vía API tras guardar).
+
+### 🐛 Bugs encontrados y corregidos — OWF-306 (P0, ambos deployados)
+
+1. **Split ("Pago múltiple") — conversión de divisas rota en `splitTotal`**: al usar filas en
+   monedas distintas (ej. una cuenta USD + una cuenta VES en el mismo split), la "Suma" sumaba
+   los montos crudos sin convertir (20 USD + 1500 VES → "Suma: $1520.00" en vez del equivalente
+   real "$30.00"), afectando también la validación de guardado. Fix: convertir cada fila no-USD
+   por su `rate` antes de sumar. **Verificado vía API**: `amount: "30.00"`, `payments` con
+   `{account_id:42, amount:20.00}` y `{account_id:43, amount:1500.00, rate_value:150}`.
+2. **Items/Factura ("Detalle / factura") — Guardar permanentemente deshabilitado, bug más
+   severo de toda la sesión**: `reviewValidationErrors`/`canSave`/`amountWithCommission`
+   validaban contra `form.amount` (el campo "Monto" hero, que queda OCULTO y nunca se llena en
+   modo Items — el monto real vive en `itemsTotal`). Resultado: el botón "Guardar" estaba
+   siempre gris y el preview mostraba siempre "$0.00", sin importar cuántas líneas de factura
+   se cargaran. **Ningún usuario podía guardar una factura detallada** desde que existe el
+   panel. Fix: usar `itemsTotal` como monto efectivo en los 3 sitios. **Verificado vía API**:
+   `amount: "23.20"`, `item_transactions: [{name:"Producto B", quantity:2, amount:"23.20"}]`.
+
+Ambos con `vue-tsc --noEmit` limpio, commit frontend `d2b1b97`, deploy prod OK.
+
+### 🐛 Bug confirmado, NO corregido — OWF-307 (P1, requiere decisión de producto)
+
+3. **Shared ("Gasto compartido") — el split por categoría nunca llega al backend, se descarta
+   en silencio**: confirmando la sospecha anotada en OWF-297 ("Gap estructural... payload
+   distinto"), se leyó el código de `save()` (SmartTransactionModal.vue ~L1483-1578): cuando
+   `proPanel === 'shared'`, `sharedCats` (las filas categoría+monto que el usuario llena) NUNCA
+   se lee en ninguna rama del payload — cae en el `else` genérico de pago único (cuenta +
+   monto completo, sin desglose). El usuario ve una UI que aparenta guardar el split
+   ("Suma: $X / $Y", validación de que coincidan), pero el resultado guardado es una
+   transacción normal de un solo monto sin ninguna categorización por partes.
+   Adicionalmente se confirmó que el **backend tampoco tiene ningún soporte** para esto:
+   `transactions` solo admite un `category_id` único (sin tabla de split por categoría), y
+   `TransactionController` no acepta ningún campo `shared_categories`/`categories[]`. No se
+   pudo completar la verificación end-to-end en browser esta ronda (automatización de UI
+   inestable en este panel — ver nota de proceso abajo) pero la lectura de código es
+   concluyente y no requiere reproducción visual para confirmar el bug.
+   **No corregido en esta ronda**: requiere decidir si se construye soporte real en backend
+   (migración + controller) o se deshabilita/oculta el panel hasta implementarlo — ver
+   OWF-307 en `.owf/TASKS.md`.
+
+### ⚠️ Notas de proceso para la Ronda 3
+
+- El panel Shared resultó particularmente difícil de automatizar vía clicks scripted: los
+  selectores de categoría de `sharedCats` viven dentro de un contenedor con scroll interno
+  (`.stm-body`) cuya posición cambia el mapeo de coordenadas de pantalla en cada scroll,
+  causando clicks fallidos que cerraron el modal más de una vez (click cayendo en el backdrop).
+  Cuando un panel Pro es difícil de aislar visualmente pero la pregunta es "¿este dato llega
+  al payload?", leer `save()` directamente es más rápido y igual de concluyente que forzar la
+  interacción de UI.
+- Confirmado (otra vez) que editar el `.vue` mientras el modal está abierto dispara HMR y
+  resetea el formulario — cada iteración de fix requirió cerrar/reabrir el modal.
+
+---
+
 ## 0. Setup previo
 
 - [ ] Tener un usuario **Lite** y un usuario **Pro** de prueba (o un mismo usuario alternable).
