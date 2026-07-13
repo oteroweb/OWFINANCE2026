@@ -339,8 +339,10 @@
 | **OWF-295** | [ ] | P3 | ⚪ | feat | cicd-pipeline | OWF-290 | Automatizar bump de punteros de submódulo: hoy hay que correr `sync-submodule-pointers.sh` a mano tras mergear a `main` en frontend/backend. Evaluar `repository_dispatch` desde esos repos hacia el central. | — | — |
 | **OWF-296** | [x] | P1 | 🟡 | design | txform-audit | OWF-240 | Unificación final look & feel SmartTransactionModal vs Claude Design (Ciclo 0: remoto sin cambios, todo era deuda de port). 6 gaps: selector cuenta con dot color+saldo (también Ajuste y Desde/Hacia transfer), tags con color semántico + header ETIQUETAS + hint, hint "Anclado a la categoría" en Cántaro, fix regresión OWF-286 (grid 3-col en vez de flex-basis), TfReviewCard rediseñado (ojo + "VAS A REGISTRAR" + fraseo NL de tx-summary.js + tokens dark-safe), "Sin proveedor" default con ícono. Pendientes anotados: accountType no viene en auth (sub-label "Corriente"), saldos visibles con hideValues activo (decidir), ancho modal 720px. Commit frontend `7830575`, deploy prod OK. | claude-code | 2026-07-12 |
 
+| **OWF-297** | [x] | P1 | 🟡 | fix | txform-audit | OWF-240 | Selector de cuentas searchable + auditoría de paridad FUNCIONAL del txform. Causa raíz: NO regresión de OWF-296 — el prop `searchable` del diseño (6 selectores en TransactionForm.jsx) nunca se portó a Vue. Fix: `use-input` + `@filter` en 5 q-selects (origen, ajuste, transfer desde/hacia, split) conviviendo con slots dot+saldo; Enter=primera opción; empty "Sin resultados" (también proveedor); iconos en menú de fecha; transfer selected-item con dot+saldo. Proceso blindado: sección F "Checklist de paridad funcional" obligatoria en JSX_VUE_TRANSLATION_GUIDE.md (inventario de comportamiento del JSX = spec; 3 columnas estética/funcional/detalles; regla anti-regresión). Gap estructural señalado sin tocar: "Gasto compartido" sin Picker de cuenta por fila (payload distinto). Commit frontend `43c0f0f`, deploy prod OK. | claude-code | 2026-07-13 |
+
 <!--
-  NEXT_ID: OWF-297
+  NEXT_ID: OWF-298
 -->
 
 ## Completed

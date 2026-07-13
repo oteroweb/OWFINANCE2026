@@ -70,6 +70,45 @@ Estas son señales de que la tarea necesita un agente con criterio, no un script
 
 ---
 
+## F) Checklist de paridad funcional (obligatoria antes de dar un port por terminado)
+
+Un port que "se ve igual" NO está terminado. Las capturas de pantalla solo validan estética;
+el comportamiento vive en el código del JSX y solo se verifica interactuando.
+
+**Antes de portar — extraer el inventario de comportamiento del JSX.** Ese inventario ES la spec:
+
+- Todo `useState` del componente y sus molecules (`FormControls.jsx` incluido, no solo el organism).
+- Todo handler: `onChange`, `onInput`, `onKeyDown`, `onFocus/onBlur`, funciones `filter`/`pick`/`create`.
+- Todo render condicional: estados hover/focus/disabled/empty/loading, textos de vacío ("Sin resultados"),
+  qué muestra el control cerrado vs abierto.
+- Props de configuración de las molecules (`searchable`, `onCreate`, `clearable`…) — un `<Picker searchable />`
+  de una sola palabra en el JSX es un requisito funcional completo (input con autofocus, filtrado por label,
+  Enter elige el primero, empty state).
+
+**La verificación de un port tiene 3 columnas — las 3 obligatorias:**
+
+| Columna | Qué se comprueba | Cómo |
+|---|---|---|
+| **Estética** | Se ve igual (tokens, spacing, orden) | Screenshots lado a lado (Paso 2.5 del SKILL) |
+| **Funcional** | Cada interacción del inventario reproducida: búsqueda al tipear, teclado (Enter/flechas), estados, crear inline | Interactuar en el preview: tipear, navegar, seleccionar — no basta mirar |
+| **Detalles** | Placeholders, textos de vacío, formatos de número/fecha (tfMoney, NBSP), tooltips/hints | Comparar texto por texto contra el JSX |
+
+**Regla anti-regresión (ports sobre controles existentes):** si el port MODIFICA un control Vue que ya
+existía (agregar slots `selected-item`/`option`, `display-value`, cambiar `:options`…), listar primero
+los comportamientos que ese control YA tenía (`use-input`, `@filter`, `clearable`, keyboard nav…) y
+re-probarlos todos después del cambio. Un slot nuevo puede romper silenciosamente el filtrado o el
+display sin que ningún lint ni typecheck lo detecte.
+
+**Caso real de referencia — OWF-296/297:** el selector de cuentas de `SmartTransactionModal.vue` quedó
+estéticamente fiel al `Picker` del rediseño (dot de color + saldo a la derecha) pero sin búsqueda: el
+`searchable` que el JSX declara en TODOS los pickers de cuenta (`TransactionForm.jsx` líneas 322/347/351/380/749/824)
+nunca se portó, y la verificación de OWF-296 fue solo visual, así que no lo detectó. Lo reportó el
+usuario, no el proceso. El fix (OWF-297) fue `use-input input-debounce="0" @filter` + needle compartida +
+slots preservados, con el input colapsado vía CSS mientras el menú está cerrado para no perder el
+saldo alineado a la derecha (`.stm-acct-select`).
+
+---
+
 ## ¿Vale la pena automatizar el primer paso (traducción mecánica)?
 
 **No, con el volumen actual.** Evaluado tras esta auditoría:

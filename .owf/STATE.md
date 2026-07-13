@@ -3,8 +3,18 @@
 <!-- Solo un agente escribe a la vez. Updated = timestamp del ultimo escritor. -->
 <!-- Tareas se referencian por ID (OWF-NNN) → ver .owf/TASKS.md -->
 
-**Updated:** 2026-07-12T18:30:00Z
+**Updated:** 2026-07-13T00:30:00Z
 **By:** claude-code
+
+## Último trabajo (2026-07-13) — OWF-297: selector de cuentas searchable + checklist de paridad funcional
+
+Usuario reportó que el selector de cuentas no filtra al tipear pese al port de OWF-296, y pidió analizar por qué pasa ("estéticamente parecido, ¿está funcional y tiene todos los detalles?").
+
+- **Causa raíz**: NO fue regresión de OWF-296 — verificado con `git log -S "use-input"` (23 commits): el selector de cuentas nunca tuvo búsqueda en Vue. El diseño la especifica desde siempre (`<Picker searchable />` en 6 selectores de TransactionForm.jsx, prop de una palabra que expande a input+filtrado+Enter+empty state). Los ports validaban estética, nadie extraía el inventario de comportamiento del JSX.
+- **OWF-297** ✅ (commit frontend `43c0f0f`, deploy prod OK): búsqueda en los 5 q-selects de cuenta (origen/ajuste/transfer desde/hacia/split) conviviendo con los slots dot+saldo de OWF-296 (CSS: input colapsado con menú cerrado, `min-width:0 !important` contra el default de Quasar); Enter selecciona la primera opción filtrada; empty state "Sin resultados" (también en proveedor); transfer Desde/Hacia ganaron dot+saldo en selected-item; iconos en las opciones del menú de fecha. Verificación runtime real (filtrado probado tipeando, no solo visual).
+- **Proceso blindado**: `JSX_VUE_TRANSLATION_GUIDE.md` ganó la sección F — "Checklist de paridad funcional (obligatoria antes de dar un port por terminado)": el inventario de comportamiento del JSX (useState/handlers/renders condicionales/props de molecules como `searchable`) ES la spec; verificación en 3 columnas (estética/funcional/detalles); regla anti-regresión al modificar controles existentes; OWF-296/297 como caso de referencia.
+- **Gap estructural señalado, NO tocado**: "Gasto compartido" en el diseño lleva Picker de cuenta por fila; el Vue actual solo categoría+monto (payload distinto — decisión de producto pendiente).
+- Concurrencia: mismo manejo que ayer (commit aislado + stash del WIP home/theme ajeno durante el build + pop limpio). El WIP ajeno sigue uncommitted.
 
 ## Último trabajo (2026-07-12, continuación 4) — OWF-296: unificación final look & feel SmartTransactionModal vs Claude Design
 
