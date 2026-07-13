@@ -351,8 +351,10 @@
 
 | **OWF-304** | [x] | P1 | 🟡 | fix | adhoc | — | 2 bugs confirmados en Ronda 1 de QA de transacciones (ver `.owf/QA_TRANSACTIONS_TEST_MATRIX.md`): (1) Comisión no se aplicaba en Transferir — el panel "Cobrar comisión" mostraba "Total $X.XX" con la comisión, pero `save()` solo aplicaba `finalAmount` con comisión en la rama Gasto/Ingreso, nunca en Transfer. Fix: computed compartido `amountWithCommission` usado en TfReviewCard (preview correcto en todos los tipos) y en el payload de Transferir — cuenta origen descuenta monto+comisión, cuenta destino recibe el monto sin inflar (comisión = cargo del banco, no parte de lo transferido). Verificado vía API: `payment_transactions` origen -10.03, destino +1500.00 (10×150 sin inflar). (2) `AnchoredJarChip` mostraba "no aporta a ningún cántaro" para categorías que el picker de categorías SÍ agrupaba bajo un cántaro — causa: `jar_slug` legado sin `assigned_jar_id` (mismo patrón de columna nullable-sin-backfill que OWF-303), CategorySelector.vue ya tenía fallback por slug para el picker pero AnchoredJarChip no. Fix: mismo fallback slug→nombre+color aplicado en AnchoredJarChip. Verificado en browser real (chip muestra "Necesidades básicas" con ícono/color en vez de "sin cántaro"). Commit frontend `b7ac81e`, deploy prod OK. | claude-code | 2026-07-13 |
 
+| **OWF-305** | [x] | P2 | ⚪ | fix | adhoc | — | Hallazgo menor de Ronda 2 QA: selectores de cuenta en SmartTransactionModal.vue mostraban saldo cacheado (`auth.user.accounts`, snapshot de login) en vez del real tras transacciones en la misma sesión (ej. $325.00 mostrado vs $350.00 real — solo UI, los montos guardados siempre fueron correctos). Causa raíz: `auth.refreshProfile()` (diseñado para esto, recalcula balances) tenía typo de URL `/users/profile` (plural) vs la ruta real `/user/profile` (singular) — 404 silencioso, sin NINGÚN llamador en toda la app hasta ahora. Fix: URL corregida + `SmartTransactionModal.vue` llama `refreshProfile()` en `onShow()` (cada apertura del modal). Verificado en browser real: balance cacheado en el store pasó de $325.00 a $350.00 al abrir el modal. Commit frontend `0b3d298`, deploy prod OK. | claude-code | 2026-07-13 |
+
 <!--
-  NEXT_ID: OWF-305
+  NEXT_ID: OWF-306
 -->
 
 ## Completed
