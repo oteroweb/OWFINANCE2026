@@ -3,10 +3,18 @@
 <!-- Solo un agente escribe a la vez. Updated = timestamp del ultimo escritor. -->
 <!-- Tareas se referencian por ID (OWF-NNN) → ver .owf/TASKS.md -->
 
-**Updated:** 2026-07-13T00:30:00Z
+**Updated:** 2026-07-13T02:45:00Z
 **By:** claude-code
 
-## Último trabajo (2026-07-13) — OWF-297: selector de cuentas searchable + checklist de paridad funcional
+## Último trabajo (2026-07-13) — OWF-298: panel de cuentas Pro home mostraba JSON crudo
+
+Usuario reportó: "en el home sale un json en vez de la data correcta (en la barra derecha del modo pro)".
+
+- **Causa raíz**: `ProHomeView.vue` `loadAccountsPanel()` casteaba `a.account_type` y `a.currency` directo `as string`, pero `/accounts` los devuelve como objetos de relación (`{id,name,description,icon,...}` y `{id,name,symbol,code,...}`). Vue 3 `toDisplayString()` serializa objetos con `JSON.stringify(val,null,2)` — de ahí el JSON pretty-printed visible en la UI en vez de "[object Object]".
+- **OWF-298** ✅ (commit frontend `ad36d6a` + `f70e78a`, deploy prod OK): extraer `.name` de `account_type` y `.code` de `currency` con guard `typeof === 'string'` (fallback string si algún endpoint sí lo manda así), fallback 'Cuenta'/'USD'. Verificado en browser real: panel Cuentas y Deudas de la barra derecha ya muestran "Efectivo"/"USD"/"VES" en vez de JSON.
+- **Gotcha para futuros mapeos de `/accounts`**: tratar `account_type` y `currency` siempre como objetos de relación (mismo patrón ya usado en `AccountsSidebarWidget.vue`), nunca castear `as string` sin verificar.
+
+## Trabajo previo (2026-07-13) — OWF-297: selector de cuentas searchable + checklist de paridad funcional
 
 Usuario reportó que el selector de cuentas no filtra al tipear pese al port de OWF-296, y pidió analizar por qué pasa ("estéticamente parecido, ¿está funcional y tiene todos los detalles?").
 
