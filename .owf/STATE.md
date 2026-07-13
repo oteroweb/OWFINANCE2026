@@ -3,8 +3,19 @@
 <!-- Solo un agente escribe a la vez. Updated = timestamp del ultimo escritor. -->
 <!-- Tareas se referencian por ID (OWF-NNN) → ver .owf/TASKS.md -->
 
-**Updated:** 2026-07-13T02:45:00Z
+**Updated:** 2026-07-13T03:20:00Z
 **By:** claude-code
+
+## Último trabajo (2026-07-13) — OWF-299: creación de etiquetas rota (400 silencioso)
+
+Usuario reportó: "la creación de etiquetas no está funcionando correctamente".
+
+- **Causa raíz**: `TagController::save()` (backend) exige `slug` como campo `required`, pero `stores/tags.ts` `createTag()` (frontend) solo posteaba `{name, color, description}` — nunca generó ni envió `slug`. Toda creación de etiqueta fallaba con 400 "The slug field is required", y el store silenciaba el error (`catch { console.error }`, sin toast ni feedback), por eso al usuario le parecía que "no funciona" sin mensaje visible.
+- **Verificación de causa raíz**: reproducido de forma determinística con `php artisan tinker` llamando `Validator::make()` con el payload exacto del frontend → `FAILS` con el mensaje del slug.
+- **OWF-299** ✅ (commit backend `fc1444b`, frontend `68683d0`, deploy prod OK ambos):
+  - Backend: `TagController::save()` ya no exige `slug` del cliente — lo autogenera server-side desde `name` vía `Str::slug()`, con resolución de colisión (`-2`, `-3`, ...) contra tags del propio usuario + tags de sistema. Verificado con tinker llamando `save()` real con el payload del frontend: 400→200 OK, slug correcto, colisión→sufijo `-2` correcto. Datos de prueba limpiados de la DB local tras verificar.
+  - Frontend: `createTag()` en `SmartTransactionModal.vue` ahora auto-selecciona (`toggleTag(tag.id)`) la etiqueta recién creada en la transacción en curso — antes se creaba pero quedaba sin aplicar, forzando al usuario a buscarla y tocarla de nuevo.
+- **Nota de entorno**: el dev server local de Quasar en este workspace apunta siempre a `https://owfinances.com` como API (tanto `.env` como `.env.dev`) — no hay integración frontend-dev↔backend-local en este proyecto. Por eso la verificación real se hizo contra el controller/Validator directamente (tinker) en vez de un repro end-to-end en browser contra localhost.
 
 ## Último trabajo (2026-07-13) — OWF-298: panel de cuentas Pro home mostraba JSON crudo
 
