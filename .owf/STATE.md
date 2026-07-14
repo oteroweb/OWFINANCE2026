@@ -3,8 +3,20 @@
 <!-- Solo un agente escribe a la vez. Updated = timestamp del ultimo escritor. -->
 <!-- Tareas se referencian por ID (OWF-NNN) → ver .owf/TASKS.md -->
 
-**Updated:** 2026-07-13T15:15:00Z
+**Updated:** 2026-07-14T00:00:00Z
 **By:** claude-code
+
+## Último trabajo (2026-07-14) — OWF-313: unificar editar transacción con el formulario de crear
+
+Usuario reportó que "el formulario de editar transacción es distinto al formulario de editar transacciones" y preguntó por el "modal previo" (DesktopQuickModal, tipo/método Escribir-Voz-Foto-AutoIA) — dijo que no le ve mucha utilidad y que evaluaríamos eliminarlo, sin pedir acción inmediata sobre eso.
+
+- **Diagnóstico vía DesignSync**: comparación byte-a-byte de los 8 componentes JSX de transacciones en Claude Design contra el espejo `rediseno/` — solo `TransactionDetailModal.jsx` (desktop) cambió. El diseño unificó el modo Editar para reutilizar el mismo `TransactionForm` de Crear (antes un mini-form aparte sin transferencia ni comisión) — confirma exactamente la queja del usuario. `DesktopQuickModal`/`QuickActionSheet` sin cambios de diseño; su eliminación sigue como decisión abierta, no tocada esta sesión.
+- **`rediseno/views-registry.json`**: la entry `transaction-detail-desktop` apuntaba a `TransactionEditDialog.vue`, borrado hace tiempo (OWF-196) — corregida al destino real, `LiteTransactionsView.vue` (`.tx-detail-sheet`).
+- **OWF-313** ✅ Port a Vue (delegado a sub-agente, verificado antes de deployar): `SmartTransactionModal.vue` ganó modo edición real (`ui.openSmartModalForEdit(id)`, prefill vía GET, guarda con `txStore.updateTransaction()` = PUT); `LiteTransactionsView.vue` perdió su mini-form de edición separado, el botón "Editar" ahora abre el modal real (mismo formulario que crear, con transferencia y comisión ya soportadas). `vue-tsc`/`eslint` limpios. Commit `ea0bbd6`, deploy prod OK.
+- **Bug real encontrado de paso**: `LiteTransactionsView.vue` llamaba `api.patch('/transactions/:id')` pero el backend solo registra `PUT` — el edit fallaba silenciosamente antes de este fix (sin ruta PATCH nunca existió).
+- **Gotcha de proceso**: la skill `rediseno-sync` (dedicada exactamente a este ciclo pull↔diff↔port) apareció disponible a mitad de sesión, después de que ya había hecho el pull manual — se invocó igual para dejar el registro (`views-registry.json`) correcto, pero para la próxima vez conviene invocarla desde el arranque cuando el usuario reporte "cambios en el diseño".
+- **Pendiente flotante, tarea aparte creada** (`task_e6a4bef7`, no en TASKS.md aún): `TxDetailModal.vue` (usado por Lite/Pro Home, distinto de `LiteTransactionsView.vue`) tiene el mismo bug de PATCH inexistente + su propio mini-form de edición separado, sin unificar con `SmartTransactionModal.vue`. Fuera de alcance de esta sesión.
+- **Pendiente de decisión de producto, sin tocar**: si `DesktopQuickModal` (el "modal previo" tipo/método) se elimina o se mantiene — el usuario quiere evaluarlo en otra conversación.
 
 ## Último trabajo (2026-07-13) — OWF-301/302/303: proveedor + categoría en formulario de transacciones
 
