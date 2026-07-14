@@ -3,8 +3,16 @@
 <!-- Solo un agente escribe a la vez. Updated = timestamp del ultimo escritor. -->
 <!-- Tareas se referencian por ID (OWF-NNN) → ver .owf/TASKS.md -->
 
-**Updated:** 2026-07-14T00:00:00Z
+**Updated:** 2026-07-14T01:00:00Z
 **By:** claude-code
+
+## Último trabajo (2026-07-14, continuación) — OWF-314: eliminar modal previo desktop
+
+Continuación directa de OWF-313 (misma sesión). El usuario confirmó eliminar el "modal previo" (`DesktopQuickModal.vue`) tras el análisis: era 100% redundante con `SmartTransactionModal.vue`, que ya tiene su propio selector de Tipo y sus propios tabs de Método — el flujo viejo forzaba elegir dos veces antes de llegar al formulario real.
+
+- **Alcance acotado explícitamente a desktop** (decisión explícita, no asumida): mobile (`QuickActionSheet.vue`) no se tocó porque también hace de overlay de navegación inferior (tabs HOME/TRANS/JARS/SETTINGS) — acoplamiento distinto que amerita su propia sesión.
+- **OWF-314** ✅ (delegado a sub-agente, verificado): `AppShell.vue` — "+"/"Agregar" en desktop abre `ui.openSmartModal()` directo; `DesktopQuickModal.vue` borrado. Los 2 atajos únicos que aportaba (3 movimientos especiales deuda/sueño/jar + CTA Asesor IA) se reubicaron como chips `.stm-quicklinks` dentro de `SmartTransactionModal.vue`, visible solo desktop + tab Escribir. `views-registry.json` actualizado. `vue-tsc`/`eslint` limpios. Deploy prod OK (`751721b`), smoke-check consola sin errores.
+- **Gotcha de proceso**: el sub-agente escribió "OWF-312" en la nota del registry por error (ID ya usado por otra tarea) — corregido a OWF-314 manualmente tras el port. Revisar siempre las notas que un sub-agente escribe en archivos compartidos (views-registry.json, DECISIONS.md) antes de darlas por buenas, no asumir que el ID que usa es correcto.
 
 ## Último trabajo (2026-07-14) — OWF-313: unificar editar transacción con el formulario de crear
 
