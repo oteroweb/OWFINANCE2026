@@ -3,8 +3,21 @@
 <!-- Solo un agente escribe a la vez. Updated = timestamp del ultimo escritor. -->
 <!-- Tareas se referencian por ID (OWF-NNN) → ver .owf/TASKS.md -->
 
-**Updated:** 2026-07-14T01:00:00Z
+**Updated:** 2026-07-15T00:00:00Z
 **By:** claude-code
+
+## Último trabajo (2026-07-15) — OWF-315: bloque 2x2 de métodos + 2 bugs de IA reportados (OWF-316/317, sin arrancar)
+
+Continuación de sesión (OWF-313/314 del día anterior). El usuario mandó una captura probando la extracción "Auto IA" (registro USD 45.00, "Gasto en Vanesco", Confianza 90%) y reportó 3 cosas en un solo mensaje:
+
+1. **"Vanesco" no matchea con "Banesco"** (proveedor real del usuario) — bug real de extracción IA, sin fuzzy-match de proveedor. Documentado como **OWF-316** [ ] pending, no investigado a fondo aún.
+2. **Conversión USD→BCV no es directa** ("45 dólares se traducen en 45 dólares a BCV") — bug real, separado. Documentado como **OWF-317** [ ] pending, no investigado a fondo aún.
+3. **"Se quitó la selección del tipo previo"** — al principio ambiguo; el usuario mandó captura de la pantalla vieja de `DesktopQuickModal` (Paso 1/2, Tipo+Método) preguntando "¿tuvo sentido eliminar esto?". Confirmado con código: NO es un bug — el selector de Tipo y los 4 métodos siguen 100% funcionales dentro de `SmartTransactionModal.vue`, solo que integrados en una sola pantalla en vez de un paso previo separado (exactamente la decisión de OWF-314 del día anterior, con su aprobación explícita en su momento).
+- Usuario confirmó mantener la decisión de OWF-314, pero pidió mejorar la presentación de los 4 métodos: pasar de la fila de pills chicas a un bloque 2x2 más amplio "para configurarlo luego".
+- **OWF-315** ✅: `primaryMethods` (Escribir/Voz/Foto/Auto IA) en grid `.stm-method-grid` 2x2, tiles más anchos (`.stm-method-tile`); "Carga masiva" quedó fuera del grid como link discreto (`.stm-bulk-link`) — no es una forma de ingresar UN movimiento, abre un dialog aparte. Verificado en dev local (apunta a API de prod) con token de sesión reutilizado de `e2e/.auth.pro.json`. `vue-tsc`/`eslint` limpios. Deploy prod OK (`d53e3e8`).
+- **Gotcha de concurrencia manejado**: la tarea en background que el usuario lanzó (`task_e6a4bef7`, fix de `TxDetailModal.vue`, mismo bug de OWF-313 pero en el componente hermano usado por Home) tenía cambios sin commitear en el mismo checkout. Aislado con `git stash push -- src/components/TxDetailModal.vue` antes de `deploy-frontend.sh` (que hace `git add -A` internamente) y `stash pop` después del deploy — mismo patrón que sesiones anteriores documentaron para este riesgo.
+- **De paso corregido**: typo de ID en la nota de `views-registry.json` de OWF-314 (decía "OWF-312", un ID ya usado por otra tarea — quedó mal escrito por un sub-agente el día anterior y no se había corregido en el archivo, solo en TASKS.md).
+- **Pendiente real para otra sesión**: investigar y arreglar OWF-316 (fuzzy-match proveedor) y OWF-317 (tasa BCV) — ninguno de los dos se tocó todavía, solo diagnosticados a partir del reporte del usuario.
 
 ## Último trabajo (2026-07-14, continuación) — OWF-314: eliminar modal previo desktop
 
