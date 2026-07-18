@@ -3,8 +3,19 @@
 <!-- Solo un agente escribe a la vez. Updated = timestamp del ultimo escritor. -->
 <!-- Tareas se referencian por ID (OWF-NNN) → ver .owf/TASKS.md -->
 
-**Updated:** 2026-07-15T00:00:00Z
+**Updated:** 2026-07-18T00:00:00Z
 **By:** claude-code
+
+## Último trabajo (2026-07-18) — OWF-316/317: proveedor fuzzy-match + equivalente BCV en extracción IA
+
+Continuación de OWF-315 (día anterior). Usuario pidió investigar a fondo ambos bugs y luego implementarlos.
+
+- **OWF-316** ✅ Causa raíz: el schema de extracción (`AiExtractionController::buildSystemPrompt()`) no tenía campo de proveedor — el nombre transcrito quedaba enterrado en `description`, nunca se resolvía contra `providers`. Fix: campo `merchant` nuevo en el schema + `resolveProviderSuggestion()` (Levenshtein, ratio≥0.6) contra providers propios+globales del usuario, mismo scope que `ProviderRepo`.
+- **OWF-317** ✅ Causa raíz: cero código de tasas de cambio en todo el backend (confirmado con grep "BCV" → 0 resultados en `app/`). El desglose USD↔BCV que existe en el formulario manual (`showDualRates`) nunca se activa para cuentas USD, y la tarjeta de confirmación de IA no lo reutilizaba. Fix: `attachBcvEquivalent()` — cálculo determinístico en PHP (no se le pide a la IA que haga matemática), usa la tasa oficial real del usuario (`user_currencies`).
+- **Verificado end-to-end en prod real** (no solo tinker local): creado provider "Banesco" real vía API, llamado el endpoint real de extracción con el texto exacto del caso reportado ("Gasté 45 dólares en Vanesco") → IA devolvió `merchant:"Vanesco"` → resuelto a Banesco real; `bcv_equivalent:1656` calculado con la tasa oficial real del usuario (36.8), no una tasa de prueba. Confirmado visualmente en browser: tarjeta de confirmación muestra "≈ VES 1.656,00 a la tasa BCV (36.8)", formulario prellenado con "Banesco" en Proveedor.
+- Suite backend completa 192/198 (6 fallos preexistentes OWF-293, no relacionados). Deploy backend `2c64141` (commit manual — `deploy-backend.sh` NO commitea solo, a diferencia de `deploy-frontend.sh`, hay que hacerlo aparte) + frontend `2e3f317`, ambos prod OK.
+- **Gotcha de proceso reafirmado**: `TxDetailModal.vue` seguía con WIP sin commitear de la otra sesión (`task_e6a4bef7`), con más cambios que la vez anterior (37 inserciones, 176 eliminaciones) — señal de que esa sesión sigue activa. Aislado de nuevo con `git stash push -- <archivo>` antes de cada deploy y `stash pop` después, dos veces en esta sesión (backend no lo tocó, solo frontend).
+- **Decisión de datos de prueba**: se dejó el provider "Banesco" creado en prod para el usuario demo — es un banco real venezolano, dato de dominio legítimo y útil para futuras pruebas de este mismo feature, no basura de QA (mismo criterio que sesiones anteriores: limpiar solo artefactos claramente descartables tipo "QA test...").
 
 ## Último trabajo (2026-07-15) — OWF-315: bloque 2x2 de métodos + 2 bugs de IA reportados (OWF-316/317, sin arrancar)
 
