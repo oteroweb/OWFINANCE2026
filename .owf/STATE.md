@@ -3,8 +3,18 @@
 <!-- Solo un agente escribe a la vez. Updated = timestamp del ultimo escritor. -->
 <!-- Tareas se referencian por ID (OWF-NNN) → ver .owf/TASKS.md -->
 
-**Updated:** 2026-07-18T00:00:00Z
+**Updated:** 2026-07-19T00:00:00Z
 **By:** claude-code
+
+## Último trabajo (2026-07-19) — OWF-318: cierre del fix gemelo de TxDetailModal.vue
+
+El usuario pidió revisar cómo iba una tarea que había lanzado en background días atrás (`task_e6a4bef7` / sesión `local_479aad54`, "Fix TxDetailModal.vue edit form (same bug as OWF-312)").
+
+- **Estado encontrado**: la sesión ya había terminado (`isRunning: false`), con el trabajo completo y verificado (`vue-tsc`/`eslint` limpios) pero deliberadamente sin desplegar, tal como se le había instruido. Aplicó el mismo patrón de OWF-313 a `TxDetailModal.vue`: "Editar" ahora abre `SmartTransactionModal.vue` vía `ui.openSmartModalForEdit()` en vez del mini-form propio con el `api.patch` roto.
+- **Revisado el diff antes de desplegar (no se desplegó a ciegas)**: se detectó un hueco real que la sesión anterior no cubrió — ni `LiteHomeView.vue` ni `ProHomeView.vue` escuchaban el evento global `owf:transaction-saved` que `AppShell.vue` dispara al guardar desde `SmartTransactionModal` (patrón que `LiteTransactionsView.vue` sí tiene desde OWF-194/195). Sin ese listener, tras editar desde el detalle de Home, la lista de "Recientes" no se refrescaba sola — quedaba desactualizada hasta un reload manual.
+- **OWF-318** ✅ Agregado el listener faltante (`onTxSaved`/`onMounted`/`onUnmounted`) en ambas vistas de Home. Verificado end-to-end en navegador real (dev local con token de sesión reutilizado): abrir detalle → Editar → formulario real prellenado → Guardar cambios → lista "Recientes" se re-renderiza sola. Deploy prod OK (`9a2582d`).
+- **Sesión de background archivada** (`archive_session`) tras confirmar que había terminado y no seguía corriendo — evita que quede "colgada" en la lista de sesiones activas del usuario.
+- **Gotcha de proceso**: al revisar trabajo de una sesión delegada, no asumir que "vue-tsc/eslint limpios" = "listo para producción" — conviene rastrear las dependencias cruzadas del patrón aplicado (en este caso, quién más necesita escuchar el evento global que el nuevo flujo dispara) antes de desplegar. La sesión delegada hizo bien su tarea puntual, pero no tenía contexto de que otros componentes (`LiteTransactionsView.vue`) ya habían necesitado ese mismo listener para el mismo patrón.
 
 ## Último trabajo (2026-07-18) — OWF-316/317: proveedor fuzzy-match + equivalente BCV en extracción IA
 
