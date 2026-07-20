@@ -3,8 +3,18 @@
 <!-- Solo un agente escribe a la vez. Updated = timestamp del ultimo escritor. -->
 <!-- Tareas se referencian por ID (OWF-NNN) → ver .owf/TASKS.md -->
 
-**Updated:** 2026-07-20T00:00:00Z
+**Updated:** 2026-07-20T09:00:00Z
 **By:** claude-code
+
+## Último trabajo (2026-07-20, continuación) — Revisión de sesión concurrente + OWF-325
+
+Usuario pidió revisar qué había dejado una sesión concurrente antes de "arrancar" OWF-321.
+
+- **OWF-321 ya estaba terminada** (ciclo SDD completo: comisión persistida + tasa BCV automática vía pydolarve.org), implementada, testeada y verificada E2E en prod por esa otra sesión. No había nada que implementar.
+- **Hallazgo real y corregido**: el backend de OWF-321 estaba deployado y verificado en producción (confirmado vía API real: `commission_type`/`commission_value`/`commission_amount` presentes en las respuestas), pero **nunca se había commiteado a git** — `deploy-backend.sh` usa rsync directo, no exige commit previo. El puntero de submódulo en central seguía apuntando al commit anterior (OWF-322). Verificado que no había edición activa (status estable en 2 chequeos), suite de tests corrida limpia (240/246, mismas 6 fallas preexistentes), y confirmado contra prod real que el código coincidía exactamente con lo commiteado antes de asumir autoría. Commiteado (`OWFINANCEBackend2025@50af2c0`, puntero central `be402a8`) — sin este commit, cualquier reset del working tree hubiera borrado código que ya corre en producción sin ningún respaldo en control de versiones.
+- **OWF-325** ✅ (bug cosmético documentado por la otra sesión, sin arreglar): `TxDetailModal.vue` mostraba "Ingreso" para transacciones que eran Gasto. Causa raíz: `isIncome` se inferia por el signo de `tx.amount` (que siempre se guarda positivo; el signo real vive en `payment_transactions[]`). Fix: capturar `transaction_type` y replicar el mismo patrón ya usado en `deriveTypeFromTx()` (SmartTransactionModal.vue) / `classifyTx()` (LiteHomeView.vue) — type primero, signo solo como último fallback. Verificado en dev local contra API de prod (transacción "snacks" pasó de mostrar "Ingreso" a "Gasto" correctamente). `vue-tsc`/`eslint` limpios. Deploy frontend prod OK (`dda03be`, `frontend=OK:200`).
+- **Nota de arquitectura para futuras sesiones**: la lógica de clasificación de tipo (income/expense/transfer por `transaction_type.slug`/`name`/`id`, con fallback a signo de amount) está duplicada en 3 componentes (`SmartTransactionModal.vue`, `LiteHomeView.vue`, `TxDetailModal.vue`). Si aparece un cuarto lugar que la necesite, vale la pena extraerla a `src/utils/txCatalog.ts`.
+- **Gotcha reforzado**: `deploy-backend.sh` no exige `git commit` — es perfectamente posible que código en producción no tenga ningún commit local. Al revisar el trabajo de una sesión concurrente, verificar SIEMPRE `git log` del submódulo (no solo confiar en el resumen de Engram) antes de asumir que "deployado" implica "commiteado".
 
 ## Último trabajo (2026-07-20) — OWF-322: port "Cántaros Pro" (Claude Design → Vue)
 
