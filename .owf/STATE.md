@@ -3,8 +3,17 @@
 <!-- Solo un agente escribe a la vez. Updated = timestamp del ultimo escritor. -->
 <!-- Tareas se referencian por ID (OWF-NNN) → ver .owf/TASKS.md -->
 
-**Updated:** 2026-07-19T00:00:00Z
+**Updated:** 2026-07-19T23:59:00Z
 **By:** claude-code
+
+## Último trabajo (2026-07-19) — OWF-320: fix comisión pago móvil (piso Bs 2) + USD equiv en panel Cuentas + OWF-321 documentado
+
+Pedido del usuario: comisión de pago móvil calculaba mal (faltaba piso mínimo Bs 2), agregar equivalente en dólares junto al saldo de cuenta, anotar en el rediseño de Cántaros el pendiente de columna de saldo histórico, y revisar la "discordancia" del formulario de edición de transacciones.
+
+- **OWF-320** ✅ `SmartTransactionModal.vue`: `comisionCalculada` para tipo `pagomovil` ahora usa `Math.max(base*0.3/100, 2)` — la UI ya prometía "mín. Bs 2" pero el cálculo nunca lo aplicaba. `ProHomeView.vue`: nuevo `accountUsdEquivalent()` (reusa `useUserRates()`) muestra "≈ $X USD" bajo el saldo de cuentas no-USD en el panel Cuentas del Home Pro (Lite no lista cuentas individuales, fuera de alcance). `rediseno/PROMPT_REDISENO_CANTAROS.md` §9: anotado el pendiente de columna de saldo histórico en la tabla de transacciones del rediseño (a pedido explícito del usuario, aunque el doc es de Cántaros). Deploy prod OK (`fd089a2`).
+- **OWF-321** 🔲 documentado, no implementado: la comisión NUNCA se persiste como dato propio en el backend — se hornea directo en `amount` al guardar. Al editar una transacción con comisión, el toggle "Cobrar comisión" queda apagado (dato irrecuperable con el schema actual). Fix real requiere migración nueva en `transactions` — pendiente decisión de producto con el usuario.
+- **Nota de proceso — colisión de sesiones concurrentes**: mientras trabajaba, otra sesión implementaba en vivo OWF-319 capa 1 (chips de cuenta faltante) en el mismo working tree (`SmartTransactionModal.vue`, `useAiExtraction.ts`). Un `git stash` mío pisó momentáneamente su WIP sin commitear; la otra sesión lo detectó y rehizo. Resuelto sin pérdida de código de ningún lado vía reconciliación de historia (`git reset --hard origin/main` tras verificar que mi contenido ya estaba presente upstream) — ver commit `fd089a2` (incluye ambos cambios) y nota de proceso en la entrada OWF-319 de `.owf/TASKS.md`. Verificado `vue-tsc`/`eslint`/`npm run build` limpios tras la reconciliación antes de desplegar.
+- **No verificado visualmente en browser**: las cuentas demo documentadas (`otero@demo.com`, `usertestpro@demo.com` / `password`) devolvieron 401 tanto en local como en prod — password probablemente rotada. Recomendado que el usuario verifique manualmente.
 
 ## Último trabajo (2026-07-19) — OWF-318: cierre del fix gemelo de TxDetailModal.vue
 
