@@ -3,8 +3,14 @@
 <!-- Solo un agente escribe a la vez. Updated = timestamp del ultimo escritor. -->
 <!-- Tareas se referencian por ID (OWF-NNN) → ver .owf/TASKS.md -->
 
-**Updated:** 2026-07-21T00:00:00Z
+**Updated:** 2026-07-21T02:00:00Z
 **By:** claude-code
+
+## Último trabajo (2026-07-21, continuación) — Verificación de cierre OWF-326
+
+Sesión retomada tras compactación con la tarea pendiente "verificar OWF-326 end-to-end". Al revisar el estado real (no solo el resumen de contexto), se encontró que una sesión concurrente ya había completado esa verificación en el ínterin: backend (`bc9dabe`) + frontend (`0bb840c`) desplegados, verificación E2E real contra prod vía API (transacción de prueba con 2 categorías compartidas, limpiada después con `forceDelete`), `.owf/TASKS.md` actualizado con la narrativa completa y `NEXT_ID` avanzado a `OWF-327`. Confirmado con `git log`/`git status`/`git fetch` en los 3 repos (central, frontend, backend) que todo está commiteado y sincronizado con origin — no había ningún trabajo real pendiente. Ningún código nuevo se tocó esta vuelta; solo se verificó y reportó el estado ya cerrado por la otra sesión.
+
+**Pendientes reales sin tocar (quedan en el board para la próxima sesión):** OWF-291/292/294/295 (infra CI/CD, ver bloque "Pending tasks" de arriba) y OWF-293 (6 tests de `UserSecurityPinTest` fallando con 404, preexistente, no bloqueante). OWF-267 sigue `[!]` bloqueada por referencia de diseño incorrecta (ver OWF-270..273).
 
 ## Último trabajo (2026-07-21) — OWF-307 (ocultar Gasto compartido) + push a origin
 
