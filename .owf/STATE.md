@@ -3,8 +3,16 @@
 <!-- Solo un agente escribe a la vez. Updated = timestamp del ultimo escritor. -->
 <!-- Tareas se referencian por ID (OWF-NNN) → ver .owf/TASKS.md -->
 
-**Updated:** 2026-07-21T02:00:00Z
+**Updated:** 2026-07-21T05:30:00Z
 **By:** claude-code
+
+## Último trabajo (2026-07-21, continuación) — OWF-310 cerrada, Gasto compartido: ocultar→revertir→implementar de verdad (OWF-326), documentación de Voz y Asesor IA para Claude Design
+
+- **OWF-310** ✅ cerrada formalmente (auditoría paraguas de IA abierta 2026-07-13): las 4 funciones (Asesor IA, OCR, Auto IA, Voz) confirmadas resueltas, cada una mapeada al ticket que la cerró (OWF-312, OWF-131, OWF-308, OWF-311+OWF-319).
+- **Gasto compartido — vaivén real de decisión, documentado con cuidado**: se ocultó el panel (OWF-307, opción "b") siguiendo instrucción directa del usuario en esta conversación. Minutos después apareció **OWF-326**, creada por una sesión concurrente el mismo día, registrando "decisión del usuario: construir soporte real" — directamente contradictoria. Consultado explícitamente al usuario para desempatar → confirmó opción "a" (construir). Revertido OWF-307 (`git revert`, deploy prod OK) y despachado un sub-agente con el ciclo SDD completo ya diseñado por la otra sesión (`sdd/shared-expense-category-split/*`). **OWF-326 quedó implementada y verificada E2E en prod**: tabla `shared_transaction_categories`, validación de suma exacta (422 si no cuadra), persistencia real. El sub-agente encontró que el código YA estaba escrito por la sesión concurrente al retomar — verificó que coincidía con el spec en vez de reimplementar, corrió la suite, deployó, y limpió el dato de prueba (gotcha nuevo: `Transaction` usa soft-delete, no cascadea sobre tablas hijas nuevas hasta purgar el padre — usar `forceDelete()` en cascada manual para limpiar datos de prueba de esta feature). **Hallazgo real sin resolver**: `DECISIONS.md` D-001 (reparto equitativo automático al agregar categorías) sigue sin implementarse — OWF-326 solo hizo persistencia de lo que la UI ya recolectaba manualmente. Documentado en Engram y en `rediseno/PROMPT_REDISENO_TRANSACCIONES.md` §4.4.3 como brecha real de UX pendiente, no housekeeping.
+- **Documentación para Claude Design**: a pedido del usuario, corregidas 2 secciones desactualizadas en los prompts de rediseño (propiedad de una sesión concurrente que generó los 9 `PROMPT_REDISENO_*.md`, dejados untracked a propósito — no son míos para commitear): §4.9 de `PROMPT_REDISENO_TRANSACCIONES.md` (proceso de Voz — reescrito completo, las 3 capas de OWF-319 estaban solo parcialmente reflejadas) y §1.7 de `PROMPT_REDISENO_ASESOR_CONFIG_NOTIFICACIONES_ONBOARDING.md` (nota de estabilidad del chat, el bug cosmético que decía "pendiente" ya no se reproduce desde OWF-312).
+- **`PROMPT_REDISENO_CENTRAL.md` confirmado como punto de entrada único** — los 9 módulos ya tienen prompt dedicado, tablero de estado completo en su §3.
+- **Push a origin**: central, backend y frontend todos sincronizados con sus remotos al cierre de esta sesión.
 
 ## Último trabajo (2026-07-21, continuación) — Verificación de cierre OWF-326
 
