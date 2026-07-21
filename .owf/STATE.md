@@ -3,8 +3,17 @@
 <!-- Solo un agente escribe a la vez. Updated = timestamp del ultimo escritor. -->
 <!-- Tareas se referencian por ID (OWF-NNN) → ver .owf/TASKS.md -->
 
-**Updated:** 2026-07-21T05:30:00Z
+**Updated:** 2026-07-21T05:45:00Z
 **By:** claude-code
+
+## Último trabajo (2026-07-21, continuación) — OWF-327: D-001 reparto equitativo, cierra el ciclo de Gasto compartido
+
+Pedido explícito del usuario tras cerrar OWF-326: implementar la última pieza pendiente de `DECISIONS.md` D-001 (reparto equitativo automático), documentada como brecha real de UX en la sesión anterior.
+
+- **OWF-327** ✅: `SmartTransactionModal.vue` — `sharedCats` gana flag `touched` por fila; `redistributeShared()` reparte `monto - Σ(filas tocadas)` en partes iguales entre las filas no tocadas (la última absorbe el redondeo); `markSharedTouched(i)` marca la fila editada; disparadores en `watch(proPanel)` (activar el panel) y `watch(form.amount)` (cambia el total), más al agregar/quitar filas. Verificado en dev local con 3 escenarios reales (no solo lectura de código): activar con $100 → 50/50; editar fila 1 a $20 → fila 2 sola pasa a $80; agregar 3ª categoría → las 2 no tocadas se parten 40/40. `vue-tsc`/`eslint` limpios. Deploy prod OK (`1129127`).
+- **`DECISIONS.md` D-001 actualizado**: acción pendiente del lado Vue marcada `[x]`; queda abierta solo la acción del lado del diseño (JSX de `TransactionForm.jsx` no tiene edición manual por fila, solo reparto automático).
+- **`PROMPT_REDISENO_TRANSACCIONES.md` corregido** (3 menciones) — ya no dice "pendiente de implementar", refleja que Gasto compartido está 100% completo del lado Vue (persistencia + reparto).
+- **Gotcha de concurrencia nuevo detectado en el deploy**: apareció WIP ajeno de un pull de diseño de Cántaros Pro en curso (`rediseno/ui_kits/lite-desktop/{index.html,shells/ProShell.jsx,templates/JarsRoute.jsx,organisms/JarsProConfig.jsx,organisms/JarsProEditor.jsx,templates/ProJarsRoute.jsx}` + los 9 `PROMPT_REDISENO_*.md`) — aislado con `git stash push -u` de la lista completa antes del deploy, recuperado íntegro después con `git stash pop`.
 
 ## Último trabajo (2026-07-21, continuación) — OWF-310 cerrada, Gasto compartido: ocultar→revertir→implementar de verdad (OWF-326), documentación de Voz y Asesor IA para Claude Design
 
