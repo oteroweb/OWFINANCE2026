@@ -3,8 +3,14 @@
 <!-- Solo un agente escribe a la vez. Updated = timestamp del ultimo escritor. -->
 <!-- Tareas se referencian por ID (OWF-NNN) → ver .owf/TASKS.md -->
 
-**Updated:** 2026-07-20T09:00:00Z
+**Updated:** 2026-07-21T00:00:00Z
 **By:** claude-code
+
+## Último trabajo (2026-07-21) — OWF-307 (ocultar Gasto compartido) + push a origin
+
+- **OWF-307** ✅: decisión del usuario (opción b) — ocultado el botón-toggle "Gasto compartido" en `SmartTransactionModal.vue` (quedan Pago múltiple + Detalle/factura, grid a 2 columnas). Código de soporte (`sharedCats`, panel, tipo `ProPanel`) NO se borró, queda inerte listo para reactivar. Verificado en dev local, `vue-tsc`/`eslint` limpios. Deploy prod OK (`40e2ca9`). Aislado WIP ajeno (`rediseno/PROMPT_REDISENO_*.md` de una sesión concurrente generando prompts de rediseño) con `git stash push -u`/`pop` antes/después del deploy.
+- **Push a origin** (pedido explícito del usuario, "sube el contenido/push si es necesario"): verificado que ningún repo estaba detrás de origin (0 riesgo de conflicto) antes de pushear. `OWFINANCEBackend2025` (7 commits, incluye el trabajo de otra sesión que resolvió OWF-131 — Gemini OCR funcionando en prod: fix real fue el header `Expect: 100-continue` causando 401 engañoso + `.env.production` vs `.env` equivocado) → pusheado a `main`. Central → pusheado a `master` (42 commits acumulados de varias sesiones). `OWFinanceFrontend2025` ya estaba sincronizado con origin, nada que pushear ahí.
+- **Nota de concurrencia**: sesión activa en paralelo generando `rediseno/PROMPT_REDISENO_*.md` (ADMIN, ANALISIS, ASESOR_CONFIG_NOTIFICACIONES_ONBOARDING, CENTRAL, CUENTAS_CATEGORIAS_IMPUESTOS, DEUDAS_SUENOS_PERFIL, HOME, TRANSACCIONES) — no tocados, quedan untracked para que esa sesión los cierre.
 
 ## Último trabajo (2026-07-20, continuación) — Revisión de sesión concurrente + OWF-325
 
