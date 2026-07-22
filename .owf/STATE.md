@@ -3,8 +3,22 @@
 <!-- Solo un agente escribe a la vez. Updated = timestamp del ultimo escritor. -->
 <!-- Tareas se referencian por ID (OWF-NNN) → ver .owf/TASKS.md -->
 
-**Updated:** 2026-07-22T05:30:00Z
+**Updated:** 2026-07-22T06:10:00Z
 **By:** claude-code
+
+## Último trabajo (2026-07-22, continuación) — OWF-331/332/333 transferencias + tasa paralela
+
+Continuación del backlog urgente reportado por el usuario sobre el formulario de transacciones (5 tareas anotadas como OWF-331..335).
+
+- **OWF-332** ✅ Transferencias con cruce de moneda: "Envías"/"Llega" ahora ambos editables (antes solo se podía calcular hacia adelante). `transferToAmountModel` (computed get/set) deriva `form.amount` cuando se escribe el monto destino.
+- **OWF-333** ✅ Checkbox explícito "usar tasa paralela actual" en `SmartTransactionModal.vue`, en gasto/ingreso Y en transferencias (antes solo autocompletado silencioso en gasto/ingreso). Se desactiva solo al editar una transacción con tasa ya guardada.
+- **OWF-331** ⚪ parcial: cuenta "Desde (origen)" de Transferir ahora se preselecciona (antes vacío); saldo "Disponible" en LiteHomeView se refresca tras guardar. Pendiente: columna de detalle en el listado de transacciones (Pro usa feed de cards, falta decidir diseño de tabla/columna).
+- **OWF-335** ✅ ya resuelto por una sesión previa (commits `ea4d323`/`8b60e92`/`69fef59`): `transferRate` no se restauraba al editar transferencias cross-currency, bloqueando "Guardar cambios"; editar ahora reusa `SmartTransactionModal` en vez del mini-form legacy; `TxDetailModal.vue` ya distingue transferencias en el preview (antes las mostraba como "Gasto").
+- **OWF-334** ⚪ sin cerrar: probablemente resuelto de rebote por OWF-335, pero no hay confirmación visual contra el reporte original del usuario.
+
+**Gotcha de verificación**: el dev server local (`npm run dev`) apunta a `https://owfinances.com/api/v1` por decisión previa (todo centralizado, no más blockshift), no a `localhost:8000`. Sin credenciales de prod válidas a mano no se pudo verificar visualmente en browser — se verificó solo por `vue-tsc --noEmit` + `eslint` limpios. **Recomendado: el usuario confirme en prod real** (transferir con cruce de moneda, editar una transferencia, tocar el checkbox de tasa paralela).
+
+Deploy prod OK: commit frontend `0824a2b`, `frontend=OK:200`.
 
 ## Último trabajo (2026-07-22, continuación) — OWF-294: rollback automático de deploy
 
