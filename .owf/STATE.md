@@ -3,8 +3,16 @@
 <!-- Solo un agente escribe a la vez. Updated = timestamp del ultimo escritor. -->
 <!-- Tareas se referencian por ID (OWF-NNN) → ver .owf/TASKS.md -->
 
-**Updated:** 2026-07-21T05:45:00Z
+**Updated:** 2026-07-21T06:15:00Z
 **By:** claude-code
+
+## Último trabajo (2026-07-21, continuación) — CI/CD: OWF-291/292 verificadas (ya hechas), OWF-293 resuelta (2 bugs reales)
+
+Usuario pidió atacar el pipeline CI/CD pendiente, uno por uno.
+
+- **OWF-291** (ssh-key en checkout de `deploy.yml`) y **OWF-292** (`pr-check.yml`) — ambas ya estaban implementadas desde el commit `9321205` (12 de julio), el board tenía la nota vieja. Verificado directo en los archivos (no solo confiando en el board): el `ssh-key: secrets.SUBMODULES_DEPLOY_KEY` está en el checkout de ambos workflows, `pr-check.yml` existe completo y coincide con el spec (lint+typecheck+build frontend, `php artisan test` backend, sin deploy). Marcadas `[x]`, sin cambios de código. Bloqueo real para verificar en CI: falta el secret `SUBMODULES_DEPLOY_KEY` (0 secrets en el repo, confirmado con `gh secret list`) + billing de GitHub Actions sigue bloqueado (OWF-290) — ambos 100% acción del usuario.
+- **OWF-293** ✅ — causa raíz real de los 6 tests de `UserSecurityPinTest` fallando con 404 desde OWF-206 (8 de julio), nunca antes investigada a fondo: **2 bugs, no 1**. (1) `UserSecurityController` existía completo y bien implementado, pero sus rutas nunca se registraron en ningún archivo (`routes/api/user.php` no las tenía) — confirmado con `curl` directo que el 404 era real también en PROD, no solo en tests, así que nadie pudo haber configurado un PIN nunca vía API (sin datos que migrar). (2) Al modelo `User.php` le faltaba el cast `'security_pin' => 'hashed'` (sí tenía el mismo patrón para `password`, nunca se replicó) — sin el cast, el PIN se hubiera guardado en texto plano y `Hash::check()` habría fallado siempre. Fix: 4 rutas agregadas + cast. Suite 250/251 (1 falla preexistente no relacionada). Verificado en prod real: `pin-status` pasó de `404` a `401` tras el deploy. Commit backend `cd973cd`.
+- **Gotcha de proceso importante**: el registro de OWF-206 afirmaba "verificado end-to-end contra prod" para este mismo flujo de PIN — imposible si las rutas nunca existieron. Probablemente se verificó por otro medio (tinker directo) y quedó documentado como si fuera una prueba HTTP real completa. **Lección**: no asumir que "verificado E2E en prod" de una sesión anterior cubrió el camino HTTP real sin confirmarlo — puede ser una verificación parcial disfrazada de completa.
 
 ## Último trabajo (2026-07-21, continuación) — OWF-327: D-001 reparto equitativo, cierra el ciclo de Gasto compartido
 
