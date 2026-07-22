@@ -3,8 +3,13 @@
 <!-- Solo un agente escribe a la vez. Updated = timestamp del ultimo escritor. -->
 <!-- Tareas se referencian por ID (OWF-NNN) → ver .owf/TASKS.md -->
 
-**Updated:** 2026-07-21T06:15:00Z
+**Updated:** 2026-07-22T05:00:00Z
 **By:** claude-code
+
+## Último trabajo (2026-07-22) — OWF-328: prellenar cuenta/fecha en "Agregar movimiento" desde filtros de Transacciones
+
+- **OWF-328** ✅: en `/user/transactions`, si el usuario tiene una cuenta filtrada y/o está viendo un día o mes específico, el modal de creación ahora prellena `account_id`/`date` con ese contexto (antes siempre defaulteaba a hoy + primera cuenta, así que el movimiento recién creado podía desaparecer de la lista filtrada). Prefill de cuenta ya existía (OWF-319); se agregó el de fecha vía `usePeriodStore()` en `SmartTransactionModal.vue` — nueva `prefillDateFromPeriod()`. Verificado en browser real (dev local): cuenta, mes distinto, y día puntual, los 3 casos confirmados vía el payload de debug del propio modal. Commit `06f7e5a`, deploy prod OK.
+- **Gotcha reforzado (ya documentado antes, no seguido esta vez)**: al aislar WIP ajeno de `rediseno/` con `git stash` antes de un deploy, usar SIEMPRE `git stash push -u` (incluye untracked). Esta vez se usó sin `-u`, y el `git add -A` de `deploy-frontend.sh` terminó commiteando (sin pérdida, pero mal atribuidos) los untracked de una sesión concurrente activa en `rediseno/` (9 `PROMPT_REDISENO_*.md` + `JarsProConfig.jsx`/`JarsProEditor.jsx`/`ProJarsRoute.jsx`) dentro del commit `557a480`, ya pusheado a `OWFinanceFrontend2025/main`.
 
 ## Último trabajo (2026-07-21, continuación) — CI/CD: OWF-291/292 verificadas (ya hechas), OWF-293 resuelta (2 bugs reales)
 
