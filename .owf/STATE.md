@@ -3,8 +3,18 @@
 <!-- Solo un agente escribe a la vez. Updated = timestamp del ultimo escritor. -->
 <!-- Tareas se referencian por ID (OWF-NNN) → ver .owf/TASKS.md -->
 
-**Updated:** 2026-07-22T05:00:00Z
+**Updated:** 2026-07-22T05:30:00Z
 **By:** claude-code
+
+## Último trabajo (2026-07-22, continuación) — OWF-294: rollback automático de deploy
+
+Pedido del usuario, con una condición explícita: diseñar primero (el ticket mismo lo exigía) y no tocar prod real para probarlo.
+
+- **Diseño confirmado con el usuario antes de escribir código**: backup+restore vía rsync (no releases versionados tipo Capistrano — más simple, mismo layout de `public_html/` sin restructurar, apropiado para un ticket P2).
+- **OWF-294** ✅: `owf_remote_backup_dir()`/`owf_remote_restore_dir()` nuevos en `deploy-notify-lib.sh` (mismo patrón `ssh $opts "..."` ya usado en el resto de los scripts). **Backend**: backup del directorio completo antes del rsync de código; si el health check final falla, restaura + re-cachea + re-verifica; detecta si el deploy corrió migraciones nuevas (grep "Migrating:" en el output ahora capturado, antes solo streameaba) y advierte fuerte en vez de revertirlas solo (riesgo de pérdida de datos con `down()` a ciegas). **Frontend**: mismo patrón, respalda `app/` + `assets/` (las 2 carpetas que toca el deploy) — el proxy `index.php` no se respalda, es contenido estático regenerado idéntico cada vez.
+- **Verificado sin tocar prod** (restricción explícita del usuario): `bash -n` limpio en los 3 scripts + simulación completa del ciclo backup→deploy-roto→rollback en carpetas locales de `/tmp`, usando los mismos comandos `rsync -a --delete` exactos que las funciones reales (solo sin el wrapper ssh) — confirmado que el rollback restaura EXACTO el estado anterior, incluyendo que revierte correctamente archivos agregados/borrados por la versión rota, no solo pisa contenido superpuesto.
+- **No deployado esta sesión** — el próximo deploy real (backend o frontend) ejercita el paso de backup de forma segura (es no-destructivo), sin necesidad de forzar un fallo real contra prod para probarlo.
+- **WIP ajeno detectado, no tocado**: sesión concurrente corrigiendo `BcvRateFetcher`/`FetchBcvRateCommand`/`OfficialRate` (backend) — cambió la fuente de la tasa BCV de `pydolarve.org` (nunca resolvía DNS, confirmado desde el propio servidor) a `ve.dolarapi.com`, con el shape real de respuesta ya verificado en vivo. Sin commitear al cierre de esta sesión.
 
 ## Último trabajo (2026-07-22) — OWF-328: prellenar cuenta/fecha en "Agregar movimiento" desde filtros de Transacciones
 
