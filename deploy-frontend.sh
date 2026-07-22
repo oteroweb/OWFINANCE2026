@@ -162,6 +162,18 @@ PHPEOF
 success "PHP wrapper creado (index.php → _app.html)"
 
 # ── 6. Deploy al servidor remoto via rsync ───────────────────────────────────
+ROOT_ASSETS_DIR="${REMOTE_DIR%/app}/assets"
+
+info "Respaldando estado actual en el servidor (para rollback si el deploy falla)..."
+ROLLBACK_BACKUP_OK=1
+if owf_remote_backup_dir "$SSH_OPTS" "$REMOTE_USER" "$REMOTE_HOST" "$REMOTE_DIR" \
+  && owf_remote_backup_dir "$SSH_OPTS" "$REMOTE_USER" "$REMOTE_HOST" "$ROOT_ASSETS_DIR"; then
+  ROLLBACK_BACKUP_OK=0
+  success "Backup remoto creado (app + assets)"
+else
+  warn "No se pudo crear el backup remoto — el deploy sigue, pero sin red de rollback si falla"
+fi
+
 info "Creando carpeta remota si no existe..."
 ssh $SSH_OPTS "${REMOTE_USER}@${REMOTE_HOST}" "mkdir -p ~/$REMOTE_DIR"
 info "Subiendo SPA al servidor remoto (~/$REMOTE_DIR/)..."
@@ -176,7 +188,6 @@ success "$FILE_COUNT archivos subidos → ~/$REMOTE_DIR/"
 # ── 7. Sync assets al root public_html/assets/ ───────────────────────────────
 # Los assets deben estar en /assets/ (publicPath '/') para que el proxy del root
 # los sirva directamente sin pasar por index.php.
-ROOT_ASSETS_DIR="${REMOTE_DIR%/app}/assets"
 info "Sincronizando assets al root (~/$ROOT_ASSETS_DIR/)..."
 ssh $SSH_OPTS "${REMOTE_USER}@${REMOTE_HOST}" "mkdir -p ~/$ROOT_ASSETS_DIR"
 rsync -az --delete \
@@ -245,7 +256,28 @@ fi
 
 case "$DEPLOY_VERIFY_SUMMARY" in
   frontend=FAIL:*)
-    error "Verificacion HTTP fallida para $DEPLOY_VERIFY_URL ($DEPLOY_VERIFY_SUMMARY)"
+    warn "Health check falló ($DEPLOY_VERIFY_SUMMARY) — iniciando rollback automático..."
+    ROLLBACK_MSG=""
+    if [ "$ROLLBACK_BACKUP_OK" -eq 0 ]; then
+      if owf_remote_restore_dir "$SSH_OPTS" "$REMOTE_USER" "$REMOTE_HOST" "$REMOTE_DIR" \
+        && owf_remote_restore_dir "$SSH_OPTS" "$REMOTE_USER" "$REMOTE_HOST" "$ROOT_ASSETS_DIR"; then
+        info "Archivos restaurados desde el backup (app + assets)..."
+        ROLLBACK_VERIFY="$(owf_capture_http_probe "$DEPLOY_VERIFY_URL" "frontend-post-rollback" || true)"
+        case "$ROLLBACK_VERIFY" in
+          frontend-post-rollback=OK:*)
+            ROLLBACK_MSG="ROLLBACK EXITOSO — el deploy falló ($DEPLOY_VERIFY_SUMMARY) pero se restauró la versión anterior y el sitio volvió a responder ($ROLLBACK_VERIFY)."
+            ;;
+          *)
+            ROLLBACK_MSG="ROLLBACK FALLÓ — el deploy falló Y la restauración no dejó el sitio saludable ($ROLLBACK_VERIFY). Requiere intervención manual inmediata."
+            ;;
+        esac
+      else
+        ROLLBACK_MSG="ROLLBACK FALLÓ — no se pudo restaurar el backup remoto (app y/o assets). Requiere intervención manual inmediata."
+      fi
+    else
+      ROLLBACK_MSG="Sin backup disponible para rollback (falló al crearlo antes del deploy). Requiere intervención manual inmediata."
+    fi
+    error "$ROLLBACK_MSG"
     ;;
 esac
 

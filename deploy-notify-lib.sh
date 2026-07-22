@@ -139,6 +139,42 @@ owf_escape_applescript() {
   printf '%s' "$value"
 }
 
+owf_remote_backup_dir() {
+  local ssh_opts="$1"
+  local remote_user="$2"
+  local remote_host="$3"
+  local remote_dir="$4"
+  local backup_status=0
+
+  ssh $ssh_opts "${remote_user}@${remote_host}" "
+    set -e
+    if [ -d \"\$HOME/${remote_dir}\" ]; then
+      rsync -a --delete \"\$HOME/${remote_dir}/\" \"\$HOME/${remote_dir}.rollback-backup/\"
+    fi
+  " || backup_status=$?
+
+  return "$backup_status"
+}
+
+owf_remote_restore_dir() {
+  local ssh_opts="$1"
+  local remote_user="$2"
+  local remote_host="$3"
+  local remote_dir="$4"
+  local restore_status=0
+
+  ssh $ssh_opts "${remote_user}@${remote_host}" "
+    set -e
+    if [ -d \"\$HOME/${remote_dir}.rollback-backup\" ]; then
+      rsync -a --delete \"\$HOME/${remote_dir}.rollback-backup/\" \"\$HOME/${remote_dir}/\"
+    else
+      exit 1
+    fi
+  " || restore_status=$?
+
+  return "$restore_status"
+}
+
 owf_send_desktop_notification() {
   local title="$1"
   local message="$2"

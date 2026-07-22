@@ -42,9 +42,10 @@ REMOTE_DIR="$DEPLOY_BACKEND_DIR"
 BACKEND_DIR="$(cd "$(dirname "$0")/OWFINANCEBackend2025" && pwd)"
 
 # ── Colores ──────────────────────────────────────────────────────────────────
-RED='\033[0;31m'; GREEN='\033[0;32m'; CYAN='\033[0;36m'; NC='\033[0m'
+RED='\033[0;31m'; GREEN='\033[0;32m'; YELLOW='\033[1;33m'; CYAN='\033[0;36m'; NC='\033[0m'
 info()    { echo -e "${CYAN}▶${NC} $*"; }
 success() { echo -e "${GREEN}✔${NC} $*"; }
+warn()    { echo -e "${YELLOW}⚠${NC} $*"; }
 error()   { echo -e "${RED}✗${NC} $*"; exit 1; }
 
 SCRIPT_START_TS=$(date +%s)
@@ -105,6 +106,15 @@ if [ "$CURRENT_BRANCH" != "$BRANCH" ]; then
   git checkout "$BRANCH"
 fi
 
+info "Respaldando estado actual en el servidor (para rollback si el deploy falla)..."
+ROLLBACK_BACKUP_OK=1
+if owf_remote_backup_dir "$SSH_OPTS" "$REMOTE_USER" "$REMOTE_HOST" "$REMOTE_DIR"; then
+  ROLLBACK_BACKUP_OK=0
+  success "Backup remoto creado (~/${REMOTE_DIR}.rollback-backup/)"
+else
+  warn "No se pudo crear el backup remoto — el deploy sigue, pero sin red de rollback si falla"
+fi
+
 info "Subiendo archivos por rsync..."
 rsync -az --delete \
   --exclude='.git' \
@@ -125,7 +135,7 @@ success "Archivos sincronizados → ~/${REMOTE_DIR}/"
 info "Ejecutando post-deploy en servidor..."
 echo ""
 
-ssh $SSH_OPTS "${REMOTE_USER}@${REMOTE_HOST}" /bin/bash << ENDSSH
+POST_DEPLOY_OUTPUT="$(ssh $SSH_OPTS "${REMOTE_USER}@${REMOTE_HOST}" /bin/bash << ENDSSH
 set -e
 cd "\$HOME/${REMOTE_DIR}"
 PHP="php"
@@ -145,6 +155,13 @@ echo "  [5/5] version..."
 echo ""
 echo "  \u2714 Post-deploy completado."
 ENDSSH
+)"
+echo "$POST_DEPLOY_OUTPUT"
+
+MIGRATIONS_RAN=0
+if echo "$POST_DEPLOY_OUTPUT" | grep -q "Migrating:"; then
+  MIGRATIONS_RAN=1
+fi
 
 echo ""
 success "DEPLOY EXITOSO → ${SITE_URL}/api/v1"
@@ -160,7 +177,33 @@ fi
 
 case "$DEPLOY_VERIFY_SUMMARY" in
   backend-health=FAIL:*)
-    error "Verificacion HTTP fallida para $DEPLOY_VERIFY_URL ($DEPLOY_VERIFY_SUMMARY)"
+    warn "Health check falló ($DEPLOY_VERIFY_SUMMARY) — iniciando rollback automático..."
+    ROLLBACK_MSG=""
+    if [ "$ROLLBACK_BACKUP_OK" -eq 0 ]; then
+      if owf_remote_restore_dir "$SSH_OPTS" "$REMOTE_USER" "$REMOTE_HOST" "$REMOTE_DIR"; then
+        info "Archivos restaurados desde el backup — re-cacheando..."
+        ssh $SSH_OPTS "${REMOTE_USER}@${REMOTE_HOST}" "cd \"\$HOME/${REMOTE_DIR}\" && php artisan config:cache && php artisan route:cache && php artisan view:cache && php artisan cache:clear" || true
+        ROLLBACK_VERIFY="$(owf_capture_http_probe "$DEPLOY_VERIFY_URL" "backend-health-post-rollback" || true)"
+        case "$ROLLBACK_VERIFY" in
+          backend-health-post-rollback=OK:*)
+            ROLLBACK_MSG="ROLLBACK EXITOSO — el deploy falló ($DEPLOY_VERIFY_SUMMARY) pero se restauró el código anterior y el servicio volvió a responder ($ROLLBACK_VERIFY)."
+            ;;
+          *)
+            ROLLBACK_MSG="ROLLBACK FALLÓ — el deploy falló Y la restauración no dejó el servicio saludable ($ROLLBACK_VERIFY). Requiere intervención manual inmediata."
+            ;;
+        esac
+      else
+        ROLLBACK_MSG="ROLLBACK FALLÓ — no se pudo restaurar el backup remoto. Requiere intervención manual inmediata."
+      fi
+    else
+      ROLLBACK_MSG="Sin backup disponible para rollback (falló al crearlo antes del deploy). Requiere intervención manual inmediata."
+    fi
+
+    if [ "$MIGRATIONS_RAN" -eq 1 ]; then
+      ROLLBACK_MSG="$ROLLBACK_MSG ADVERTENCIA: este deploy corrió migraciones nuevas que NO se revirtieron automáticamente — revisar el estado de la base de datos a mano antes de reintentar."
+    fi
+
+    error "$ROLLBACK_MSG"
     ;;
 esac
 
