@@ -3,8 +3,19 @@
 <!-- Solo un agente escribe a la vez. Updated = timestamp del ultimo escritor. -->
 <!-- Tareas se referencian por ID (OWF-NNN) → ver .owf/TASKS.md -->
 
-**Updated:** 2026-07-22T06:10:00Z
+**Updated:** 2026-07-23T15:00:00Z
 **By:** claude-code
+
+## Último trabajo (2026-07-23) — OWF-334/OWF-335/OWF-331/OWF-332/OWF-333 verificados end-to-end en prod real
+
+Continuación de la sesión anterior (lote urgente P0 de UI/transacciones). Patrón de la sesión: varias de estas tareas ya estaban marcadas `[x]` por sesiones concurrentes con solo `vue-tsc`/`eslint` limpios, sin verificación visual real — se verificaron una por una con login vía token Sanctum inyectado + interacción real en el navegador (dev local apuntando a la API de prod).
+
+- **OWF-335** (editar transacciones roto) ✅ verificado: ya estaba fixeado por otra sesión (transferRate no se restauraba al editar transferencias, bloqueaba "Guardar cambios"). Confirmado editando una transferencia cross-currency real: preview correcto, tasa restaurada, guardado exitoso.
+- **OWF-334** (preview de transacción con layout roto) ✅ implementado y verificado: causa real encontrada — un TERCER modal de detalle (`.tx-detail-modal`, "v2"/OWF-138, embebido en `index.vue`, distinto del componente `TxDetailModal.vue`) tenía colores de texto hardcodeados de tema claro (`#222`/`#666`/`#999`) nunca migrados a dark mode — texto casi invisible sobre el fondo oscuro real. Migrado a `var(--fg-1)`/`var(--fg-2)`/`var(--fg-3)`/`var(--surface-1)`. Commit `c63a4ca`, deploy prod OK.
+- **OWF-331** (columna de saldo/detalle en listado) ✅ corregido y verificado: la entrada anterior del board decía "en Pro ya existía" — **era falso**, esa columna vivía en un modo de layout `legacy` inalcanzable desde el feed Pro real (`.pro-tx-feed`). La infra de cálculo (`runningBalanceMap`) sí corría en Pro, solo faltaba pintarla — agregado caption de saldo corrido bajo el monto de cada fila, visible con 1 cuenta filtrada. Verificado: 10 filas con saldos matemáticamente consistentes contra el saldo real de la cuenta. Commit `181499e`, deploy prod OK.
+- **OWF-332/OWF-333** (cálculo bidireccional de transferencia + toggle tasa paralela) ✅ verificados sin necesidad de código nuevo: ambos ya funcionaban, solo faltaba la prueba real. Confirmado con interacción real: escribir en "Llega (VES)" deriva "Envías (USD)" hacia atrás; toggle "tasa paralela actual" presente y activo en ambos paneles (Gasto/Ingreso y Transferir).
+- **Hallazgo colateral sin confirmar, anotado para seguimiento**: campo "Tasa oficial (BCV) HOY" mostró `0.0000` en la prueba de OWF-333 pese a que OWF-321 (BCV automático) está funcionando — podría ser timing/cache del entorno de dev local apuntando a prod, no confirmado como bug real en prod. Si el usuario lo reporta en prod real, abrir ticket propio.
+- **Gotchas de proceso documentados en Engram** (útiles para futuras sesiones): (1) generar tokens Sanctum de prueba SIEMPRE con `App\Models\User` (el modelo real del guard), nunca `App\Models\Entities\User` — mezclarlos rompe `/user/profile` con 500; (2) el layout Pro/Lite no se activa solo con `localStorage.user`, hace falta también `localStorage.settings` (`GET /user/settings`); (3) cuando el board dice "ya existía"/"resuelto" sin nota explícita de verificación visual, tratarlo como no confirmado — 3 de 3 veces que se verificó algo así esta sesión, había un problema real (invisible en el código, solo detectable interactuando con la app).
 
 ## Último trabajo (2026-07-22, continuación) — OWF-331/332/333 transferencias + tasa paralela
 
