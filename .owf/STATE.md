@@ -3,8 +3,17 @@
 <!-- Solo un agente escribe a la vez. Updated = timestamp del ultimo escritor. -->
 <!-- Tareas se referencian por ID (OWF-NNN) → ver .owf/TASKS.md -->
 
-**Updated:** 2026-07-23T15:00:00Z
+**Updated:** 2026-07-23T18:40:00Z
 **By:** claude-code
+
+## Cierre de sesión (2026-07-23) — OWF-320/321 fuente BCV + cron verificado, OWF-331 (parte) + OWF-329/330 documentados
+
+Sesión larga con trabajo real propio + mucha colisión con sesiones concurrentes trabajando el mismo módulo de transacciones/tasas (ver notas de proceso en OWF-319/320/331/336/338 de `.owf/TASKS.md` — ninguna perdió código, todo se reconcilió sin pisar nada).
+
+- **OWF-320** ✅ Fuente de tasa BCV cambiada de `pydolarve.org` (DNS caído, confirmado desde el propio servidor) a `ve.dolarapi.com/v1/dolares/oficial` (verificada en vivo, JSON limpio). `BcvRateFetcher.php`/`config/services.php` actualizados. Cron en CloudPanel configurado (`php artisan schedule:run` cada hora) — **verificado en esta sesión que corre solo**: `official_rates` tiene filas reales a las 9am y 4pm hora Caracas de los últimos 2 días (`737.8816` hoy 09:00, `737.2321` ayer 09:00/16:00), tasas distintas entre sí confirmando que trae datos frescos, no cacheados.
+- **OWF-329/330** 🔲 documentados en TASKS.md a pedido del usuario, sin implementar: (329) mantener pydolarve.org como fallback secundario; (330) agregar tasa EUR↔VES (lógica separada, fuente aún sin definir).
+- **OWF-331** parte propia de esta sesión: piso de comisión pago móvil Bs 2 (ya en OWF-320... nota: el número de ticket real quedó en OWF-320, la comisión), refresco de `loadBalanceSummary()`/`loadAccountsPanel()` en `onTxSaved()` de Pro Y Lite home (antes solo Lite lo hacía), y saldo acumulado por transacción en `LiteTransactionsView.vue` (Pro ya lo tenía, o fue corregido por sesión posterior tras encontrar que el q-table "legacy" no era alcanzable desde el layout Pro real — ver nota completa en la entrada OWF-331 de TASKS.md, fue refinada por esa sesión posterior). Verificado en prod real: preselección de cuenta en Transferir, refresco de saldo tras guardar (confirmado por red: POST→200 dispara accounts/summary+accounts), equivalente USD por cuenta en el panel.
+- **Nota de proceso recurrente**: múltiples sesiones trabajando concurrentemente sobre `SmartTransactionModal.vue`/`transactions/index.vue`/`.owf/TASKS.md` en paralelo durante toda la sesión. Patrón que funcionó: antes de cualquier `git stash`/`reset`, verificar `git log`+`git status` inmediatamente antes; preferir reconciliar vía `git fetch`+diff+`reset --hard origin/main` (cuando el contenido propio ya está confirmado presente upstream) en vez de reescribir historia local.
 
 ## Último trabajo (2026-07-23) — OWF-334/OWF-335/OWF-331/OWF-332/OWF-333 verificados end-to-end en prod real
 
