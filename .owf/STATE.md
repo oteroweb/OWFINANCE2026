@@ -3,8 +3,17 @@
 <!-- Solo un agente escribe a la vez. Updated = timestamp del ultimo escritor. -->
 <!-- Tareas se referencian por ID (OWF-NNN) → ver .owf/TASKS.md -->
 
-**Updated:** 2026-07-23T18:40:00Z
+**Updated:** 2026-07-23T22:20:00Z
 **By:** claude-code
+
+## Último trabajo (2026-07-23, continuación) — OWF-341/OWF-343: Gasto compartido sin categoría redundante + hidratación al editar
+
+Continuación de la sesión que cerró OWF-331..339 (lote urgente de transacciones). Dos pedidos del usuario, ambos con hallazgos reales más allá de lo pedido.
+
+- **OWF-341** ✅ (commits dicen "OWF-340" por colisión de ID — otra sesión ya lo había tomado): quitado el campo "Categoría" principal de `SmartTransactionModal.vue` cuando el panel "Gasto compartido" está activo (mismo criterio que Items). Backend (`TransactionRepo::all()`/`allActive()`) eager-carga `sharedCategories.category` para que el listado muestre ambas categorías del split. **Auditoría de lógica pedida explícitamente por el usuario** ("revisá el formulario frente a la lógica") encontró un bug real preexistente (afectaba también a Items, no solo Gasto compartido): `category_id`/`jar_id` de la transacción viajaban desde el campo oculto sin resetear si el usuario había elegido una categoría ANTES de activar el panel — arreglado forzando `null` a nivel de transacción cuando `itemsOn`/`sharedOn`. Verificado en prod real reproduciendo el escenario exacto.
+- **OWF-343** ✅ (commits dicen "OWF-342" por otra colisión de ID): hidratado el panel Items/Gasto compartido al editar una transacción ya guardada — gap documentado desde OWF-326. Encontrado que el gap tenía 2 capas: (1) frontend nunca restauraba `proPanel`/`sharedCats`/`facturaItems`; (2) **el backend nunca procesaba `shared_categories` en `update()`**, solo en `store()` — sin este segundo fix, hidratar el formulario hubiera sido una trampa (el usuario edita el split, guarda, y la base de datos no cambia). Arreglados ambos. Items se reconstruye con pérdida documentada (el schema no guarda precio/impuesto por separado, solo cantidad+total). Verificado end-to-end en prod real: creada transacción con split, editados los montos en el navegador, confirmado por tinker que la base de datos realmente cambió.
+- **Gotcha de proceso reforzado (van 4 colisiones de ID esta sesión)**: con tantas sesiones concurrentes en este repo, `NEXT_ID` en `.owf/TASKS.md` avanza constantemente — siempre releer el valor actual justo antes de escribir el mensaje de commit, nunca asumir el número basado en la última tarea vista en la conversación.
+- Los 3 repos (central/frontend/backend) quedaron limpios y sincronizados con origin al cierre — se encontró y corrigió un commit backend (`82390dc`) que había quedado sin pushear.
 
 ## Cierre de sesión (2026-07-23) — OWF-320/321 fuente BCV + cron verificado, OWF-331 (parte) + OWF-329/330 documentados
 
