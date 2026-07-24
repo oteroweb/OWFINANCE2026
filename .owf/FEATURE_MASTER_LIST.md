@@ -86,7 +86,7 @@ Para cada módulo se lista: KPIs/datos mostrados, acciones disponibles, diferenc
 - **Métodos de entrada**: Escribir / Voz / Foto / Auto IA / Carga masiva (dialog aparte).
 - **Tipos**: Gasto, Ingreso, Transferir, Ajuste (oculto en edición — usa endpoint dedicado).
 - Campos por tipo: cuenta define moneda, monto, tasas duales (paralelo + BCV oficial) si no-USD, categoría+cántaro anclado (solo lectura), proveedor (con creación inline), fecha, etiquetas (Pro: todas; Lite: 3 fijas por slug).
-- **4 features Pro-only** (toggles tipo tarjeta): Pago múltiple/split, Detalle/factura por ítems, Gasto compartido (⚠️ incompleta, ver hallazgos), Cobrar comisión (Pago móvil % / % / monto fijo).
+- **4 features Pro-only** (toggles tipo tarjeta): Pago múltiple/split, Detalle/factura por ítems, Gasto compartido (✅ resuelta — OWF-326/327, ver §10), Cobrar comisión (Pago móvil % / % / monto fijo).
   - **(OWF-320, 2026-07-19)** Comisión "Pago móvil" ahora aplica un **piso mínimo de Bs 2** (antes solo calculaba el 0.30% sin piso, lo que daba comisiones irrealmente bajas o de $0 en montos pequeños) — el resultado mostrado es `max(monto*0.30%, Bs 2 convertido a la moneda de la cuenta)`.
 - Toggle "Afecta el saldo".
 - Foto/adjunto: ⚠️ solo UI, no sube al backend (OWF-283 pendiente).
@@ -275,7 +275,7 @@ Dos specs de diseño distintas confirmadas en comentarios: `ProAnalisisRoute` ("
 - `components/ExchangeRatesWidget.vue` (hallazgo 2026-07-20) — huérfano confirmado por grep global: no se importa/renderiza en ningún lugar. `transactions/index.vue` tiene comentarios/variables con su nombre pero es una UI de tasas construida ad-hoc ahí, no el componente real. La UI de tasas realmente en producción es `ExchangeRatesTable.vue`, usada en `ProHomeView.vue` y `config/index.vue`.
 
 ### Features incompletas / solo-UI (no asumir que funcionan)
-- **"Gasto compartido"** en `SmartTransactionModal` — UI completa, pero `sharedCats` nunca se envía en el payload de guardado (se descarta en silencio).
+- ~~**"Gasto compartido"** en `SmartTransactionModal` — UI completa, pero `sharedCats` nunca se envía en el payload de guardado (se descarta en silencio).~~ **RESUELTO (OWF-326/327, 2026-07-21)**: `save()` ahora arma `shared_categories[]` y lo envía; backend persiste en tabla dedicada `shared_transaction_categories` con validación de suma exacta (422 si no cuadra); reparto equitativo automático entre filas no editadas. Pendiente real (no bloqueante, documentado): editar una transacción existente con `shared_categories` ya guardadas no hidrata el panel (mismo gap que Items/comisión).
 - **Adjuntar foto/comprobante** en `SmartTransactionModal` — solo preview local, sin endpoint de subida real (OWF-283).
 - **Subir avatar** en `/user/profile` — botón cámara sin función, notifica "próximamente".
 - **Selector de periodo en Lite Jars** (Mensual/Semestral/Anual) — no dispara recarga de datos.
