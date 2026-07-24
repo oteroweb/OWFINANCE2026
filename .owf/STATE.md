@@ -3,8 +3,14 @@
 <!-- Solo un agente escribe a la vez. Updated = timestamp del ultimo escritor. -->
 <!-- Tareas se referencian por ID (OWF-NNN) → ver .owf/TASKS.md -->
 
-**Updated:** 2026-07-23T22:20:00Z
+**Updated:** 2026-07-23T23:15:00Z
 **By:** claude-code
+
+## Cierre de sesión (2026-07-23) — OWF-329/OWF-330: fallback pydolarve.org + tasa EUR en automatización BCV
+
+- **OWF-329** ✅ `BcvRateFetcher::fetch()` intenta `ve.dolarapi.com` primero, si falla cae a `pydolarve.org` (nunca verificado en vivo — DNS caído desde siempre, se reusó la lógica defensiva original de antes de OWF-321). Cada fuente persiste su propio `source` en `official_rates`. 5 tests nuevos. Commit backend `4c0bfbc`, deploy prod OK.
+- **OWF-330** ✅ Tasa EUR agregada a la automatización — confirmado que era "otra lógica" como anticipó el usuario: `ve.dolarapi.com/v1/euros/oficial` da VES-por-EUR directo (~842), pero el sistema necesita "EUR por 1 USD" (mismo criterio que VES). Fix: `fetchAndPersistEur()` deriva `rate_ves_usd / rate_ves_eur` — verificado en vivo contra prod real: `0.8765` EUR/USD, consistente con las tasas VES medidas por separado. Cron nuevo (misma cadencia 9am/4pm), confirmado registrado con `schedule:list` en el servidor real. `GET /user-currencies/official-latest` ya era genérico (OWF-337) — EUR queda servido sin tocar frontend. Aclarado que `ExchangeRatesTable.vue` (Configuración) es un sistema de tasas MANUAL totalmente separado, no relacionado a esta automatización — para no confundir a futuro. Bug propio detectado en el camino (hardcodeaba `'VES'` al persistir, lo agarró un test preexistente) y corregido antes de deployar. 9 tests nuevos, suite 269/270 (1 fallo preexistente no relacionado). Commit backend `1bbec1a`, deploy prod OK.
+- **Nota de proceso**: mismo patrón de colisión de sesiones concurrentes de toda la sesión larga — WIP ajeno sin commitear encontrado 2 veces (`TransactionController.php`/`TransactionRepo.php` para OWF-342, luego `CategoryController.php`/`categories.php` para otra tarea) al ir a commitear; en ambos casos se hizo `git add` selectivo (solo los archivos propios) en vez de `git add -A`, dejando el WIP ajeno intacto y sin commitear para que su propia sesión lo cierre.
 
 ## Último trabajo (2026-07-23, continuación) — OWF-341/OWF-343: Gasto compartido sin categoría redundante + hidratación al editar
 
