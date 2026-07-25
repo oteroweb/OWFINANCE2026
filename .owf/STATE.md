@@ -3,10 +3,16 @@
 <!-- Solo un agente escribe a la vez. Updated = timestamp del ultimo escritor. -->
 <!-- Tareas se referencian por ID (OWF-NNN) → ver .owf/TASKS.md -->
 
-**Updated:** 2026-07-25T10:15:00Z
+**Updated:** 2026-07-25T11:20:00Z
 **By:** claude-code
 
-## Último trabajo (2026-07-25) — OWF-348: diseño real del panel Admin (greenfield)
+## Último trabajo (2026-07-25, continuación) — OWF-349: Asesor IA/Config/Notificaciones/Onboarding
+
+- **OWF-349** ✅ Última pieza de los 9 módulos de la auditoría con ciclo completo. A diferencia de Admin (greenfield), acá había una base sólida — se completaron gaps puntuales: Asesor IA ganó ajustes (nombre/personalidad/activado), barra de error real, copiar mensaje, limpiar conversación. Config Pro tenía el mismo problema estructural que Cántaros antes de OWF-322 (un solo `ConfigRoute.jsx` compartido Pro/Lite, violando DESIGN_CONTRACT.md §5) — nuevo `ProConfigRoute.jsx` con cards+5 tabs. Notificaciones ganó su página completa (`NotificationsRoute.jsx`), antes solo existía el panel. Onboarding ganó badges de gamificación en el paso final.
+- **Gotcha de verificación reforzado**: al probar el badge de gamificación, el panel de preview local sirvió una versión desactualizada del script pese a que el disco y el bundle subido a Claude Design eran correctos (confirmado con inspección directa de `window.ObStep.toString()` en consola, no solo lectura de archivo) — mismo patrón de limitación ya visto con Cántaros Pro. Cuando la verificación local no cuadra pero el código en disco es correcto, no asumir que el código está mal — comparar contra Claude Design antes de "arreglar" algo que no está roto.
+- **Con esto, los 9 módulos de la auditoría diseño↔prompt tienen su ciclo completo** (prompt → diseño real → verificación → push): Cántaros, Transacciones*, Análisis*, Home*, Cuentas/Categorías/Impuestos*, Deudas/Sueños/Perfil, Asesor IA/Config/Notificaciones/Onboarding, Admin, Auth/Público*. (*Home/Análisis/Transacciones ya tenían diseño real de antes vía OWF-322 y sesiones previas; Cuentas/Categorías/Impuestos y Auth/Público solo tienen el prompt, sin el mismo pase de "auditar código de diseño + completar gaps" — quedan como trabajo futuro si se quiere el mismo nivel de rigor.)
+
+## Último trabajo (2026-07-25, sesión previa) — OWF-348: diseño real del panel Admin (greenfield)
 
 - **OWF-348** ✅ Admin no tenía ningún diseño interactivo previo (solo un HTML genérico de referencia) — construido desde cero: `AdminRoute.jsx` + `organisms/AdminScreens.jsx` con sidebar propia (6 pantallas: Dashboard, Usuarios index+detalle 6 tabs+impersonar, Monitor de IA, Sistema, y 2 CRUDs de muestra sobre un motor genérico parametrizable en vez de construir las 15 pantallas CRUD reales por separado). Acceso vía nuevo botón "Panel de administración" en el topbar Pro. Verificado end-to-end en el kit sin errores de consola.
 - **Con esto, 8 de los 9 módulos de la auditoría tienen el ciclo completo** (prompt → diseño real → verificación → push). Solo queda Asesor IA/Config/Notificaciones/Onboarding y Auth/Público (marketing) sin este mismo tratamiento.
