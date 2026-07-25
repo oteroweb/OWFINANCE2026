@@ -3,8 +3,16 @@
 <!-- Solo un agente escribe a la vez. Updated = timestamp del ultimo escritor. -->
 <!-- Tareas se referencian por ID (OWF-NNN) → ver .owf/TASKS.md -->
 
-**Updated:** 2026-07-23T23:15:00Z
+**Updated:** 2026-07-23T23:45:00Z
 **By:** claude-code
+
+## Cierre de sesión (2026-07-23, continuación) — OWF-340: conversión USD en feed Pro
+
+Continuación directa de la sesión OWF-329/330 (mismo hilo, el usuario pidió seguir con el backlog).
+
+- **OWF-340** ✅ item #6 de la auditoría diseño↔prod de Transacciones. La lógica de conversión inline a USD (`formatAmountConversionLine`/`showUsdUnderAmounts`, formato exacto del diseño "USD: X VES / tasa = Y USD") ya existía completa pero solo se pintaba en la tabla "legacy" de `transactions/index.vue`, nunca en `.pro-tx-feed__amount` (el feed de cards que usa el layout Pro real). Fix de una sola línea de template — sin tocar cálculo. Verificado en prod real filtrando cuenta VES real: `USD: -VES 842.52 / 834 = -$1.01`. Commit frontend `4508e1c`, deploy OK.
+- **Pendiente de decisión del usuario, no tocado**: OWF-342/D-004 (¿portar el drag-and-drop de categorías del diseño al sidebar de Transacciones, o la página Configuración→Categorías ya alcanza?) y OWF-295 (automatizar bump de punteros de submódulo).
+- **Nota de proceso**: sesión con altísima concurrencia — múltiples otras sesiones trabajando en paralelo sobre `transactions/index.vue`/`.owf/TASKS.md` todo el día (OWF-341/342/343 con colisiones de ID documentadas en sus propias entradas). Ningún choque causó pérdida de código esta vez; el protocolo de "fetch+verificar contenido antes de reconciliar" (ver memoria de Engram "Patrón recurrente...") siguió funcionando bien.
 
 ## Cierre de sesión (2026-07-23) — OWF-329/OWF-330: fallback pydolarve.org + tasa EUR en automatización BCV
 
