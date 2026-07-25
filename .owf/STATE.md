@@ -3,10 +3,17 @@
 <!-- Solo un agente escribe a la vez. Updated = timestamp del ultimo escritor. -->
 <!-- Tareas se referencian por ID (OWF-NNN) → ver .owf/TASKS.md -->
 
-**Updated:** 2026-07-25T11:20:00Z
+**Updated:** 2026-07-25T12:10:00Z
 **By:** claude-code
 
-## Último trabajo (2026-07-25, continuación) — OWF-349: Asesor IA/Config/Notificaciones/Onboarding
+## Último trabajo (2026-07-25, continuación) — OWF-350: Cuentas/Categorías/Impuestos (greenfield, cierra el ciclo)
+
+- **OWF-350** ✅ Último módulo de usuario pendiente. Greenfield como Admin. Construido `CategoriesTreeView`/`CategoryDialog` (unificado), `AccountsTreeView`/`AccountDialog`/`AdjustBalanceDialog` ("Recalcular saldo" real, no simulado), `TaxesCrud` (con confirmación de borrado, a diferencia del Vue real) — integrados en las tabs de `ProConfigRoute.jsx` que habían quedado como placeholders en OWF-349.
+- **Bug real encontrado durante la verificación**: `Segmented` recibía opciones en formato de tupla en vez del objeto `{value,label}` que el componente realmente usa — el selector de Tipo de transacción no rompía pero tampoco funcionaba (`onChange` siempre `undefined`). Corregido en el código.
+- **Mismo gotcha de verificación de las últimas 2 sesiones**: el panel de preview local volvió a servir una versión desactualizada (esta vez del propio fix del bug de `Segmented`) — confirmado con `window.CategoryDialog.toString()` en consola. Patrón ya recurrente (3 veces en esta racha de sesiones): cuando la verificación visual local no cuadra con un cambio recién hecho, comparar contra el código en disco (`grep`) antes de asumir que algo está roto — y confiar en Claude Design como fuente de verdad para la verificación final del usuario.
+- **Con esto, los 9 módulos de la auditoría original (`.owf/FEATURE_MASTER_LIST.md`) tienen su ciclo completo de diseño real** (prompt → diseño → verificación → push): Cántaros, Transacciones, Análisis, Home, Cuentas/Categorías/Impuestos, Deudas/Sueños/Perfil, Asesor IA/Config/Notificaciones/Onboarding, Admin. Solo queda Auth/Público sin este tratamiento (menor prioridad, páginas de marketing ya simples).
+
+## Último trabajo (2026-07-25, sesión previa) — OWF-349: Asesor IA/Config/Notificaciones/Onboarding
 
 - **OWF-349** ✅ Última pieza de los 9 módulos de la auditoría con ciclo completo. A diferencia de Admin (greenfield), acá había una base sólida — se completaron gaps puntuales: Asesor IA ganó ajustes (nombre/personalidad/activado), barra de error real, copiar mensaje, limpiar conversación. Config Pro tenía el mismo problema estructural que Cántaros antes de OWF-322 (un solo `ConfigRoute.jsx` compartido Pro/Lite, violando DESIGN_CONTRACT.md §5) — nuevo `ProConfigRoute.jsx` con cards+5 tabs. Notificaciones ganó su página completa (`NotificationsRoute.jsx`), antes solo existía el panel. Onboarding ganó badges de gamificación en el paso final.
 - **Gotcha de verificación reforzado**: al probar el badge de gamificación, el panel de preview local sirvió una versión desactualizada del script pese a que el disco y el bundle subido a Claude Design eran correctos (confirmado con inspección directa de `window.ObStep.toString()` en consola, no solo lectura de archivo) — mismo patrón de limitación ya visto con Cántaros Pro. Cuando la verificación local no cuadra pero el código en disco es correcto, no asumir que el código está mal — comparar contra Claude Design antes de "arreglar" algo que no está roto.
