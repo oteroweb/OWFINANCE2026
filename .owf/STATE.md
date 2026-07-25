@@ -3,8 +3,16 @@
 <!-- Solo un agente escribe a la vez. Updated = timestamp del ultimo escritor. -->
 <!-- Tareas se referencian por ID (OWF-NNN) → ver .owf/TASKS.md -->
 
-**Updated:** 2026-07-25T09:00:00Z
+**Updated:** 2026-07-25T09:30:00Z
 **By:** claude-code
+
+## Cierre de sesión (2026-07-25) — OWF-295: auto-sync de punteros de submódulo (código completo, bloqueado)
+
+Continuación de la sesión que cerró OWF-329/330/340 el día anterior.
+
+- **OWF-295** ✅ código: `repository_dispatch` implementado — frontend/backend disparan un evento a central al pasar su CI en push a `main` (nuevo job `notify-central` en ambos `ci.yml`), central lo escucha (`sync-submodule-pointer.yml` nuevo) y auto-commitea/pushea el puntero del submódulo si cambió. Reutiliza `SUBMODULES_DEPLOY_KEY` (ya conocido de OWF-291); requiere secret nuevo `CENTRAL_DISPATCH_TOKEN` en frontend+backend, no creado todavía.
+- **Bloqueo confirmado, no resuelto**: la cuenta de GitHub tiene TODOS los Actions bloqueados por billing — verificado con `gh run view` en los 3 repos el mismo día, todos fallan en ~3s. Mismo bloqueo que OWF-290/291/292, sigue vigente días después. Código cerrado; verificación real depende de que el usuario resuelva el billing + cree el secret nuevo.
+- Con esto queda cerrado todo el backlog visible del board (`OWF-290`..`OWF-347`, salvo lo que otras sesiones concurrentes fueron agregando en paralelo el mismo día — ver sus propias entradas).
 
 ## Último trabajo (2026-07-25) — OWF-346/347: diseño real de Cántaros Lite + Deudas/Sueños/Perfil
 
