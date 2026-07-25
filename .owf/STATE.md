@@ -3,10 +3,20 @@
 <!-- Solo un agente escribe a la vez. Updated = timestamp del ultimo escritor. -->
 <!-- Tareas se referencian por ID (OWF-NNN) → ver .owf/TASKS.md -->
 
-**Updated:** 2026-07-25T04:20:00Z
+**Updated:** 2026-07-25T09:00:00Z
 **By:** claude-code
 
-## Último trabajo (2026-07-25) — OWF-345: conversión dual paralela+BCV, cierre del ciclo de auditoría diseño↔prod de Transacciones
+## Último trabajo (2026-07-25) — OWF-346/347: diseño real de Cántaros Lite + Deudas/Sueños/Perfil
+
+Continuación de la sesión que generó los 9 `PROMPT_REDISENO_*.md` (auditoría completa del sistema Pro/Lite) y ya había conectado Cántaros Pro. El usuario pidió avanzar módulo por módulo con diseño real en Claude Design, no solo prompts.
+
+- **OWF-346** ✅ Cántaros Lite diseñado completo (`JarsLiteConfig.jsx`) — card resumen, selector de periodo, lista con drag reorder + toggle activo, 3 modales (Detalle/Editar/Nuevo). De paso se descubrió y corrigió que el fix de wiring de Cántaros Pro de la sesión anterior se había revertido en el espejo local (no en Claude Design) — reaplicado.
+- **OWF-347** ✅ Deudas/Sueños/Perfil completados con interacciones reales (antes solo tarjetas de solo-lectura sin `onClick`): Deudas (Pagar cuota que reduce saldo real, Editar, Eliminar, formulario completo), Sueños (Aportar con celebración al completar + sección Completados, menú contextual), Perfil (card "Seguridad" agregada, faltaba por completo). `Card` ganó soporte de `onClick` (no lo tenía).
+- Ambos verificados end-to-end en el kit de Claude Design (no solo lectura de código) — pago que reduce saldo real, aporte que completa un sueño y dispara celebración, indicador de fortaleza de contraseña en vivo. Sin errores de consola.
+- **Gotcha de proceso**: el espejo local (`rediseno/`) puede revertirse a un estado anterior por operaciones git de sesiones concurrentes sin que Claude Design (el proyecto remoto real) pierda nada — antes de asumir que un fix "desapareció", comparar contra el proyecto remoto vía `DesignSync get_file` antes de re-hacer el trabajo desde cero.
+- **Quedan 3 de los 9 módulos sin este mismo ciclo completo** (auditoría → prompt → diseño real → verificación → push): Asesor IA/Config/Notificaciones/Onboarding, Admin, Auth/Público.
+
+## Último trabajo (2026-07-25, sesión previa) — OWF-345: conversión dual paralela+BCV, cierre del ciclo de auditoría diseño↔prod de Transacciones
 
 Continuación tras cerrar la sesión anterior. El usuario pidió retomar OWF-330 (ya resuelta, solo verificada de nuevo en vivo) y luego los 2 items pendientes de la auditoría diseño↔prod de Transacciones (OWF-340/342).
 
