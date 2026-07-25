@@ -3,10 +3,16 @@
 <!-- Solo un agente escribe a la vez. Updated = timestamp del ultimo escritor. -->
 <!-- Tareas se referencian por ID (OWF-NNN) → ver .owf/TASKS.md -->
 
-**Updated:** 2026-07-25T12:10:00Z
+**Updated:** 2026-07-25T13:00:00Z
 **By:** claude-code
 
-## Último trabajo (2026-07-25, continuación) — OWF-350: Cuentas/Categorías/Impuestos (greenfield, cierra el ciclo)
+## Último trabajo (2026-07-25, continuación) — OWF-351: Auth completo, Marketing pendiente
+
+- **OWF-351** ✅ `EntryGate.jsx` ya tenía landing+login/registro combinados — se agregó lo que faltaba: medidor de fuerza de contraseña, enlace "olvidé mi contraseña", botones sociales decorativos, y el gap real: **flujo completo de recuperación de contraseña** (`GateForgotPassword`+`GateResetPassword`), que no existía en absoluto. Verificado end-to-end en el kit (login→olvidé→enviar→banner→reset→medidor "Fuerte"→guardar→banner), sin errores de consola.
+- **No se tocó Marketing** (landing/features/pricing/matriz) — ya existe como HTML de referencia razonable, menor prioridad explícita.
+- **Con esto los 9 módulos de la auditoría original tienen al menos un ciclo de diseño real.** El trabajo de rediseño "por módulo, desde el prompt hasta el diseño verificado" que arrancó esta racha de sesiones queda cerrado; lo único explícitamente pendiente es Marketing (contenido, no funcionalidad) si se decide priorizarlo más adelante.
+
+## Último trabajo (2026-07-25, sesión previa) — OWF-350: Cuentas/Categorías/Impuestos (greenfield, cierra el ciclo)
 
 - **OWF-350** ✅ Último módulo de usuario pendiente. Greenfield como Admin. Construido `CategoriesTreeView`/`CategoryDialog` (unificado), `AccountsTreeView`/`AccountDialog`/`AdjustBalanceDialog` ("Recalcular saldo" real, no simulado), `TaxesCrud` (con confirmación de borrado, a diferencia del Vue real) — integrados en las tabs de `ProConfigRoute.jsx` que habían quedado como placeholders en OWF-349.
 - **Bug real encontrado durante la verificación**: `Segmented` recibía opciones en formato de tupla en vez del objeto `{value,label}` que el componente realmente usa — el selector de Tipo de transacción no rompía pero tampoco funcionaba (`onChange` siempre `undefined`). Corregido en el código.
