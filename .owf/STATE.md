@@ -3,8 +3,13 @@
 <!-- Solo un agente escribe a la vez. Updated = timestamp del ultimo escritor. -->
 <!-- Tareas se referencian por ID (OWF-NNN) → ver .owf/TASKS.md -->
 
-**Updated:** 2026-07-25T09:30:00Z
+**Updated:** 2026-07-25T10:15:00Z
 **By:** claude-code
+
+## Último trabajo (2026-07-25) — OWF-348: diseño real del panel Admin (greenfield)
+
+- **OWF-348** ✅ Admin no tenía ningún diseño interactivo previo (solo un HTML genérico de referencia) — construido desde cero: `AdminRoute.jsx` + `organisms/AdminScreens.jsx` con sidebar propia (6 pantallas: Dashboard, Usuarios index+detalle 6 tabs+impersonar, Monitor de IA, Sistema, y 2 CRUDs de muestra sobre un motor genérico parametrizable en vez de construir las 15 pantallas CRUD reales por separado). Acceso vía nuevo botón "Panel de administración" en el topbar Pro. Verificado end-to-end en el kit sin errores de consola.
+- **Con esto, 8 de los 9 módulos de la auditoría tienen el ciclo completo** (prompt → diseño real → verificación → push). Solo queda Asesor IA/Config/Notificaciones/Onboarding y Auth/Público (marketing) sin este mismo tratamiento.
 
 ## Cierre de sesión (2026-07-25) — OWF-295: auto-sync de punteros de submódulo (código completo, bloqueado)
 
