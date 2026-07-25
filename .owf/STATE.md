@@ -3,8 +3,18 @@
 <!-- Solo un agente escribe a la vez. Updated = timestamp del ultimo escritor. -->
 <!-- Tareas se referencian por ID (OWF-NNN) → ver .owf/TASKS.md -->
 
-**Updated:** 2026-07-23T23:45:00Z
+**Updated:** 2026-07-25T04:20:00Z
 **By:** claude-code
+
+## Último trabajo (2026-07-25) — OWF-345: conversión dual paralela+BCV, cierre del ciclo de auditoría diseño↔prod de Transacciones
+
+Continuación tras cerrar la sesión anterior. El usuario pidió retomar OWF-330 (ya resuelta, solo verificada de nuevo en vivo) y luego los 2 items pendientes de la auditoría diseño↔prod de Transacciones (OWF-340/342).
+
+- **OWF-330** ✅ re-verificada (ya estaba hecha por otra sesión): confirmado en vivo que `official_rates` tiene EUR real (0.8765) y el cron `bcv:fetch-rate --currency=EUR` está registrado.
+- **OWF-345** ✅ (antes OWF-340, sin ID propio): conversión dual "Paralela + BCV" en el feed Pro de Transacciones — decisión explícita del usuario de ir con dual en vez de la conversión simple del diseño de referencia. **Colisión real detectada a mitad de implementación**: otra sesión concurrente ya había agregado la variante simple al mismo punto del template — reemplazada por la dual sin dejarlas compitiendo. Verificado en prod real con datos reales (no de prueba): 1.500 VES → Paralela \$37.04 · BCV \$2.03, ambos correctos.
+- **OWF-342** ✅ — al ir a implementarla, se encontró que **otra sesión concurrente ya la había completado end-to-end** (pestaña "Categorías" con drag-and-drop real, `PATCH /categories/{id}/jar`, verificado con `DragEvent` nativo, deploy prod OK) bajo el ticket OWF-344, mientras yo todavía estaba evaluando el alcance con el usuario. Marcada OWF-342 como resuelta apuntando a OWF-344, sin duplicar trabajo.
+- **Con esto cierra completo el ciclo de la auditoría diseño↔prod de Transacciones** (ítems #1 a #9, repartidos entre OWF-331 a OWF-345 a lo largo de 2 sesiones concurrentes el mismo día).
+- **Gotcha de proceso reforzado**: con tantas sesiones concurrentes activas el mismo día sobre el mismo archivo (`transactions/index.vue`), conviene verificar el estado REAL en el navegador (no solo el código local) antes de empezar a implementar algo que "parece" pendiente — 2 de 2 features grandes de esta sesión (Categorías inline, conversión simple) ya estaban en curso o completas por otra sesión al momento de arrancar.
 
 ## Cierre de sesión (2026-07-23, continuación) — OWF-340: conversión USD en feed Pro
 
