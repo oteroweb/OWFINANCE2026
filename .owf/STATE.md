@@ -3,10 +3,18 @@
 <!-- Solo un agente escribe a la vez. Updated = timestamp del ultimo escritor. -->
 <!-- Tareas se referencian por ID (OWF-NNN) → ver .owf/TASKS.md -->
 
-**Updated:** 2026-07-25T13:00:00Z
+**Updated:** 2026-07-25T13:45:00Z
 **By:** claude-code
 
-## Último trabajo (2026-07-25, continuación) — OWF-351: Auth completo, Marketing pendiente
+## Último trabajo (2026-07-25, continuación) — OWF-352: Marketing completo + OnboardingModal separado (cierra todo pendiente explícito)
+
+- **OWF-352** ✅ Marketing (`organisms/MarketingPages.jsx`, nuevo): `FeaturesPage`, `PricingPage` (con nota de producto explícita del hallazgo "no hay paywall técnico hoy"), `MatrixPage` — comparten un único array `LITE_PRO_MATRIX` en vez de repetir la tabla en 2 lugares. **Inconsistencia FeaturesPage↔MatrixPage resuelta con datos reales** (no con ninguna de las 2 fuentes contradictorias): Apalancamiento (no "transferir entre cántaros") es 100% Pro; Carga masiva es igual en Lite y Pro. `GateLanding` expandido (trust strip, comparación Lite/Pro, features grid, CTA final) + `MarketingNav` compartido.
+- **Pedido explícito del usuario, fuera del alcance original**: separado `OnboardingModal` de `OnboardingFlow.jsx` — la elección Lite/Pro vivía fusionada en el paso "welcome" del wizard (decisión de OWF-349); ahora es un modal real e independiente (pantalla completa, no saltable), como especifica el prompt de Asesor/Config/Notificaciones/Onboarding §4.1.
+- Verificado end-to-end: navegación por las 4 páginas de marketing, toggle anual, FAQ, y el ciclo completo registro→OnboardingModal→elegir Pro→modo seteado (`window.getMode()`)→OnboardingFlow se abre solo. Sin errores de consola.
+- Subido a Claude Design + commit `d6dcf04` en `OWFinanceFrontend2025`, pusheado.
+- **Con esto, los 9 módulos de la auditoría original quedan con su ciclo completo de diseño real, sin pendientes explícitos conocidos.**
+
+## Último trabajo (2026-07-25, sesión previa) — OWF-351: Auth completo, Marketing pendiente
 
 - **OWF-351** ✅ `EntryGate.jsx` ya tenía landing+login/registro combinados — se agregó lo que faltaba: medidor de fuerza de contraseña, enlace "olvidé mi contraseña", botones sociales decorativos, y el gap real: **flujo completo de recuperación de contraseña** (`GateForgotPassword`+`GateResetPassword`), que no existía en absoluto. Verificado end-to-end en el kit (login→olvidé→enviar→banner→reset→medidor "Fuerte"→guardar→banner), sin errores de consola.
 - **No se tocó Marketing** (landing/features/pricing/matriz) — ya existe como HTML de referencia razonable, menor prioridad explícita.
