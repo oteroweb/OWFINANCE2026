@@ -3,10 +3,23 @@
 <!-- Solo un agente escribe a la vez. Updated = timestamp del ultimo escritor. -->
 <!-- Tareas se referencian por ID (OWF-NNN) → ver .owf/TASKS.md -->
 
-**Updated:** 2026-07-28T05:20:00Z
+**Updated:** 2026-07-28T05:25:00Z
 **By:** claude-code
 
-## Último trabajo (2026-07-28) — OWF-353..359: Onboarding funcional al día (reset + diseño real)
+## Último trabajo (2026-07-28) — OWF-361: Rate history picker + impuesto por fila en split + split+comisión combinables
+
+Pedido del usuario: (1) modal/reloj para elegir tasas paralela/BCV históricas con fecha, (2) impuesto por fila en "Pago múltiple" (no lo tenía, a diferencia de Items), (3) "Pago múltiple" y "Cobrar comisión" deben poder combinarse. Ciclo SDD completo (spec→design→tasks→apply×5 fases→verify), "procede con todo hasta culminar".
+
+**Nota de colisión de ID**: código/tests/comentarios usan "OWF-353" (asignado al iniciar la sesión), pero esa ID quedó tomada por una sesión concurrente para el trabajo de onboarding (ver abajo). Entrada real del board: **OWF-361**. No se renumeraron comentarios/tests retroactivamente — documentado acá y en TASKS.md.
+
+- **Fase 1** ✅ Backend `GET /user-currencies/history` + `/official-history` (`UserCurrencyController.php`), `RateHistoryTest.php` (5 tests), deploy.
+- **Fase 2** ✅ `RateHistoryPicker.vue` (modal, reloj junto a ambas tasas, historial con fecha), deploy.
+- **Fase 3** ✅ Backend `payments.*.tax_id` — reusa `payment_transaction_taxes`+`taxes` (dormidas desde antes). De paso: `/taxes` estaba 100% `CheckRole:admin` (bloqueaba a cualquier no-admin listar el catálogo) — mismo patrón OWF-264/OWF-303, corregido (lectura abierta, escritura admin). `PaymentTaxTest.php`+`TaxScopeTest.php` (8 tests), deploy.
+- **Fase 4** ✅ Selector de impuesto por fila en split (frontend), deploy.
+- **Fase 5** ✅ Refactor `proPanel` (ref único, 4 valores excluyentes) → `detailPanel` (split\|items\|shared\|null) + `commissionOn` (bool independiente) — permite combinar split+comisión. **Bug encontrado durante la propia verificación E2E** (no preexistente, introducido en esta fase): al sumar la comisión a la fila de split se restaba con signo (mismo criterio que el pago simple), pero las filas de split viajan en magnitud siempre positiva y el backend valida `abs(payments_sum)==abs(amount)` — la resta achicaba la suma en vez de agrandarla → 422 "Payments total must equal transaction amount". Corregido: en split la comisión siempre suma. Verificado en prod real: guardado split+comisión (tx id 5274, payment amount=102.00=100+2), confirmado en DB, limpiado (forceDelete + recalculate-account, balance 312.80 restaurado), token revocado. `vue-tsc`/`eslint` limpios.
+- **Deploy**: pendiente confirmar hash de commit tras este cierre de sesión (frontend + backend ya en prod incrementalmente por fase; Fase 5 es el último commit de esta racha).
+
+## Último trabajo (2026-07-28, sesión previa) — OWF-353..359: Onboarding funcional al día (reset + diseño real)
 
 Pedido del usuario: onboarding funcional para usuario nuevo (ya lo era, verificado) + opción de "repetirlo desde cero" (estaba rota) + poner el diseño al día. Auditoría completa contra `rediseno/onboarding/*.jsx` → 2 agentes en paralelo implementaron todo, verificado en vivo en browser (local + build prod), deployado.
 
