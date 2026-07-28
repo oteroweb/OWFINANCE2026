@@ -3,10 +3,26 @@
 <!-- Solo un agente escribe a la vez. Updated = timestamp del ultimo escritor. -->
 <!-- Tareas se referencian por ID (OWF-NNN) → ver .owf/TASKS.md -->
 
-**Updated:** 2026-07-25T13:45:00Z
+**Updated:** 2026-07-28T05:20:00Z
 **By:** claude-code
 
-## Último trabajo (2026-07-25, continuación) — OWF-352: Marketing completo + OnboardingModal separado (cierra todo pendiente explícito)
+## Último trabajo (2026-07-28) — OWF-353..359: Onboarding funcional al día (reset + diseño real)
+
+Pedido del usuario: onboarding funcional para usuario nuevo (ya lo era, verificado) + opción de "repetirlo desde cero" (estaba rota) + poner el diseño al día. Auditoría completa contra `rediseno/onboarding/*.jsx` → 2 agentes en paralelo implementaron todo, verificado en vivo en browser (local + build prod), deployado.
+
+- **OWF-353** ✅ (bug crítico) `OnboardingFlow.vue` nunca reseteaba `currentIndex`/`form`/`selectedTemplate` — "Repetir onboarding" reabría en el paso `done` con datos viejos. Fix: `resetFlow()` + `watch(show)` que resetea cuando el diálogo pasa cerrado→abierto y el paso previo era `done`.
+- **OWF-354** ✅ Paso `summary` ("Revisa tu perfil") nuevo entre `jars` y `done`: respuestas agrupadas por fase + botón Editar por sección.
+- **OWF-355** ✅ Paso `dream` ("sueño a largo plazo") separado de "goals", ahora paso propio.
+- **OWF-356** ✅ Modo Express ("Empezar rápido") en intro, salta pasos 100% opcionales.
+- **OWF-357** ✅ Gamificación ponderada real (`ONB_WEIGHTS`) reemplaza el cálculo fijo anterior.
+- **OWF-358** ✅ No se creó página nueva — ya existía `src/pages/user/financial-profile/index.vue` con todos los campos + guardado real; se le agregó anillo de completitud + nivel + 4 badges de sección + botón "Reiniciar mi perfil" (resetea `has_seen_onboarding`, dispara onboarding desde `AppShell.vue`).
+- **OWF-359** ✅ 4 campos avanzados Pro (income_detail/risk_tolerance/time_horizon/goal_priority) agregados a financial-profile, gateados por `layout_mode==='pro'`. Backend no tiene columnas para esto — persistidos en `localStorage` por ahora, comentario en código apuntando a `UserFinancialProfileController::PROFILE_FIELDS` para cuando se agregue migración real.
+- **OWF-360** ✅ Aclarado: `OnboardingModal.vue` (picker Lite/Pro) es diseño intencional (OWF-352), no gap.
+- **Verificado en vivo** (browser real, local apuntando a API prod): reset funciona (52% "Brote" tras reset y re-completar 4 campos), paso sueño dedicado, resumen editable, modo express visible, vue-tsc + eslint limpios en todo el proyecto.
+- **Deploy**: commit `0d8be43`, `./deploy-frontend.sh prod` OK, `frontend=OK:200`.
+- **Pendiente/nota**: en `config/index.vue` el nav item "Repetir configuración inicial" (línea 303) solo aparece en layout Lite (`lite-config__nav-item` — Pro usa `ProConfigRoute`/tabs sin ese link); usuarios Pro reinician desde "Mi perfil financiero" → "Reiniciar mi perfil" en su lugar (verificado, funciona igual).
+
+## Trabajo previo (2026-07-25, continuación) — OWF-352: Marketing completo + OnboardingModal separado (cierra todo pendiente explícito)
 
 - **OWF-352** ✅ Marketing (`organisms/MarketingPages.jsx`, nuevo): `FeaturesPage`, `PricingPage` (con nota de producto explícita del hallazgo "no hay paywall técnico hoy"), `MatrixPage` — comparten un único array `LITE_PRO_MATRIX` en vez de repetir la tabla en 2 lugares. **Inconsistencia FeaturesPage↔MatrixPage resuelta con datos reales** (no con ninguna de las 2 fuentes contradictorias): Apalancamiento (no "transferir entre cántaros") es 100% Pro; Carga masiva es igual en Lite y Pro. `GateLanding` expandido (trust strip, comparación Lite/Pro, features grid, CTA final) + `MarketingNav` compartido.
 - **Pedido explícito del usuario, fuera del alcance original**: separado `OnboardingModal` de `OnboardingFlow.jsx` — la elección Lite/Pro vivía fusionada en el paso "welcome" del wizard (decisión de OWF-349); ahora es un modal real e independiente (pantalla completa, no saltable), como especifica el prompt de Asesor/Config/Notificaciones/Onboarding §4.1.
