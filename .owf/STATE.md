@@ -3,8 +3,18 @@
 <!-- Solo un agente escribe a la vez. Updated = timestamp del ultimo escritor. -->
 <!-- Tareas se referencian por ID (OWF-NNN) → ver .owf/TASKS.md -->
 
-**Updated:** 2026-07-28T05:25:00Z
+**Updated:** 2026-07-29T00:00:00Z
 **By:** claude-code
+
+## Último trabajo (2026-07-29) — OWF-362: fix bypass de autorización en bulk import de transacciones
+
+Reporte externo (no descubierto por sesión propia): `test_bulk_create_account_permission_denied` fallaba — `TransactionBulkService::validateBusinessRules()` chequeaba ownership de cuentas pero con `!app()->environment('testing')` en la condición, deshabilitando el chequeo completo durante tests. El código de producción sí ejecutaba el chequeo (nunca fue explotable en prod), pero la ausencia de bypass en testing significaba que la protección nunca tuvo cobertura real — el bypass se había agregado (antes de esta sesión) para no romper 4 tests de bulk que creaban cuentas sin asociarlas al usuario autenticado de test.
+
+- Quitado `!app()->environment('testing')` de `TransactionBulkService.php:210`.
+- `tests/TestCase.php`: expuesto `protected ?User $authUser` (antes usuario anónimo de `Sanctum::actingAs` sin referencia accesible desde subclases).
+- 4 tests de bulk actualizados para `$this->authUser->accounts()->attach(...)` en vez de depender del bypass: `test_bulk_create_all_valid`, `test_bulk_create_partial_success`, `test_bulk_create_dry_run`, `test_bulk_create_transfer_validation`.
+- Suite completa: 283/283 tests OK, sin regresiones (incluye `TransactionRatePrecedenceTest` que ya tenía su propio `private User $user` shadowing — por eso se eligió el nombre `authUser` para la propiedad base y evitar colisión de visibilidad).
+- Deploy backend: `./deploy-backend.sh prod "OWF-362..."` → exit 0, DEPLOY EXITOSO, backend-health=OK:200.
 
 ## Último trabajo (2026-07-28) — OWF-361: Rate history picker + impuesto por fila en split + split+comisión combinables
 
