@@ -3,8 +3,16 @@
 <!-- Solo un agente escribe a la vez. Updated = timestamp del ultimo escritor. -->
 <!-- Tareas se referencian por ID (OWF-NNN) → ver .owf/TASKS.md -->
 
-**Updated:** 2026-07-29T00:00:00Z
+**Updated:** 2026-07-31T00:00:00Z
 **By:** claude-code
+
+## Último trabajo (2026-07-31) — Cierre de sesión: verificación E2E OWF-361 fase 2, limpieza de board, confirmación OWF-362
+
+- **OWF-361 fase 2** (`RateHistoryPicker.vue`) re-verificada en navegador real (dev local → API prod, token de sesión real): reloj de "Tasa paralelo" y de "Tasa oficial (BCV)" abren su modal con historial real fechado, seleccionar una entrada rellena el campo correcto. Sin cambios de código — ya estaba deployado, solo confirmación visual.
+- **Board cleanup**: OWF-267/268/269 estaban `[!]` bloqueadas desde la auditoría txform (OWF-240, cerrada 2026-07-12), pero eran hallazgos DESCARTADOS (referencia de diseño incorrecta) ya absorbidos por OWF-270/271 (`[x]` desde 2026-07-08/12) — el `[!]` era estado stale nunca actualizado tras la resolución real, no un bloqueo activo. Marcadas `[x]` con referencia cruzada.
+- **OWF-362** (fix bulk transaction import, ver entrada abajo): completado por una sesión local paralela que el usuario lanzó desde el chip sugerido al final de OWF-361. Verificado en esta sesión: commit `c9fdca2` en main, deployado en prod (confirmado el fix vive en el servidor vía grep remoto), suite completa 283/283 corrida de nuevo sin regresiones.
+- **Submodule bump**: el puntero `OWFinanceFrontend2025` en central seguía apuntando a `0d8be43` (previo a OWF-361 fase 5); actualizado a `c87af00` (commit `f2b61b2`).
+- Sin código nuevo esta sesión — solo verificación, housekeeping de board y sync de submodule.
 
 ## Último trabajo (2026-07-29) — OWF-362: fix bypass de autorización en bulk import de transacciones
 
