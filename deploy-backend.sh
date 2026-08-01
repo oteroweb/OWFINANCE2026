@@ -139,18 +139,20 @@ POST_DEPLOY_OUTPUT="$(ssh $SSH_OPTS "${REMOTE_USER}@${REMOTE_HOST}" /bin/bash <<
 set -e
 cd "\$HOME/${REMOTE_DIR}"
 PHP="php"
-echo "  [1/5] composer install..."
+echo "  [1/6] composer install..."
 composer install --no-dev --prefer-dist --no-interaction --quiet 2>/dev/null || true
-echo "  [2/5] migraciones..."
+echo "  [2/6] migraciones..."
 \$PHP artisan migrate --force
-echo "  [3/5] caches..."
+echo "  [3/6] storage:link..."
+\$PHP artisan storage:link || true
+echo "  [4/6] caches..."
 \$PHP artisan config:cache
 \$PHP artisan route:cache
 \$PHP artisan view:cache
 \$PHP artisan event:cache 2>/dev/null || true
-echo "  [4/5] cache:clear..."
+echo "  [5/6] cache:clear..."
 \$PHP artisan cache:clear
-echo "  [5/5] version..."
+echo "  [6/6] version..."
 \$PHP artisan --version
 echo ""
 echo "  \u2714 Post-deploy completado."

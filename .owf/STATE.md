@@ -3,8 +3,19 @@
 <!-- Solo un agente escribe a la vez. Updated = timestamp del ultimo escritor. -->
 <!-- Tareas se referencian por ID (OWF-NNN) → ver .owf/TASKS.md -->
 
-**Updated:** 2026-07-31T00:00:00Z
+**Updated:** 2026-08-01T00:40:00Z
 **By:** claude-code
+
+## Último trabajo (2026-08-01) — OWF-284: wiring real del campo "Foto / soporte"
+
+Bloqueada desde antes por falta de decisión de infraestructura (ver hallazgo original: cero precedente de `Storage::`, `storage:link` nunca corrido en prod, subida de archivos como superficie nueva). Usuario eligió **local + storage:link** (no S3, sin credenciales AWS en prod hoy).
+
+- Backend: `POST /transactions/attachments` (multipart, `auth:sanctum`) en `TransactionController::uploadAttachment()` — valida mime (jpg/jpeg/png/webp/pdf) + tamaño (max 5MB), guarda en disco `public` bajo `attachments/{user_id}/`, devuelve la URL pública. `save()`/`update()` ya soportaban `url_file` (incluido `null` para limpiar en edición), sin cambios ahí.
+- `deploy-backend.sh`: agregado `php artisan storage:link` al post-deploy (idempotente — Laravel no falla si el link ya existe). **Confirmado en el propio deploy real que el disco NO estaba enlazado en prod** — primera corrida real lo conectó (el hallazgo original de OWF-284 era correcto).
+- Frontend (`SmartTransactionModal.vue`): `onAttachmentPicked()` ahora sube el archivo real vía `FormData` a `/transactions/attachments` (antes solo generaba un blob URL local decorativo, nunca llegaba a subir nada — UI-only real desde OWF-283). `canSave` bloquea mientras sube. Prefill del adjunto ya guardado al editar una transacción (`loadTransactionForEdit`). Quitar el adjunto en modo edición manda `url_file: null` explícito para limpiar el campo en backend.
+- Tests: 4 nuevos (`TransactionAttachmentTest.php` — upload ok/mime rechazado/tamaño rechazado/requiere auth), suite completa backend 287/287.
+- **Verificación E2E real** (no solo tests unitarios): usuario+cuenta de prueba desechables creados en el backend local, login real, upload multipart vía curl → archivo confirmado en disco → URL servida vía symlink (200) → transacción creada con `url_file` persistido en DB — confirmado y limpiado (forceDelete) después. Intento de probar la subida por UI real (click+file picker) en el Browser pane no fue posible (el picker de archivos del SO no es controlable por las herramientas de browser disponibles); se compensó con la verificación curl end-to-end del mismo endpoint + revisión de código de `onAttachmentPicked()`/`vue-tsc`/`eslint` limpios.
+- Deploy: backend (`bd720ac`) y frontend prod OK, `frontend=OK:200`/`backend-health=OK:200`.
 
 ## Último trabajo (2026-07-31) — Cierre de sesión: verificación E2E OWF-361 fase 2, limpieza de board, confirmación OWF-362
 
