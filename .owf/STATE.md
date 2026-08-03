@@ -3,8 +3,21 @@
 <!-- Solo un agente escribe a la vez. Updated = timestamp del ultimo escritor. -->
 <!-- Tareas se referencian por ID (OWF-NNN) → ver .owf/TASKS.md -->
 
-**Updated:** 2026-08-01T00:40:00Z
+**Updated:** 2026-08-03T00:00:00Z
 **By:** claude-code
+
+## Último trabajo (2026-08-03) — OWF-363: fix IDOR crítico en AccountController + hardening Jar con Policies
+
+Pedido del usuario: "tenemos alguna otra tarea para avanzar" → auditoría de gaps delegada a agente. Encontró 6 Policies registradas en `AuthServiceProvider` pero CERO invocadas en todo el backend (código muerto), y un patrón recurrente de bugs de autorización (3ra instancia: OWF-117, OWF-362, ahora esto).
+
+- **Bug crítico real, activo en prod** (no reportado por el usuario, encontrado en la auditoría): `AccountController::find/update/delete/change_status/adjustBalance/recalcBalance` no tenían NINGÚN chequeo de ownership — cualquier usuario autenticado podía ver/editar/desactivar/ajustar saldo/borrar la cuenta de otro usuario adivinando el ID.
+- Fix: `AccountPolicy` nueva basada en pivot `account_user` (multi-dueño), `is_owner` gatea `delete` vs `view`/`update` compartido entre co-dueños. Wireada en los 6 endpoints.
+- **Jar** (menor severidad, SÍ protegido en prod): `JarController`+`UserJarController` duplicaban 9 checks inline con `!app()->environment('testing')` — mismo bypass que OWF-362, sin cobertura de test real pese a funcionar en runtime. Reemplazado por `$request->user()->can()/cannot()` contra `JarPolicy` (bypass también eliminado de la Policy).
+- `DebtPolicy`/`DreamPolicy` creadas y registradas por consistencia (sin bug activo — ya protegidos vía scoping de query, controllers no tocados para preservar semántica 404).
+- 12 tests IDOR nuevos + 5 preexistentes corregidos. Suite completa 299/299.
+- Verificado en vivo en prod con 2 usuarios reales: atacante → 403 en GET/PUT/DELETE/PATCH contra cuenta ajena; dueño real → 200 sin cambios. Tokens de verificación revocados.
+- Deploy backend OK, commit `29ccf51` pusheado a `OWFINANCEBACKEND2025`.
+- **Alcance explícitamente diferido** (decisión del usuario): Category/Transaction/ItemTransaction/Provider/AccountFolder tienen Policy registrada pero también inerte — sin bug activo, no se tocaron. Otros hallazgos de la misma auditoría (CRUD de impuestos por cuenta/ítem sin usar en frontend, SMTP de recuperación de contraseña sin configurar en prod, docs desactualizados OWF-068) quedan pendientes de decisión — no atacados en este ciclo.
 
 ## Último trabajo (2026-08-01) — OWF-284: wiring real del campo "Foto / soporte"
 
