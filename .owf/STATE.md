@@ -3,8 +3,19 @@
 <!-- Solo un agente escribe a la vez. Updated = timestamp del ultimo escritor. -->
 <!-- Tareas se referencian por ID (OWF-NNN) → ver .owf/TASKS.md -->
 
-**Updated:** 2026-08-03T00:00:00Z
+**Updated:** 2026-08-03T16:50:00Z
 **By:** claude-code
+
+## Último trabajo (2026-08-03, cont.) — OWF-364: onboarding no se disparaba tras registro
+
+Usuario pidió "verificar el diseño y ver todo lo que tenemos en la zona de onboarding y planificar las cosas". Agente Explore auditó `OnboardingFlow.vue`/`OnboardingModal.vue` contra `rediseno/onboarding/*.jsx` + trazó el flujo registro→onboarding completo. En paralelo, reproduje en vivo en prod (cuenta descartable en owfinances.com): **un usuario recién registrado nunca ve ni el picker Lite/Pro ni el wizard de perfil** — cae directo al Home.
+
+- **Causa raíz 1**: `LoginPage.vue`/`LoginMobileView.vue` — el handler de registro seteaba token/user directo sin llamar `auth.fetchSettings()` (a diferencia de `auth.login()`). `auth.settings` quedaba `null` para siempre → ni `OnboardingModal` ni `AppShell` tenían de dónde leer `has_seen_onboarding`. Confirmado con network tab: cero llamadas a `GET /user/settings` tras registrarse.
+- **Causa raíz 2** (afecta incluso a usuarios que sí pasan por login normal): `OnboardingModal` y `AppShell.checkOnboarding()` compartían la misma bandera `has_seen_onboarding` — el modal la marca `true` apenas se elige Lite/Pro, así que el wizard (gateado con la misma bandera) nunca llegaba a mostrarse.
+- **Fix**: `fetchSettings()` agregado a los 2 handlers de registro. `AppShell.checkOnboarding()` ahora gatea el wizard con `onboarding_profile_completed` (de `GET /user/financial-profile`, bandera YA existente y usada por el backend para el Asesor IA, pero nunca conectada al trigger del wizard) — solo se evalúa una vez que `has_seen_onboarding===true`, para secuenciar picker→wizard sin superponerlos.
+- **Bonus (acordado con el usuario)**: `OnboardingFlow.skip()` (botón "×"/"Ahora no") mandaba solo `{onboarding_profile_completed:true}`, perdiendo cualquier campo ya respondido — ahora manda `{...form.value, ...}` igual que `finish()`.
+- **Verificado end-to-end** contra backend local con usuario descartable real (no solo código): registro→picker aparece→Pro→wizard se abre solo→responde "Empleado"→cierra con "×"→PUT confirmado con `occupation:"employee"` persistido (antes se perdía). `vue-tsc`/`eslint` limpios. Deploy frontend prod OK (`42ff2c2`).
+- **Gaps documentados pero NO implementados hoy** (fuera del alcance acordado, quedaron como OWF-365..368 en el board): 2 modelos de gamificación divergentes (wizard "Semilla/Brote/Árbol" vs Mi Perfil "Básico/Completo/Avanzado" — usuario ya confirmó que debe ganar este último, falta migrar el wizard), campos Pro avanzados sin columnas backend, pregunta abierta sobre moneda/cuenta inicial en el onboarding, pregunta abierta sobre login social + links legales en Registro (el diseño de referencia los tiene, el código real no).
 
 ## Último trabajo (2026-08-03) — OWF-363: fix IDOR crítico en AccountController + hardening Jar con Policies
 
