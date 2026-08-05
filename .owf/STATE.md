@@ -3,8 +3,17 @@
 <!-- Solo un agente escribe a la vez. Updated = timestamp del ultimo escritor. -->
 <!-- Tareas se referencian por ID (OWF-NNN) → ver .owf/TASKS.md -->
 
-**Updated:** 2026-08-03T16:50:00Z
+**Updated:** 2026-08-03T18:10:00Z
 **By:** claude-code
+
+## Último trabajo (2026-08-03, cont. 2) — OWF-365: unificar gamificación de perfil financiero
+
+Usuario pidió directo: "dale con OWF-365, unifica la gamificación".
+
+- `OnboardingFlow.vue` (wizard) migrado del modelo propio "Semilla/Brote/Árbol" (OWF-357) al modelo de `financial-profile/index.vue` ("Básico/Completo/Avanzado", mismos `ONB_WEIGHTS`). `templateSlug` en el wizard se deriva de `selectedTemplate` (plan elegido en el paso "jars"). El wizard solo llega a "completo" — "avanzado" queda fuera de su alcance porque no pide los campos Pro avanzados (OWF-366, separado).
+- **Bug adicional encontrado durante la verificación** (sin el cual la unificación quedaba a medias): `financial-profile/index.vue` trata `templateSlug` como estado 100% local de esa página — un usuario que aplicó su plan desde el wizard tenía cántaros reales pero seguía mostrando 88%/Básico en Mi Perfil para los mismos datos que el wizard ya daba por 100%/Completo. Fix: `isFieldDone('templateSlug')` también cuenta como lleno si ya hay `jars` reales cargados, sin importar dónde se eligió el plan.
+- **Verificado end-to-end** contra backend local con usuario descartable real: wizard completo (9 campos + plan "Conservador") → 100%/Completo en el wizard (confirmado también el cálculo intermedio: 96%/Brote-viejo-96%-nuevo con un campo faltante, matemática ponderada correcta) → PUT confirmado con los 9 campos → navegación a "Mi Perfil financiero" → **mismo 100%/Completo**, sin discrepancia. `vue-tsc`/`eslint` limpios. Deploy frontend prod OK (`103a99e`).
+- OWF-366/367/368 (campos Pro avanzados a backend, pregunta de moneda/cuenta inicial, pregunta de login social) siguen pendientes en el board, no tocados hoy.
 
 ## Último trabajo (2026-08-03, cont.) — OWF-364: onboarding no se disparaba tras registro
 
