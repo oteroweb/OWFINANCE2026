@@ -3,8 +3,20 @@
 <!-- Solo un agente escribe a la vez. Updated = timestamp del ultimo escritor. -->
 <!-- Tareas se referencian por ID (OWF-NNN) → ver .owf/TASKS.md -->
 
-**Updated:** 2026-08-03T18:10:00Z
+**Updated:** 2026-08-06T17:40:00Z
 **By:** claude-code
+
+## Último trabajo (2026-08-06) — OWF-366: campos Pro avanzados a backend real
+
+Usuario pidió directo: "dale con OWF-366, los campos Pro avanzados". Antes de tocar código, pregunta rápida sobre alcance: ¿solo migrar a backend, o además agregarlos al wizard de onboarding? Usuario confirmó: solo backend, el wizard sigue sin pedirlos.
+
+- Migración nueva `add_advanced_profile_fields_to_ai_user_settings` (4 columnas nullable, mismo patrón que la migración original de perfil narrativo). `AiUserSetting`/`UserFinancialProfileController` actualizados (fillable, validación `Rule::in`, `formatProfile()`).
+- El frontend (`financial-profile/index.vue`) YA mandaba estos 4 campos en el PUT desde OWF-359 — Laravel los descartaba en silencio por no estar en las reglas de validación. No hizo falta tocar el guardado, solo la validación/exposición del lado backend.
+- Frontend: eliminado todo el código de `localStorage` (`advancedStorageKey`/`loadAdvanced`/`saveAdvanced` + el `watch` que persistía en cada cambio) — ahora `advanced.value` se hidrata desde la misma respuesta de `GET /user/financial-profile`.
+- 3 tests nuevos (`UserFinancialProfileTest.php`), suite completa 302/302. Migración probada rollback→re-migrate limpio.
+- **Verificado end-to-end** con usuario Pro descartable real: llenó los 4 campos → PUT confirmado → `localStorage.clear()` + reload → GET trae los mismos 4 valores (prueba explícita de que ya no depende de localStorage, no solo "el código se ve bien").
+- Deploy backend (migración corrida en prod, confirmada en el log del deploy) + frontend OK.
+- Quedan en el board sin tocar: **OWF-367** (¿pedir moneda/cuenta inicial en onboarding?) y **OWF-368** (login social + links legales en Registro) — ambas preguntas abiertas de producto, no resueltas todavía.
 
 ## Último trabajo (2026-08-03, cont. 2) — OWF-365: unificar gamificación de perfil financiero
 
