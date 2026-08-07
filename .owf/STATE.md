@@ -3,8 +3,26 @@
 <!-- Solo un agente escribe a la vez. Updated = timestamp del ultimo escritor. -->
 <!-- Tareas se referencian por ID (OWF-NNN) → ver .owf/TASKS.md -->
 
-**Updated:** 2026-08-06T17:40:00Z
+**Updated:** 2026-08-07T22:30:00Z
 **By:** claude-code
+
+## Último trabajo (2026-08-07) — OWF-367: el "gap" de moneda/cuenta inicial no era el que parecía
+
+Usuario pidió "dale con OWF-367, definamos moneda/cuenta inicial". Confirmó por pregunta directa que sí quería un paso nuevo en el wizard para crear la primera cuenta (nombre+moneda+saldo).
+
+**Implementación inicial** (revertida, ver abajo): paso "account" completo en `OnboardingFlow.vue` — chips de moneda (`GET /currencies/active`), tipo de cuenta resuelto automático (`GET /account_types/active`), `POST /accounts` en `finish()`, gateado a `hasExistingAccounts` (computed sobre `auth.user.accounts`).
+
+**Al verificar en vivo con un usuario descartable real** (no solo revisar el diff): se creó una SEGUNDA cuenta duplicada — "Billetera" (id menor) ya existía junto a la "Cuenta principal" recién creada por el wizard. Investigando: `AuthController::register()` (backend) **ya crea una cuenta "Billetera" por defecto desde OWF-065**, idempotente y silencioso. El síntoma original (selector de cuenta vacío tras registro, que motivó todo OWF-367) nunca fue "no hay cuenta" — fue que la respuesta de `POST /auth/register` no hace eager-load de la relación `accounts`, así que `auth.user.accounts` quedaba vacío en el frontend hasta el primer refresh de perfil real (`GET /user/profile`, que sí la trae).
+
+**Fix real aplicado** (mucho más chico que el descartado): `await auth.refreshProfile()` agregado en `LoginPage.vue`/`LoginMobileView.vue` justo después del `fetchSettings()` que ya se había agregado en OWF-364. Revertido por completo el paso nuevo del wizard (`git checkout -- OnboardingFlow.vue`, nunca llegó a deploy). Verificado en vivo: usuario 100% nuevo, sin tocar el wizard de perfil para nada (ni siquiera abrirlo), abre el modal de transacción y ya ve "Billetera · USD" como cuenta de origen.
+
+**Bug colateral real, encontrado al construir el paso descartado pero independiente y correcto de mantener**: `GET /account_types` (catálogo, necesario para crear cualquier cuenta) estaba 100% detrás de `CheckRole:admin` — mismo patrón de bug ya visto y corregido en `/providers` (OWF-264), `/transaction_types` (OWF-303), `/taxes` (OWF-353). Esto bloqueaba de verdad la pantalla de Cuentas en Configuración para cualquier usuario no-admin (confirmado con curl antes del fix: 403). Separado lectura/escritura, con cuidado en el ORDEN de registro de rutas — confirmado en vivo que Laravel matchea por orden de registro, no por especificidad de segmento: si `GET /{id}` (público) se registra antes que `GET /all` (admin, literal), `/account_types/all` cae en `find('all')` en vez de `withTrashed()`. Este exacto bug ya existe hoy en `/taxes/all` (mismo patrón, orden invertido) — confirmado con curl real (admin recibe 404 "Not Data with this Tax" en vez de la lista de eliminados) y reportado aparte como tarea flotante (`task_fab6be55`, no arreglado en esta sesión, fuera de alcance).
+
+6 tests nuevos (`AccountTypeScopeTest.php`), suite completa backend 308/308. Deploy backend+frontend OK.
+
+**Con esto, OWF-367 queda cerrada y la pregunta original del board (¿pedir moneda/cuenta inicial en el onboarding?) tiene respuesta: no hace falta, ya existe automáticamente — el problema real era de refresco de datos, no de flujo de producto.**
+
+Solo queda **OWF-368** (login social + links legales en Registro) como pregunta abierta de producto en el board de onboarding-audit.
 
 ## Último trabajo (2026-08-06) — OWF-366: campos Pro avanzados a backend real
 
