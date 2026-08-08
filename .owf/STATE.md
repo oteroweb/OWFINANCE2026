@@ -3,8 +3,21 @@
 <!-- Solo un agente escribe a la vez. Updated = timestamp del ultimo escritor. -->
 <!-- Tareas se referencian por ID (OWF-NNN) → ver .owf/TASKS.md -->
 
-**Updated:** 2026-08-07T22:30:00Z
+**Updated:** 2026-08-08T15:05:00Z
 **By:** claude-code
+
+## Último trabajo (2026-08-08) — OWF-368: páginas legales reales + botones sociales decorativos removidos
+
+Usuario pidió cerrar el último ítem del backlog de onboarding-audit: "dale con OWF-368, login social y links legales".
+
+- **Verificación previa** (aprendida de OWF-367): antes de implementar, se revisó el código real en vez de confiar en la nota vieja del ticket. Resultado: los links Términos/Privacidad SÍ existían (desktop y mobile), apuntaban a `href="#"`. Los botones Google/Apple existían SOLO en desktop, 100% decorativos.
+- Pregunta directa al usuario sobre 2 sub-decisiones de tamaño muy distinto:
+  1. Links legales (fix chico) → confirmó crear páginas reales.
+  2. Login social (fix grande, requiere credenciales OAuth externas que no tengo) → confirmó **quitar los botones decorativos** en vez de dejarlos rotos o intentar el OAuth real.
+- Implementado: `TermsPage.vue`/`PrivacyPage.vue` nuevas (rutas `/terminos`/`/privacidad`, contenido legal base — comentario en código marcando que necesita revisión legal real antes de ser definitivo), conectadas desde `LoginPage.vue`/`LoginMobileView.vue` y el footer público (`PublicLayout.vue`). Botones Google/Apple removidos de `LoginPage.vue`.
+- Verificado en vivo (desktop + mobile, dev local): páginas renderizan con el layout público del sitio, links navegan correctamente, botones sociales ausentes. `vue-tsc`/`eslint` limpios. Deploy frontend prod OK.
+
+**Con esto se cierra el backlog completo de la auditoría de onboarding abierta el 2026-08-03 (OWF-364 hallazgo crítico + OWF-365/366/367/368 backlog derivado). Sin pendientes de onboarding en el board.**
 
 ## Último trabajo (2026-08-07) — OWF-367: el "gap" de moneda/cuenta inicial no era el que parecía
 
