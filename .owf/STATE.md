@@ -3,8 +3,32 @@
 <!-- Solo un agente escribe a la vez. Updated = timestamp del ultimo escritor. -->
 <!-- Tareas se referencian por ID (OWF-NNN) → ver .owf/TASKS.md -->
 
-**Updated:** 2026-08-08T15:05:00Z
+**Updated:** 2026-08-20T21:35:00Z
 **By:** claude-code
+
+## Último trabajo (2026-08-20) — OWF-369: backend Fase 1 de "Grupo Familiar y Contabilidad Empresarial"
+
+Épica nueva, todavía sin fila en `.owf/TASKS.md` a pedido del usuario ("esperemos a tener el diseño confirmado antes de abrir el ticket"). Contexto completo: pidió esquematizar (2026-08-08) compartir cuentas entre usuarios dentro de un "grupo familiar" + segmentar contabilidad personal/empresarial (múltiples "contabilidades", nómina real, gastos fijos) — documento de arquitectura publicado como Artifact (buscar con `Artifact({action:"list"})` si hace falta el link), roadmap de 4 fases confirmado con el usuario:
+1. **Grupo familiar y cuentas compartidas** ← esta sesión, backend hecho
+2. Empresas y contabilidad segmentada (business_id en accounts/categories/transactions)
+3. Gastos fijos recurrentes (personal + empresarial)
+4. Nómina/RRHH real
+
+Sesión de hoy: usuario pidió "el prompt para hacer el diseño y realizar la sincronización" → generado y subido a Claude Design (`rediseno/PROMPT_REDISENO_GRUPO_FAMILIAR_CUENTAS_COMPARTIDAS.md`, vía DesignSync), scopeado SOLO a Fase 1 (no todo de una, mismo principio de sincronización incremental del design system). Después: "qué falta para iniciar, ¿podríamos hacer todo lo relacionado con el backend?" → cerradas 2 decisiones de modelo de datos que estaban abiertas en el documento de arquitectura (preguntadas directo, no asumidas):
+- Un usuario puede pertenecer a **varios grupos familiares a la vez** (no uno solo).
+- Cuando alguien con permiso `manage` opera una cuenta ajena, queda **trazado quién la operó** — resuelto sin cambios de esquema: `transactions.user_id` ya guardaba esto.
+- Deploy a medida que avanza (aditivo, no rompe nada existente), sin esperar al frontend.
+
+**Implementado y deployado a prod** (backend completo de Fase 1):
+- `family_groups` + `family_group_members` (multi-grupo, invitar por correo a usuario ya registrado, aceptar/rechazar, salir/remover — no se puede remover al dueño del grupo).
+- `account_user` extendido: `permission` (manage|view_full|view_balance) + `shared_by_user_id`. Compartir requiere ser dueño real Y que ambos compartan un grupo familiar activo — validado en el endpoint (`AccountController::share()`), no solo confiado a la UI.
+- `AccountPolicy` endurecida: **antes cualquier fila `is_owner=false` en el pivot daba acceso de edición completo** (sin niveles) — hallazgo real durante la implementación, no solo teórico: había un test (`AccountPolicyIdorTest::test_non_owner_member_can_view_and_update_but_not_delete`) que fijaba ese comportamiento viejo como "correcto". Actualizado a propósito: editar ahora requiere `permission=manage` explícito.
+- `GET /accounts/shared-with-me`, `POST/DELETE /accounts/{id}/share` — mismo cuidado de orden de rutas literal-antes-que-{id} que OWF-367 (`account_types.php`).
+- 27 tests nuevos/actualizados (`FamilyGroupTest.php`, `AccountSharingTest.php`, `AccountPolicyIdorTest.php` actualizado), suite completa backend 328/328. Migraciones probadas con rollback→re-migrate antes de deployar.
+- Commit backend `d265485`, deploy prod OK (migraciones corridas, `backend-health=OK:200`).
+- **No implementado a propósito, fuera de alcance de esta fase**: enforcement de que `view_balance` no pueda listar transacciones (el policy method `viewTransactions()` existe pero no está wireado en `TransactionController::all()` — requiere tocar un endpoint de listado complejo y no está claro todavía el trigger exacto en la UI real; mejor esperar el diseño confirmado antes de tocarlo). Frontend de Fase 1 (el JSX) sigue pendiente de Claude Design.
+
+**Siguiente**: esperar a que el usuario confirme el diseño de Fase 1 en Claude Design → correr Ciclo 0 (pull acotado) → port a Vue → recién ahí abrir la fila OWF-369 en el board con todo el detalle. Fase 2 (empresas) necesita su propio prompt de diseño cuando toque.
 
 ## Último trabajo (2026-08-08) — OWF-368: páginas legales reales + botones sociales decorativos removidos
 

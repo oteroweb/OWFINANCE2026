@@ -443,10 +443,17 @@
 | **OWF-368** | [x] | P3 | ⚪ | design | onboarding-audit | OWF-364 | **Resuelto — el código real ya tenía más de lo que decía el ticket, verificado antes de tocar nada.** Los links Términos/Privacidad SÍ existían en ambas vistas (desktop y mobile) pero apuntaban a `href="#"` — ahora conectados a 2 páginas nuevas (`TermsPage.vue`/`PrivacyPage.vue`, rutas `/terminos`/`/privacidad`, contenido base razonable para una app de finanzas personales — **flaggeado en comentario de código que necesita revisión legal real antes de tratarse como definitivo**). Botones "Google"/"Apple" existían SOLO en desktop, 100% decorativos (`href="#" @click.prevent`, sin OAuth real) — usuario confirmó (pregunta directa) que un botón que aparenta funcionar y no hace nada es peor que no tenerlo: **removidos** de `LoginPage.vue`. OAuth real (Google Cloud Console + Apple Developer) requiere credenciales del usuario, fuera de alcance de esta sesión — no implementado, no se agregó a mobile. De paso, footer público (`PublicLayout.vue`, "Privacidad"/"Términos" en todas las páginas) conectado a las mismas 2 páginas nuevas ("Contacto" queda sin página, fuera de alcance). `vue-tsc`/`eslint` limpios. Verificado en vivo (desktop + mobile): páginas renderizan, links navegan, botones sociales ausentes. Deploy frontend prod OK. **Con esto se cierra el backlog completo de la auditoría de onboarding (OWF-364..368).** | claude-code | 2026-08-08 |
 
 <!--
-  NEXT_ID: OWF-369
+  NEXT_ID: OWF-370
 -->
 
 <!-- OWF-284 reutilizó el ID ya reservado (no consume uno nuevo). -->
+
+<!-- OWF-369 (backend Fase 1 — grupo familiar y cuentas compartidas) reservado y usado en
+     commits/deploy, a propósito TODAVÍA sin fila en este board — el usuario pidió esperar
+     a que el diseño de Claude Design esté confirmado antes de abrir el ticket formal. Ver
+     .owf/STATE.md para el detalle completo mientras tanto; agregar la fila acá cuando se
+     confirme. rediseno/PROMPT_REDISENO_GRUPO_FAMILIAR_CUENTAS_COMPARTIDAS.md ya está subido
+     a Claude Design (Ciclo 2 de owf-design-sync, esperando el JSX de vuelta). -->
 
 ## Completed
 
