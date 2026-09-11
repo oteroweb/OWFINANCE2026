@@ -3,8 +3,20 @@
 <!-- Solo un agente escribe a la vez. Updated = timestamp del ultimo escritor. -->
 <!-- Tareas se referencian por ID (OWF-NNN) → ver .owf/TASKS.md -->
 
-**Updated:** 2026-08-20T21:35:00Z
-**By:** claude-code
+**Updated:** 2026-09-07T10:46:54+00:00
+**By:** codex (auditoría; historial preservado)
+
+## Auditoría de contexto y accesos (2026-09-07) — Codex
+
+Revisión solicitada por el usuario; no se implementaron features ni se desplegó código.
+- El encabezado histórico quedó en 20-ago, pero TASKS.md y GitHub llegan a OWF-373 (01-sep UTC). OWF-369 está completada; OWF-370 espera diseño de Empresas; OWF-004/005/006/020 siguen pausadas.
+- GitHub: oteroweb tiene ADMIN en central/backend/frontend, HEADs locales coinciden con GitHub, sin PRs/issues abiertos. OWF-290: las anotaciones actuales confirman cuenta bloqueada por billing (no solo sospecha de minutos o políticas).
+- Accesos comprobados: SSH de producción, API /up 200, tokens existentes Lite/Pro /user/profile 200; login de producción y landing local renderizan. Dev/stage /up 200 no equivale a entorno QA validado.
+- Local: frontend 3000/9000 y backend 8000 encendidos; frontend .env y e2e/global-setup.ts apuntan a producción. No ejecutar E2E de escritura asumiendo aislamiento local.
+- Hallazgos pendientes de corrección: viewTransactions() no se invoca y TransactionRepo usa todas las cuentas compartidas sin filtrar permission; /taxes/{id} antecede /taxes/all; contraseña en texto plano presente en .owf/CONTEXT.md publicado en GitHub (no reproducirla).
+- SMTP: producción tiene MAIL_MAILER=smtp, contradiciendo notas históricas; entrega real de correo no probada.
+- Referencia del informe local: /Users/otero/Documents/Codex/2026-09-07/vcodf/outputs/revision-owfinance-2026-09-07.md.
+- Próximo: priorizar exposición de credenciales y permisos de cuentas; resolver billing; retomar diseño OWF-370.
 
 ## Último trabajo (2026-08-20) — OWF-369: backend Fase 1 de "Grupo Familiar y Contabilidad Empresarial"
 
