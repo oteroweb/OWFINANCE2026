@@ -43,7 +43,13 @@ owf_deploy_load_config() {
   DEPLOY_FRONTEND_URL="${DEPLOY_FRONTEND_URL:-${DEPLOY_SITE_URL}/app/}"
 
   # ── Construir opciones SSH ─────────────────────────────────────────────────
-  DEPLOY_SSH_OPTS="-o StrictHostKeyChecking=accept-new -o ConnectTimeout=15 -o BatchMode=yes"
+  # -o IdentitiesOnly=yes: fuerza a usar SOLO la identidad indicada con -i, ignorando
+  # cualquier ssh-agent/config ambiental (ej. el que deja activo actions/checkout con
+  # `ssh-key:` para el checkout de submódulos en CI durante el resto del job) — sin
+  # esto, un agente activo puede ofrecer otra identidad/extension primero y el server
+  # de destino termina rechazando la conexión con "Permission denied" aunque la llave
+  # correcta esté disponible.
+  DEPLOY_SSH_OPTS="-o StrictHostKeyChecking=accept-new -o ConnectTimeout=15 -o BatchMode=yes -o IdentitiesOnly=yes"
   if [ -n "$DEPLOY_SSH_KEY" ]; then
     DEPLOY_SSH_OPTS="$DEPLOY_SSH_OPTS -i $DEPLOY_SSH_KEY"
   fi
