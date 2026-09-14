@@ -21,7 +21,12 @@ jobs:
       DEPLOY_ENV:               ${{ github.ref_name == 'master' && 'prod' || 'stage' }}
       DEPLOY_HOST:              ${{ secrets.DEPLOY_HOST }}
       DEPLOY_USER:              ${{ secrets.DEPLOY_USER }}
-      DEPLOY_BRANCH:            ${{ github.ref_name }}
+      # OJO: esto NO es el branch del repo central (master/stage) — es el branch
+      # que usan los submódulos frontend/backend en si mismos (siempre "main" en
+      # ambos hoy), igual que .deploy/prod.sh/stage.sh. Confundir los dos hizo que
+      # deploy-frontend.sh intentara "git checkout master" adentro del submódulo,
+      # que solo tiene "main", y fallara con "pathspec 'master' did not match".
+      DEPLOY_BRANCH:            ${{ github.ref_name == 'master' && 'main' || 'stage' }}
       DEPLOY_SITE_URL:          ${{ secrets.DEPLOY_SITE_URL }}
       DEPLOY_BACKEND_DIR:       ${{ secrets.DEPLOY_BACKEND_DIR }}
       DEPLOY_FRONTEND_DIR:      ${{ secrets.DEPLOY_FRONTEND_DIR }}
