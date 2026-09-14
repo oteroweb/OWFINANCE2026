@@ -27,6 +27,7 @@ jobs:
       DEPLOY_FRONTEND_DIR:      ${{ secrets.DEPLOY_FRONTEND_DIR }}
       DEPLOY_FRONTEND_ENV_FILE: .env.production
       VITE_API_BASE_URL:        ${{ secrets.DEPLOY_API_URL }}
+      DEPLOY_HTACCESS_PATH:     ${{ secrets.DEPLOY_HTACCESS_PATH }}
 
     steps:
       - name: Checkout (with submodules)
@@ -43,6 +44,28 @@ jobs:
           chmod 600 ~/.ssh/deploy_key
           ssh-keyscan -H "$DEPLOY_HOST" >> ~/.ssh/known_hosts
           echo "DEPLOY_SSH_KEY=$HOME/.ssh/deploy_key" >> "$GITHUB_ENV"
+
+      - name: Write deploy config
+        # deploy-frontend.sh/deploy-backend.sh cargan .deploy/${DEPLOY_ENV}.sh desde
+        # disco (mismo mecanismo que un deploy manual) — ese archivo esta en
+        # .gitignore y nunca existe en un checkout de CI. Lo reconstruimos acá desde
+        # los secrets ya resueltos como env de este job (incluye DEPLOY_SSH_KEY, que
+        # el paso anterior ya reescribió como ruta al archivo de la llave).
+        run: |
+          mkdir -p .deploy
+          cat > ".deploy/${DEPLOY_ENV}.sh" <<EOF
+          export DEPLOY_ENV="${DEPLOY_ENV}"
+          export DEPLOY_HOST="${DEPLOY_HOST}"
+          export DEPLOY_USER="${DEPLOY_USER}"
+          export DEPLOY_SSH_KEY="${DEPLOY_SSH_KEY}"
+          export DEPLOY_BRANCH="${DEPLOY_BRANCH}"
+          export DEPLOY_SITE_URL="${DEPLOY_SITE_URL}"
+          export DEPLOY_API_URL="${VITE_API_BASE_URL}"
+          export DEPLOY_BACKEND_DIR="${DEPLOY_BACKEND_DIR}"
+          export DEPLOY_FRONTEND_DIR="${DEPLOY_FRONTEND_DIR}"
+          export DEPLOY_FRONTEND_ENV_FILE="${DEPLOY_FRONTEND_ENV_FILE}"
+          export DEPLOY_HTACCESS_PATH="${DEPLOY_HTACCESS_PATH}"
+          EOF
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
