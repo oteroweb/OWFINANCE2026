@@ -50,14 +50,6 @@ jobs:
           ssh-keyscan -H "$DEPLOY_HOST" >> ~/.ssh/known_hosts
           echo "DEPLOY_SSH_KEY=$HOME/.ssh/deploy_key" >> "$GITHUB_ENV"
 
-      - name: Debug SSH key fingerprint (temporal, sin datos sensibles)
-        run: |
-          ssh-keygen -lf ~/.ssh/deploy_key || echo "ssh-keygen fallo al leer la llave"
-          wc -c ~/.ssh/deploy_key
-          head -c 40 ~/.ssh/deploy_key
-          echo ""
-          ssh -vvv -i ~/.ssh/deploy_key -o StrictHostKeyChecking=accept-new -o ConnectTimeout=10 -o BatchMode=yes "$DEPLOY_USER@$DEPLOY_HOST" echo conectado 2>&1 | tail -60
-
       - name: Write deploy config
         # deploy-frontend.sh/deploy-backend.sh cargan .deploy/${DEPLOY_ENV}.sh desde
         # disco (mismo mecanismo que un deploy manual) — ese archivo esta en
