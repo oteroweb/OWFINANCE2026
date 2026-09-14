@@ -3,8 +3,16 @@
 <!-- Solo un agente escribe a la vez. Updated = timestamp del ultimo escritor. -->
 <!-- Tareas se referencian por ID (OWF-NNN) → ver .owf/TASKS.md -->
 
-**Updated:** 2026-09-07T10:46:54+00:00
-**By:** codex (auditoría; historial preservado)
+**Updated:** 2026-09-14T22:00:00Z
+**By:** claude-code
+
+## Último trabajo (2026-09-14) — OWF-290 cerrado (billing), OWF-374 fix CI, OWF-375 nuevo (secrets pendientes)
+
+Usuario confirmó haber resuelto el billing de GitHub. Verificado real (no de palabra): re-corridos los 3 workflows vía `gh api .../rerun`.
+
+- **OWF-290 cerrado**: confirmado que los 3 pipelines ejecutan pasos reales ahora (antes: 0 steps, fail en ~3s con "account is locked"). Backend `Lint + Tests` y frontend `Lint + Typecheck` — verdes tras esta sesión.
+- **OWF-374**: encontrado y arreglado un fallo real de CI destapado al destrabar el billing — `AiExtractionDirectCreateTest` (3 tests) fallaba 503 en CI porque `AiProviderFactory` corta antes de cualquier `Http::fake()` si no hay ninguna API key de IA configurada, y `.env.example` (lo que CI copia) las trae vacías. Fix: `GROQ_API_KEY` dummy inline en el step de tests. Commit `108b03d`, push, re-verificado verde en CI real.
+- **OWF-375 (nuevo, pendiente, requiere al usuario)**: quedan 2 gaps de secrets, ambos ya anticipados por OWF-291/295 en julio y confirmados que siguen faltando: (1) central `OWFINANCE2026` — CERO secrets configurados (ni a nivel repo ni del environment `production`), así que `deploy.yml` falla en "Setup SSH key" — necesita `DEPLOY_HOST`/`DEPLOY_USER`/`DEPLOY_SITE_URL`/`DEPLOY_BACKEND_DIR`/`DEPLOY_FRONTEND_DIR`/`DEPLOY_API_URL`/`DEPLOY_SSH_KEY`/`SUBMODULES_DEPLOY_KEY` (valores ya existen en `.deploy/prod.sh` local); (2) backend+frontend — falta `CENTRAL_DISPATCH_TOKEN`, el job `notify-central` (auto-sync de submódulo) falla 401 en ambos. No bloquea nada crítico: el deploy manual (usado toda la sesión) sigue funcionando, y el CI de tests/lint ya está verde. Deliberadamente no intenté crear estos secrets yo mismo — manejar/transmitir credenciales de infraestructura (SSH keys, PATs) es una acción que le corresponde al usuario directamente en GitHub, no algo que deba hacer por él.
 
 ## Auditoría de contexto y accesos (2026-09-07) — Codex
 
