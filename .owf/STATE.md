@@ -3,8 +3,21 @@
 <!-- Solo un agente escribe a la vez. Updated = timestamp del ultimo escritor. -->
 <!-- Tareas se referencian por ID (OWF-NNN) → ver .owf/TASKS.md -->
 
-**Updated:** 2026-09-14T22:00:00Z
+**Updated:** 2026-09-15T14:05:00Z
 **By:** claude-code
+
+## Último trabajo (2026-09-15) — OWF-376: causa raíz real (llave con passphrase, no bloqueo IP)
+
+Retomé OWF-376 (última sesión lo dejó como "probable bloqueo por IP del hosting"). Diagnóstico en vivo, 4 corridas reales de `Deploy OWFinance` contra el runner de GitHub Actions:
+
+1. Confirmé que el secret `DEPLOY_SSH_KEY` ya está bien configurado (OWF-375 real) y que el fallo ahora es específicamente en el intento de conexión SSH, no en setup.
+2. Agregué un paso de diagnóstico (`ssh -vvv` + IP pública) — el log mostró que el servidor SÍ acepta la llave, pero el firmado final falla en silencio, con una referencia confusa a `publickey-hostbound-v00@openssh.com` que sugería un bug de negociación de protocolo.
+3. Probé 2 hipótesis de negociación SSH (excluir esa extensión, firmar vía `ssh-agent`) — ninguna cambió el resultado, pero la prueba de `ssh-agent` reveló el dato clave: se quedó esperando un prompt de passphrase interactivo, que en CI nunca llega.
+4. Confirmé LOCAL que la llave privada real (`~/.ssh/owfinances_prod`) tiene passphrase (`ssh-keygen -y -P ""` la rechaza). En mi Mac funciona porque el Keychain la cachea sola; en el runner (sin tty) el firmado siempre falla.
+
+**Conclusión**: no era un bloqueo por IP del hosting (hipótesis anterior descartada). Es simplemente que la llave de deploy tiene passphrase y CI no puede suministrarla. Fix real pendiente del lado del usuario: generar una llave CI dedicada sin passphrase y rotar el secret `DEPLOY_SSH_KEY`. No lo hice yo mismo — no me corresponde generar/rotar la llave de producción real.
+
+Workflow (`deploy.yml`) limpio de los pasos de diagnóstico al final (commit `c2a1bb8`). `.owf/TASKS.md` actualizado con la explicación completa y los pasos exactos para el usuario.
 
 ## Último trabajo (2026-09-14) — OWF-290 cerrado (billing), OWF-374 fix CI, OWF-375 nuevo (secrets pendientes)
 
