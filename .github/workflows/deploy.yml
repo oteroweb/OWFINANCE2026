@@ -50,6 +50,20 @@ jobs:
           ssh-keyscan -H "$DEPLOY_HOST" >> ~/.ssh/known_hosts
           echo "DEPLOY_SSH_KEY=$HOME/.ssh/deploy_key" >> "$GITHUB_ENV"
 
+      # OWF-376: la conexión SSH real (no solo el handshake) es rechazada con
+      # "Permission denied (publickey,password)" pese a que la llave es correcta
+      # (fingerprint verificado, sin restricción `from=` en authorized_keys) —
+      # hipótesis fuerte: el hosting bloquea por IP a nivel de panel/CSF/Imunify,
+      # no de sshd_config. Este paso imprime la IP pública real del runner para
+      # que el usuario la busque en los logs de bloqueo de su panel de hosting.
+      - name: Diagnóstico — IP pública del runner (para revisar en el panel de hosting)
+        run: |
+          echo "IP pública de este runner de GitHub Actions:"
+          curl -s https://ifconfig.me || curl -s https://api.ipify.org
+          echo ""
+          echo "Intento de conexión SSH verbose (para ver en qué fase exacta se rechaza):"
+          ssh -vvv -i ~/.ssh/deploy_key -o IdentitiesOnly=yes -o ConnectTimeout=10 -o BatchMode=yes "$DEPLOY_USER@$DEPLOY_HOST" exit 2>&1 | tail -40 || true
+
       - name: Write deploy config
         # deploy-frontend.sh/deploy-backend.sh cargan .deploy/${DEPLOY_ENV}.sh desde
         # disco (mismo mecanismo que un deploy manual) — ese archivo esta en
