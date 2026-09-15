@@ -66,6 +66,12 @@ jobs:
           echo ""
           echo "=== Intento 2: excluyendo publickey-hostbound-v00 (hipótesis de bug de negociación) ==="
           ssh -vvv -i ~/.ssh/deploy_key -o IdentitiesOnly=yes -o ConnectTimeout=10 -o BatchMode=yes -o PubkeyAcceptedAlgorithms=-publickey-hostbound-v00@openssh.com "$DEPLOY_USER@$DEPLOY_HOST" exit 2>&1 | tail -30 || true
+          echo ""
+          echo "=== Intento 3: firmando vía ssh-agent en vez de -i directo (hipótesis: el bug es del path de firma por archivo) ==="
+          eval "$(ssh-agent -s)"
+          ssh-add ~/.ssh/deploy_key
+          ssh -vvv -o ConnectTimeout=10 -o BatchMode=yes "$DEPLOY_USER@$DEPLOY_HOST" exit 2>&1 | tail -30 || true
+          ssh-agent -k || true
 
       - name: Write deploy config
         # deploy-frontend.sh/deploy-backend.sh cargan .deploy/${DEPLOY_ENV}.sh desde
