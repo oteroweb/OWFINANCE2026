@@ -42,6 +42,19 @@ jobs:
           fetch-depth: 0
           ssh-key: ${{ secrets.SUBMODULES_DEPLOY_KEY }}
 
+      # OWF-376: causa raíz real confirmada (2026-09-15) — el secret DEPLOY_SSH_KEY
+      # contiene una llave privada protegida con passphrase. `ssh-add` en CI (sin
+      # tty) se queda esperando el prompt de passphrase y falla; en el path directo
+      # `-i` + BatchMode=yes, la fase de firmado final falla en silencio (se
+      # manifestaba como "we did not send a packet, disable method" atado a la
+      # extensión publickey-hostbound-v00@openssh.com — un síntoma confuso, NO la
+      # causa: cualquier fallo de firmado por passphrase se ve igual). NO es un
+      # bloqueo por IP del hosting (hipótesis descartada tras diagnóstico en vivo).
+      # Localmente funciona porque el Keychain de macOS cachea la passphrase.
+      # Fix pendiente (requiere al usuario, no algo que deba tocar yo): generar una
+      # llave dedicada SIN passphrase para CI (`ssh-keygen -t ed25519 -N ""`),
+      # agregar su pública a authorized_keys del server, y reemplazar el secret
+      # DEPLOY_SSH_KEY con la privada nueva.
       - name: Setup SSH key
         run: |
           mkdir -p ~/.ssh
@@ -49,29 +62,6 @@ jobs:
           chmod 600 ~/.ssh/deploy_key
           ssh-keyscan -H "$DEPLOY_HOST" >> ~/.ssh/known_hosts
           echo "DEPLOY_SSH_KEY=$HOME/.ssh/deploy_key" >> "$GITHUB_ENV"
-
-      # OWF-376: la conexión SSH real (no solo el handshake) es rechazada con
-      # "Permission denied (publickey,password)" pese a que la llave es correcta
-      # (fingerprint verificado, sin restricción `from=` en authorized_keys) —
-      # hipótesis fuerte: el hosting bloquea por IP a nivel de panel/CSF/Imunify,
-      # no de sshd_config. Este paso imprime la IP pública real del runner para
-      # que el usuario la busque en los logs de bloqueo de su panel de hosting.
-      - name: Diagnóstico — IP pública del runner (para revisar en el panel de hosting)
-        run: |
-          echo "IP pública de este runner de GitHub Actions:"
-          curl -s https://ifconfig.me || curl -s https://api.ipify.org
-          echo ""
-          echo "Intento de conexión SSH verbose (para ver en qué fase exacta se rechaza):"
-          ssh -vvv -i ~/.ssh/deploy_key -o IdentitiesOnly=yes -o ConnectTimeout=10 -o BatchMode=yes "$DEPLOY_USER@$DEPLOY_HOST" exit 2>&1 | tail -40 || true
-          echo ""
-          echo "=== Intento 2: excluyendo publickey-hostbound-v00 (hipótesis de bug de negociación) ==="
-          ssh -vvv -i ~/.ssh/deploy_key -o IdentitiesOnly=yes -o ConnectTimeout=10 -o BatchMode=yes -o PubkeyAcceptedAlgorithms=-publickey-hostbound-v00@openssh.com "$DEPLOY_USER@$DEPLOY_HOST" exit 2>&1 | tail -30 || true
-          echo ""
-          echo "=== Intento 3: firmando vía ssh-agent en vez de -i directo (hipótesis: el bug es del path de firma por archivo) ==="
-          eval "$(ssh-agent -s)"
-          ssh-add ~/.ssh/deploy_key
-          ssh -vvv -o ConnectTimeout=10 -o BatchMode=yes "$DEPLOY_USER@$DEPLOY_HOST" exit 2>&1 | tail -30 || true
-          ssh-agent -k || true
 
       - name: Write deploy config
         # deploy-frontend.sh/deploy-backend.sh cargan .deploy/${DEPLOY_ENV}.sh desde
