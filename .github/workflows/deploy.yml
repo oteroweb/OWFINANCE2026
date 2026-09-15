@@ -63,6 +63,9 @@ jobs:
           echo ""
           echo "Intento de conexión SSH verbose (para ver en qué fase exacta se rechaza):"
           ssh -vvv -i ~/.ssh/deploy_key -o IdentitiesOnly=yes -o ConnectTimeout=10 -o BatchMode=yes "$DEPLOY_USER@$DEPLOY_HOST" exit 2>&1 | tail -40 || true
+          echo ""
+          echo "=== Intento 2: excluyendo publickey-hostbound-v00 (hipótesis de bug de negociación) ==="
+          ssh -vvv -i ~/.ssh/deploy_key -o IdentitiesOnly=yes -o ConnectTimeout=10 -o BatchMode=yes -o PubkeyAcceptedAlgorithms=-publickey-hostbound-v00@openssh.com "$DEPLOY_USER@$DEPLOY_HOST" exit 2>&1 | tail -30 || true
 
       - name: Write deploy config
         # deploy-frontend.sh/deploy-backend.sh cargan .deploy/${DEPLOY_ENV}.sh desde
