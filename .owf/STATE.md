@@ -3,8 +3,16 @@
 <!-- Solo un agente escribe a la vez. Updated = timestamp del ultimo escritor. -->
 <!-- Tareas se referencian por ID (OWF-NNN) → ver .owf/TASKS.md -->
 
-**Updated:** 2026-09-17T02:45:00Z
+**Updated:** 2026-09-17T18:40:00Z
 **By:** claude-code
+
+## Último trabajo (2026-09-17, continuación) — OWF-382: "Invalid Date" en CrudPage + verificación completa de Grupo familiar
+
+Continuación del pedido "revisa vistas y procede con todo" — 2do pase de auditoría.
+
+- **OWF-382**: Configuración → Impuestos mostraba "Invalid Date" en la columna Fecha para las 3 filas (`taxes.date` nunca se pobló, siempre `null`). `CrudPage.vue` no tenía guard para valores null en su formatter de columnas tipo "date" — fix genérico, aplica a cualquier entidad que use el componente. Deploy OK.
+- **Verificado de punta a punta sin bugs**: Grupo familiar (crear grupo, invitar por email a un 2do usuario real registrado para la prueba, aceptar invitación, compartir una cuenta con nivel "Ver todo", confirmado vía API que el receptor ve `permission:view_full` correcto) — funciona igual que el smoke test original de OWF-369. También revisado Configuración → Finanzas (ingreso mensual esperado, moneda por defecto — el select vacío de moneda es dato real sin setear, no un bug de UI) y pago de deuda + aporte a sueño (ambos funcionan correctamente).
+- Total de bugs reales encontrados y arreglados en esta auditoría completa (2 sesiones): **5** — OWF-377 (tipos de cuenta duplicados), OWF-378 (signo de "neto"), OWF-379 (Asesor IA roto/filtración de errores, crítico), OWF-380 (agrupación por categoría rota en Inicio), OWF-382 (Invalid Date en tablas CrudPage). Todos testeados, commiteados y en prod. (OWF-381 no se usó — número saltado por una corrección de comentario en código, sin tarea asociada.)
 
 ## Último trabajo (2026-09-17) — Auditoría completa en vivo (usuario nuevo real) + 3 bugs reales encontrados y arreglados + pull de diseño Fase 2
 
