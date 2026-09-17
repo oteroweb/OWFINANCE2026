@@ -3,7 +3,21 @@
 <!-- Solo un agente escribe a la vez. Updated = timestamp del ultimo escritor. -->
 <!-- Tareas se referencian por ID (OWF-NNN) → ver .owf/TASKS.md -->
 
-**Updated:** 2026-09-15T14:05:00Z
+**Updated:** 2026-09-17T02:45:00Z
+**By:** claude-code
+
+## Último trabajo (2026-09-17) — Auditoría completa en vivo (usuario nuevo real) + 3 bugs reales encontrados y arreglados + pull de diseño Fase 2
+
+Pedido del usuario: revisar bloqueos, dejar el diseño listo (adjuntó `redisenocongrupo.zip`), y probar cada sección de la plataforma con un usuario nuevo, auditando bugs como "usuario no puede crear cuenta".
+
+- **Diseño pulleado**: `redisenocongrupo.zip` (export completo de Claude Design, 9.6MB) — extraído con `ditto` (macOS `unzip` fallaba con nombres acentuados, mensaje engañoso de "disk full"). Confirmado que llegó el JSX de Fase 2 Empresas (`BusinessOnboardingFlow`/`BusinessEmptyState`/`BusinessAccessPanel`/`CreateBusinessModal.jsx`, desbloquea OWF-370) + 3 componentes nuevos no pedidos (`ContextBar.jsx`, `SecurityDialogs.jsx`, `InternalDebtCard.jsx`) + `AccountShareDialog.jsx` actualizado para multi-grupo (D-014, documentado en `rediseno/DECISIONS.md`). Ninguno implementado todavía — solo sincronizado el espejo, commit `4524afd` en frontend. `redisenocongrupo.zip` NO se trackeó en git (9.6MB binario, agregado a `.gitignore`).
+- **OWF-377**: `account_types` tenía 77 filas para 7 tipos reales (seeder corrido 11 veces sin guard) — el selector de "Tipo de cuenta" mostraba "Cashea" repetido decenas de veces, y la app no daba ningún mensaje claro si el usuario dejaba Moneda/Tipo sin elegir ("Incorrect Params" crudo). Esta combinación es la causa más probable de "usuario no puede crear cuenta". Limpiado en prod (70 duplicados soft-deleted, 3 cuentas reales repointeadas), seeder fixeado con `firstOrCreate`, y `CrudPage.vue` ahora muestra "Falta completar: Moneda, Tipo de Cuenta" en vez del mensaje crudo (fix genérico, aplica a cualquier entidad que use CrudPage).
+- **OWF-378**: "neto" de Transacciones Pro mostraba gastos como ingresos (signo incorrecto, 3 sitios en `index.vue`).
+- **OWF-379** (crítico): Asesor IA completamente roto — colgado en "escribiendo..." infinito. Root cause real: bug de cURL (`CURLOPT_WRITEFUNCTION` deja de invocarse en respuestas de error, filtrando el body crudo del proveedor —incluida una URL interna de cuenta— directo al usuario). Fixeado en los 7 providers de IA. Verificado: ahora falla limpio con "Servicio no disponible". **Nota aparte, no arreglable por código**: los 6 providers de IA configurados están TODOS rotos por temas de cuenta externa (opencode-go necesita opt-in de región, groq/openrouter con modelos deprecados, xai sin créditos, openai key inválida) — el usuario necesita revisar cada cuenta de proveedor.
+- **Verificado sano** (sin bugs encontrados): registro de usuario nuevo, onboarding modal, creación de cuenta (ambos entry points), Cántaros (plantilla + guardado), Deudas, Sueños, Análisis, Perfil financiero, Configuración.
+- Usuario QA de prueba dejado en prod (`qa.audit.owf.0917@example.com`) como fixture, mismo patrón que `usertestpro@demo.com` de sesiones anteriores — no se limpió.
+- Todos los fixes commiteados, testeados (335/335 backend) y deployados a prod.
+
 **By:** claude-code
 
 ## Último trabajo (2026-09-15) — OWF-376: causa raíz real (llave con passphrase, no bloqueo IP)
